@@ -1,15 +1,104 @@
 package com.business;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
+import java.util.*;
+import com.persistent.*;
+
+
 public class WorkItemManager {
 
-    private static Integer nextAvailableId;
+    private static String fileAddress = "src/com/data/workItems.xml";
+    public HashMap<Integer, WorkItem> workItems;
+    private static Integer nextAvailableId = 100;
+
 
     public WorkItemManager() {
-
+        try {
+            workItems = new HashMap<>();
+            loadWorkItemFileToHashMap();
+            nextAvailableId = Collections.max(workItems.keySet()) + 1;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("File must be empty. Continue...");
+        }
     }
 
     public static Integer getAvailableId() {
         return nextAvailableId;
     }
 
+    public static void increaseNextAvailableId() {
+        nextAvailableId++;
+    }
+
+
+    // Create new work item - not saved to hashmap or file
+    public WorkItem createNewWI(WorkItem.typeEnum type) {
+        WorkItem wi;
+        if (type == WorkItem.typeEnum.Epic) { wi = new EpicWI(); }
+        if (type == WorkItem.typeEnum.Story) { wi = new StoryWI(); }
+        if (type == WorkItem.typeEnum.Task) { wi = new TaskWI(); }
+        else { wi = new BugWI(); } //bug
+        return wi;
+    }
+
+    // Addition of new work item to hashmap
+    public void addWorkItemToHashMap(WorkItem wi) {
+        workItems.put(wi.getId(), wi);
+        increaseNextAvailableId();
+    }
+
+    // search work item by id
+    public WorkItem searchWorkItem(Integer id) {
+        if (workItems.containsKey(id))
+            return workItems.get(id);
+        return null;
+    }
+
+
+    // Loading work items file contents into hashmap
+    public void loadWorkItemFileToHashMap() {
+        try {
+            FileInputStream workItemsFile = new FileInputStream(fileAddress);
+            XMLDecoder decoder = new XMLDecoder(workItemsFile);
+            WorkItem wi = (WorkItem) decoder.readObject();
+            while (wi != null) {
+                addWorkItemToHashMap(wi);
+                wi = (WorkItem) decoder.readObject();
+            }
+            decoder.close();
+            workItemsFile.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    // Overwrites work items file with the hashmap contents
+    public void updateWorkItemsFile() {
+        FileOutputStream workItemsFile = null;
+        try {
+            workItemsFile = new FileOutputStream(fileAddress);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (workItemsFile != null) {
+            try {
+                XMLEncoder encoder = new XMLEncoder(workItemsFile);
+                for (Map.Entry<Integer, WorkItem> entry : workItems.entrySet()) {
+                    encoder.writeObject(entry.getValue());
+                }
+                encoder.close();
+                workItemsFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
+
+

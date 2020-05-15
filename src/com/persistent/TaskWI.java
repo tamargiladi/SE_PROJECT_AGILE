@@ -11,9 +11,31 @@ public class TaskWI extends WorkItem {
     protected String targetVersion;
     protected Integer storyID;
 
-    public TaskWI(typeEnum type) {
-        super(type);
+    public TaskWI() {
+        super();
+        this.type = typeEnum.Task;
+        priority = priorityEnum.Unassigned;
+        sprint = sprintEnum.Unassigned;
+        estimate = null;
+        timeSpent = null;
+        targetVersion = null;
+        storyID = null;
     }
+
+    public void saveWorkItem(String summary,statusEnum status, String description, priorityEnum priority, User owner,
+                             Team team, sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+                             Integer storyID)
+    {
+        this.priority = priority;
+        this.owner = owner;
+        this.team = team;
+        this.sprint = sprint;
+        this.estimate = estimate;
+        this.timeSpent = timeSpent;
+        this.targetVersion = targetVersion;
+        this.storyID = storyID;
+    }
+
 
     public priorityEnum getPriority() {
         return priority;
@@ -23,6 +45,7 @@ public class TaskWI extends WorkItem {
         this.priority = priority;
     }
 
+
     public User getOwner() {
         return owner;
     }
@@ -30,6 +53,7 @@ public class TaskWI extends WorkItem {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
 
     public Team getTeam() {
         return team;
@@ -39,6 +63,7 @@ public class TaskWI extends WorkItem {
         this.team = team;
     }
 
+
     public sprintEnum getSprint() {
         return sprint;
     }
@@ -46,6 +71,7 @@ public class TaskWI extends WorkItem {
     public void setSprint(sprintEnum sprint) {
         this.sprint = sprint;
     }
+
 
     public Integer getEstimate() {
         return estimate;
@@ -55,6 +81,7 @@ public class TaskWI extends WorkItem {
         this.estimate = estimate;
     }
 
+
     public Integer getTimeSpent() {
         return timeSpent;
     }
@@ -63,6 +90,7 @@ public class TaskWI extends WorkItem {
         this.timeSpent = timeSpent;
     }
 
+
     public String getTargetVersion() {
         return targetVersion;
     }
@@ -70,6 +98,7 @@ public class TaskWI extends WorkItem {
     public void setTargetVersion(String targetVersion) {
         this.targetVersion = targetVersion;
     }
+
 
     public Integer getStoryID() {
         return storyID;
