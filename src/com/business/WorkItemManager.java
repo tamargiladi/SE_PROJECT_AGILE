@@ -39,8 +39,8 @@ public class WorkItemManager {
     public WorkItem createNewWI(WorkItem.typeEnum type) {
         WorkItem wi;
         if (type == WorkItem.typeEnum.Epic) { wi = new EpicWI(); }
-        if (type == WorkItem.typeEnum.Story) { wi = new StoryWI(); }
-        if (type == WorkItem.typeEnum.Task) { wi = new TaskWI(); }
+        else if (type == WorkItem.typeEnum.Story) { wi = new StoryWI(); }
+        else if (type == WorkItem.typeEnum.Task) { wi = new TaskWI(); }
         else { wi = new BugWI(); } //bug
         return wi;
     }
@@ -50,6 +50,16 @@ public class WorkItemManager {
         workItems.put(wi.getId(), wi);
         increaseNextAvailableId();
     }
+
+    // Save Work Item
+    public void saveWorkItem(WorkItem wi, String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
+                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+                             Integer storyID, String foundVersion)
+    {
+        wi.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
+        addWorkItemToHashMap(wi);
+    }
+
 
     // search work item by id
     public WorkItem searchWorkItem(Integer id) {
@@ -98,6 +108,7 @@ public class WorkItemManager {
             }
         }
     }
+
 
 }
 

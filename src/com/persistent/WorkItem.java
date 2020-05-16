@@ -55,7 +55,9 @@ public abstract class WorkItem {
         Dec20
     }
 
-    public void saveWorkItem(String summary,statusEnum status, String description) {
+    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
+                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+                             Integer storyID, String foundVersion) {
         this.summary = summary;
         this.status = status;
         this.description = description;
@@ -163,5 +165,11 @@ public abstract class WorkItem {
     }
     public void setFoundVersion(String foundVersion) {
     }
+
+    public Integer getEpicID() {
+        return null;
+    }
+
+    public void setEpicID(Integer epicID) { }
 
 }

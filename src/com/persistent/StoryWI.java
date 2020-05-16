@@ -13,7 +13,11 @@ public class StoryWI extends WorkItem {
         this.epicID = null;
     }
 
-    public void saveWorkItem(String summary,statusEnum status, String description, priorityEnum priority, User owner, Integer epicID) {
+    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
+                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+                             Integer storyID, String foundVersion)
+    {
+        super.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
         this.priority = priority;
         this.owner = owner;
         this.epicID = epicID;
