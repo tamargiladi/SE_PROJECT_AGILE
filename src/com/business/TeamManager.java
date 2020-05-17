@@ -1,15 +1,10 @@
 package com.business;
-import com.persistent.*;
-
-import java.awt.font.TextHitInfo;
-import java.io.*;
+import com.persistent.Team;
+import com.persistent.User;
+import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
-
-public class TeamManager  {
+public class TeamManager {
 
 
     private File teamsFile;
@@ -17,60 +12,19 @@ public class TeamManager  {
 
 
 
-    public TeamManager() throws IOException, Exception,FileNotFoundException{
+    public TeamManager()
+    {
+        //TODO: complete creation of the new file
+        //TODO: Complete update of the file
+
         this.teams = new HashMap<>();
-        this.teamsFile = new File("teamsFile.ser");
-        try
-        {
-            FileOutputStream fos =
-                    new FileOutputStream("teamsFile.ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(teams);
-            oos.close();
-            fos.close();
-            System.out.printf("Serialized HashMap data is saved in teamsFile.ser");
-        }catch(IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
     }
-
-
-
     /**
      *The method read teamFile file.
      */
     public void readTeamsFile()
     {
-        HashMap<Integer, String> map = null;
-        try
-        {
-            FileInputStream fis = new FileInputStream("teamsFile.ser");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            map = (HashMap) ois.readObject();
-            ois.close();
-            fis.close();
-        }catch(IOException ioe)
-        {
-            ioe.printStackTrace();
-            return;
-        }catch(ClassNotFoundException c)
-        {
-            System.out.println("Class not found");
-            c.printStackTrace();
-            return;
-        }
-        System.out.println("Deserialized HashMap..");
 
-        // Display content using Iterator
-        Set set = map.entrySet();
-        Iterator iterator = set.iterator();
-
-        while(iterator.hasNext()) {
-            Map.Entry mentry = (Map.Entry)iterator.next();
-            System.out.print("key: "+ mentry.getKey() + " & Value: ");
-            System.out.println(mentry.getValue());
-        }
     }
 
     /**
@@ -79,8 +33,9 @@ public class TeamManager  {
      */
     public void addTeam(String teamName)
     {
-       if(!isTeamExist(teamName))
+       if(isTeamExist(teamName))
            teams.put(teamName,new Team(teamName));
+
     }
 
     /**
@@ -122,9 +77,9 @@ public class TeamManager  {
     }
 
     /**
-     *The function removes a member from a selected team.
-     * @param user The user we want to delete
-     * @param team The team we want to remove the user frmo
+     *
+     * @param user
+     * @param team
      */
     public void removeMemberFromTeam(User user, Team team)
     {
@@ -133,7 +88,7 @@ public class TeamManager  {
     }
 
     /**
-     *The function checks if the given team is already exists in the teamManger hashMap. If it exists the function would
+     *
      * @param teamName
      * @return
      */
@@ -181,27 +136,10 @@ public class TeamManager  {
     /**
      *
      */
-    public void updateTeamsFile() throws Exception{
-
-        FileOutputStream fos = new FileOutputStream(teamsFile);
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-        oos.writeObject(teams);
-
-
-
-
-    }
-
-
-    /**======TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP===========**/
-
-   public void printTeams()
+    public void updateTeamsFile()
     {
-        System.out.println(this.teams);
-    }
 
-    /**======TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP TEMP===========**/
+    }
 
 
 

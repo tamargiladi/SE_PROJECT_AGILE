@@ -2,9 +2,8 @@ package com.persistent;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.Serializable;
 
-public class Team implements Serializable {
+public class Team {
 
     private String teamsName;
     private  List<User> users;
