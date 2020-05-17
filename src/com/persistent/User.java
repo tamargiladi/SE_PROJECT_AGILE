@@ -2,6 +2,9 @@ package com.persistent;
 
 public class User {
 
+    public enum PermissionLevel{
+        member, manager,admin}
+
     private String userName;
     private String password;
     private PermissionLevel permissionLevel;

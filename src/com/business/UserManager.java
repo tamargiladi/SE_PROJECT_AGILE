@@ -1,5 +1,4 @@
 package com.business;
-import com.persistent.PermissionLevel;
 import com.persistent.User;
 import com.persistent.Team;
 import java.io.File;
@@ -18,7 +17,7 @@ public class UserManager {
 
     public void readUsersFile(){}
 
-    public void addUser(String username, String password, PermissionLevel permission, Team team){
+    public void addUser(String username, String password, User.PermissionLevel permission, Team team){
         //TODO: TRY-addUser
         if (isActionPermitted())
             if(!(isUserExist(username))){
@@ -39,7 +38,7 @@ public class UserManager {
 
     }
 
-    public void updateUserPermission(User user, PermissionLevel newPermission){
+    public void updateUserPermission(User user, User.PermissionLevel newPermission){
         if (isActionPermitted())
             user.setPermissionLevel(newPermission);
     }
@@ -59,7 +58,7 @@ public class UserManager {
     }
 
     public Boolean isActionPermitted(){
-        return (this.loggedInUser.getPermissionLevel().equals(PermissionLevel.manager) || this.loggedInUser.getPermissionLevel().equals(PermissionLevel.admin));
+        return (this.loggedInUser.getPermissionLevel().equals(User.PermissionLevel.manager) || this.loggedInUser.getPermissionLevel().equals(User.PermissionLevel.admin));
     }
 
     public void updateUsersFile(){
