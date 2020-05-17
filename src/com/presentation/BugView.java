@@ -8,11 +8,31 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 
 public class BugView extends TaskView {
 
     public BugView(WorkItem wi) throws HeadlessException {
         super(wi);
+    }
+
+    @Override
+    public void setLayoutTitle(WorkItem wi) {
+        Insets insets = jPanel.getInsets();
+        Dimension size;
+        JLabel title;
+        if (wi == null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+            Time timeStamp = new Time(System.currentTimeMillis());
+            title = new JLabel("Bug <" + formatter.format(timeStamp) + ">");
+        }
+        else {
+            title = new JLabel("Bug " + wi.getId());
+        }
+        this.jPanel.add(title);
+        size = title.getPreferredSize();
+        title.setBounds(insets.left + 50 , insets.top + 20, size.width + 5, size.height);
     }
 
     @Override
