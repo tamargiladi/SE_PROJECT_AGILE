@@ -1,13 +1,12 @@
 package com.presentation;
 
+import com.business.ReportGenerator;
 import com.business.WorkItemManager;
 import com.persistent.WorkItem;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,17 +15,17 @@ import java.awt.event.MouseEvent;
 import java.util.*;
 import java.util.List;
 
+
 public class MainUserInterface extends JFrame {
 
     public static WorkItemManager WIManager = new WorkItemManager();
+    public static ReportGenerator reportGenerator = new ReportGenerator(WIManager.workItems);
+//    public static TeamManager teamManager = new TeamManager();
+//    public static UserManager userManager = new UserManager();
     public static JFrame mainFrame;
     public static JMenuBar mb;
 
     public static void main(String[] args) {
-        WIManager = new WorkItemManager();
-//        TeamManager teamManager = new TeamManager();
-//        UserManager userManager = new UserManager();
-//        ReportGenerator reportGenerator = new ReportGenerator();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -47,9 +46,9 @@ public class MainUserInterface extends JFrame {
         reportGenMenu(mainFrame);
         boardsMenu(mainFrame);
         searchBox(mainFrame);
+        userConnected(mainFrame);
         mainFrame.setJMenuBar(mb);
         recentlyCreated(mainFrame);
-
 
         mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -186,28 +185,7 @@ public class MainUserInterface extends JFrame {
         storiesBoard.setSize(1000, 600);
         storiesBoard.setVisible(true);
         storiesBoard.setLayout(null);
-
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Epics");
-
-        HashMap<WorkItem, List<WorkItem>> epicsStories = new HashMap<WorkItem, List<WorkItem>>();
-        for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet())
-            if (entry.getValue().getType() == WorkItem.typeEnum.Epic && entry.getValue().getEpicID() != null) {
-                epicsStories.put(WIManager.searchWorkItem(entry.getValue().getEpicID()), (List<WorkItem>) entry.getValue());
-                DefaultMutableTreeNode e = new DefaultMutableTreeNode(entry.getValue());
-                root.add(e);
-            }
-        HashMap<WorkItem, List<WorkItem>> storiesTasks = new HashMap<WorkItem, List<WorkItem>>();
-        for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet())
-            if ((entry.getValue().getType() == WorkItem.typeEnum.Task || entry.getValue().getType() == WorkItem.typeEnum.Bug)
-                    && entry.getValue().getStoryID() != null) {
-                epicsStories.put(WIManager.searchWorkItem(entry.getValue().getStoryID()), (List<WorkItem>) entry.getValue());
-        }
-
-
-        DefaultTreeModel treeModel = new DefaultTreeModel(root);
-        JTree tree = new JTree(treeModel);
-        storiesBoard.add(tree);
-
+        //TODO: set hierarchy
     }
 
 
@@ -303,5 +281,26 @@ public class MainUserInterface extends JFrame {
         mainFrame.add(panel);
     }
 
+    public static void userConnected(JFrame mainFrame) {
+        JLabel username = new JLabel("<username>");
+        JButton logout = new JButton("Logout");
+
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String command = actionEvent.getActionCommand();
+                if(command.equals("Logout")) {
+
+                }
+            }
+        };
+
+        mb.add(username);
+        username.setMaximumSize(new Dimension(200,30));
+        username.setHorizontalAlignment(username.getHorizontalAlignment() - 10);
+        mb.add(logout);
+        logout.addActionListener(actionListener);
+        mainFrame.setJMenuBar(mb);
+    }
 
 }
