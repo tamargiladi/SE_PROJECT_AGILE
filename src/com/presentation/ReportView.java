@@ -31,14 +31,14 @@ public class ReportView extends JFrame {
 
 
     public void setLayout() {
+        Insets insets = jPanel.getInsets();
         setTitle("Report Generator");
         setSize(1000,600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
-        this.setContentPane(this.jPanel);
         this.jPanel.setLayout(null);
-
+        this.setContentPane(this.jPanel);
 
         if (reportName == "Work Item distribution by status" || reportName == "Total planned hours per member") {
             setLayoutSprint();
@@ -51,6 +51,7 @@ public class ReportView extends JFrame {
         else { //exceeding estimations
             setLayoutButtonGen();
         }
+
     }
 
     public void setLayoutVersion() {
@@ -299,7 +300,6 @@ public class ReportView extends JFrame {
                 JTable table =(JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
-                int selectedRow;
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
                     Integer val = (Integer) resultsTable.getValueAt(row,0);
                     WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);

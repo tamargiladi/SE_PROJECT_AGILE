@@ -109,7 +109,7 @@ public class BugView extends TaskView {
                         } else {
                             MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, foundVersion, false);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);

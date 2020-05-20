@@ -122,7 +122,7 @@ public class StoryView extends EpicView{
                         } else {
                             MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null, false);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);

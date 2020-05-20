@@ -10,11 +10,12 @@ import com.persistent.WorkItem;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.Graphics;
 import java.awt.Color;
+import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -22,7 +23,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
@@ -36,7 +39,9 @@ public class MainUserInterface extends JPanel {
     public static ReportGenerator reportGenerator = new ReportGenerator();
     public static JFrame mainFrame;
     public static JMenuBar mb;
-
+    private DefaultTableModel model = new DefaultTableModel(0,0);
+    private JTable recentlyCreatedTable = new JTable(model);
+    private JScrollPane jScrollPane = new JScrollPane(recentlyCreatedTable);
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -45,7 +50,6 @@ public class MainUserInterface extends JPanel {
                 MainUserInterface frame = new MainUserInterface();
             }
         });
-
     }
 
     public MainUserInterface() throws HeadlessException {
@@ -62,12 +66,16 @@ public class MainUserInterface extends JPanel {
         userManager.addUser("Yuval Levi", "123", User.PermissionLevel.manager, algo);
         userManager.login("Yuval Levi", "123");
 
+
         mainFrame = new JFrame("Agile Project Management");
         mainFrame.setResizable(false);
         mainFrame.setSize(1000,600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
+        mainFrame.setLayout(null);
+        mainFrame.setContentPane(jScrollPane);
+
         mb = new JMenuBar();
         mb.setBackground(new Color(87,160,211));;
         workItemMenu(mainFrame);
@@ -79,8 +87,8 @@ public class MainUserInterface extends JPanel {
         if (userManager.loggedInUser != null)
             userConnected(mainFrame);
         mainFrame.setJMenuBar(mb);
-        title(mainFrame);
         recentlyCreated(mainFrame);
+        title(mainFrame);
 
         mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -92,16 +100,26 @@ public class MainUserInterface extends JPanel {
 
     }
 
+
     public static void title(JFrame mainFrame) {
         Insets insets = mainFrame.getInsets();
-        JLabel title = new JLabel("Agile Project Management Tool");
+        ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
+        ImageIcon vIcon = new ImageIcon("src/com/presentation/images/v-icon.png");
+        Image newVIcon = vIcon.getImage().getScaledInstance(30,40, Image.SCALE_AREA_AVERAGING);
+        vIcon = new ImageIcon(newVIcon);
+        JLabel title = new JLabel("Agile Project Management Tool", vIcon, JLabel.LEFT);
+        JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
-        Font labelFont = title.getFont();
-        title.setFont(new Font(labelFont.getName(), Font.PLAIN, 20));
+
+        title.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         title.setForeground(new Color(0,49,82));
         mainFrame.add(title);
+        mainFrame.add(background);
+        title.setVisible(true);
+        background.setVisible(true);
         Dimension size = title.getPreferredSize();
-        title.setBounds(insets.left + 10 , insets.top - 20, size.width + 5, size.height);
+        title.setBounds(insets.left + 10 , insets.top - 15, size.width + 5, size.height);
+        background.setBounds(insets.left , insets.top - 35, size.width + 700, size.height + 550);
     }
 
     public static void workItemMenu(JFrame mainFrame) {
@@ -186,7 +204,10 @@ public class MainUserInterface extends JPanel {
         menuReports.add(mRep1); menuReports.add(mRep2); menuReports.add(mRep3); menuReports.add(mRep4); menuReports.add(mRep5);
         menuReports.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
         mb.add(menuReports);
-        //menuReports.addSeparator();
+        if (userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
+            menuReports.setEnabled(false);
+            menuReports.setToolTipText("You have no permissions to this area");
+        }
     }
 
     public static void boardsMenu(JFrame mainFrame) {
@@ -217,7 +238,7 @@ public class MainUserInterface extends JPanel {
 
     }
 
-    public static void searchBox(JFrame mainFrame) {
+    public void searchBox(JFrame mainFrame) {
         JTextField searchBox = new JTextField("",10);
         JButton searchButton = new JButton("Search");
 
@@ -231,6 +252,9 @@ public class MainUserInterface extends JPanel {
                 }
             }
         };
+
+        searchButton.setOpaque(false);
+        searchButton.setBorder(new EmptyBorder(5,15,5,15));
 
         mb.add(searchBox);
         searchBox.setMaximumSize(new Dimension(400,20));
@@ -262,61 +286,61 @@ public class MainUserInterface extends JPanel {
         }
     }
 
-    public static void recentlyCreated(JFrame mainFrame) {
-        JPanel panel = new JPanel(new BorderLayout());
+    public void recentlyCreated(JFrame mainFrame) {
         Insets insets = mainFrame.getInsets();
-        String username;
-
-        //Prepare 2 dimensional array with work items data from hashmap
+        //Prepare table data
+        model.setRowCount(0);
+        model.setColumnCount(0);
         String[] columnNames = {"ID", "Type", "Status", "Owner", "Summary"};
-        Object[][] data = new Object[WIManager.workItems.size()][5];
-        Integer item = 0;
-        for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) {
-            data[item][0] = entry.getValue().getId();
-            data[item][1] = entry.getValue().getType();
-            data[item][2] = entry.getValue().getStatus();
-            data[item][3] = username = entry.getValue().getOwner();
-            data[item][4] = entry.getValue().getSummary();
-            item++;
-        }
-        JTable jTable = new JTable(data, columnNames);
-        jTable.setDefaultEditor(Object.class, null);
-        jTable.addMouseListener(new MouseAdapter() {
+        for (String col : columnNames) //adding columns
+            model.addColumn(col);
+        for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) //adding rows
+            model.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getSummary()});
+        recentlyCreatedTable.setDefaultEditor(Object.class, null);
+
+//        // Sort work items by id - descending (most recently created)
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(recentlyCreatedTable.getModel());
+        recentlyCreatedTable.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
+
+//        //show on UI
+        JLabel recentLabel = new JLabel("Recently created Work Items");
+        jScrollPane.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(75,10,205,410),
+                BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Recently Created Work Items", TitledBorder.CENTER, TitledBorder.TOP)));
+        recentLabel.setVisible(true);
+        Dimension size = recentLabel.getPreferredSize();
+        recentLabel.setBounds(insets.left + 12 , insets.top + 40, size.width * 2, size.height);
+        mainFrame.add(recentLabel);
+        recentLabel.setFont(new Font(recentLabel.getFont().getName(), Font.BOLD, 12));
+        recentLabel.setForeground(new Color(0,49,82));
+        recentlyCreatedTable.setDefaultEditor(Object.class, null);
+        Dimension tableSize = recentlyCreatedTable.getPreferredSize();
+        recentlyCreatedTable.getTableHeader().setBackground(Color.WHITE);
+        recentlyCreatedTable.getTableHeader().setForeground(new Color(0,49,82));
+
+
+        recentlyCreatedTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent mouseEvent) {
                 JTable table =(JTable) mouseEvent.getSource();
                 Point point = mouseEvent.getPoint();
                 int row = table.rowAtPoint(point);
                 if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
-                    Integer val = (Integer) jTable.getValueAt(row,0);
-                    WorkItem foundWI = WIManager.searchWorkItem(val);
-                    returnWorkItemFromSearch(foundWI);
-                    WIManager.updateWorkItemsFile();
-                    mainFrame.dispose();
+                    Integer val = (Integer) recentlyCreatedTable.getValueAt(row,0);
+                    WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
+                    MainUserInterface.returnWorkItemFromSearch(foundWI);
+                    MainUserInterface.WIManager.updateWorkItemsFile();
+                    MainUserInterface.mainFrame.dispose();
                 }
             }
         });
-
-        // Sort work items by id - descending (most recently created)
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(jTable.getModel());
-        jTable.setRowSorter(sorter);
-        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-        sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
-        sorter.setSortKeys(sortKeys);
-        sorter.sort();
-
-        // show on main screen
-        panel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60,10,205,410),
-                BorderFactory.createTitledBorder("Recently created Work Items")));
-        jTable.getColumnModel().getColumn(4).setMinWidth(250);
-        jTable.setShowGrid(false);
-        panel.add(jTable, BorderLayout.WEST);
-        panel.add(jTable.getTableHeader(), BorderLayout.NORTH);
-        mainFrame.add(panel);
     }
 
     public static void userConnected(JFrame mainFrame) {
-        JLabel usernameLabel = new JLabel(userManager.loggedInUser.getUserName() + "   ");
+        JLabel usernameLabel = new JLabel(userManager.loggedInUser.getUserName() + "  (" + userManager.loggedInUser.getPermissionLevel().name() + ")   ");
         JButton logoutButton = new JButton("Logout");
 
         ActionListener actionListener = new ActionListener() {

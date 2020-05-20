@@ -187,11 +187,12 @@ public class TaskView extends StoryView {
                         } else {
                             MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null, false);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
-                        MainUserInterface mainView = new MainUserInterface();
+
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
                         win.dispose();
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+                        MainUserInterface mainView = new MainUserInterface();
                     }
                 }
             }

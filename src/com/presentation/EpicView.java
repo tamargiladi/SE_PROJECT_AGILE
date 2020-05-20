@@ -33,10 +33,12 @@ public class EpicView extends JFrame {
     }
 
     public void setLayout(WorkItem wi) throws  HeadlessException {
+        Insets insets = jPanel.getInsets();
         setTitle("Work Item");
         setSize(1000,600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
+
         this.setContentPane(this.jPanel);
         this.jPanel.setLayout(null);
         setLayoutTitle(wi);
@@ -54,6 +56,11 @@ public class EpicView extends JFrame {
         setLayoutTimeSpent(wi);
         setLayoutTargetVersion(wi);
         setLayoutFoundInVersion(wi);
+
+        ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
+        JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
+        jPanel.add(background);
+        background.setBounds(insets.left , insets.top - 35, 1000, 600);
     }
 
     public void setLayoutTitle(WorkItem wi) {
@@ -148,7 +155,7 @@ public class EpicView extends JFrame {
                         } else {
                             MainUserInterface.WIManager.saveWorkItem(wi, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
