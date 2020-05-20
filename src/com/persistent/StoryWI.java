@@ -3,7 +3,7 @@ package com.persistent;
 public class StoryWI extends WorkItem {
 
     private priorityEnum priority;
-    private User owner;
+    private String owner;
     private Integer epicID;
 
     public StoryWI() {
@@ -13,8 +13,8 @@ public class StoryWI extends WorkItem {
         this.epicID = null;
     }
 
-    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
-                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
+                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
                              Integer storyID, String foundVersion)
     {
         super.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
@@ -33,11 +33,11 @@ public class StoryWI extends WorkItem {
     }
 
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 

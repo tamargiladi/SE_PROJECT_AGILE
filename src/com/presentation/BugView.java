@@ -72,18 +72,14 @@ public class BugView extends TaskView {
                     String summary = summaryTextBox.getText();
                     WorkItem.priorityEnum priority = (WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem();
 
-                    //TODO: update owner as user
-                    //User owner = ownerCombo.getModel().getSelectedItem();
-                    User owner = null;
+                    String owner = (String) ownerCombo.getModel().getSelectedItem();
 
                     String ep = storyIDTextBox.getText();
                     Integer storyId = null;
                     if (ep.length() != 0)
                         storyId = Integer.parseInt(ep);
 
-                    //TODO:update to team
-                    //Team team = teamCombo.getModel().getSelectedItem();
-                    Team team = null;
+                    String team = (String) teamCombo.getModel().getSelectedItem();
 
                     WorkItem.sprintEnum sprint = (WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem();
 
@@ -104,14 +100,14 @@ public class BugView extends TaskView {
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId) == null)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
-                    else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Bug)
-                        JOptionPane.showMessageDialog(jPanel, "Parent ID is not Epic");
+                    else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Story)
+                        JOptionPane.showMessageDialog(jPanel, "Parent ID is not Story");
                     else {
                         if (wi == null) {
                             WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Bug);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, foundVersion);
+                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, foundVersion, true);
                         } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, foundVersion);
+                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, foundVersion, false);
                         }
                         MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();

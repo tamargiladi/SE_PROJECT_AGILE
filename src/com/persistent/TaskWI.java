@@ -3,8 +3,8 @@ package com.persistent;
 public class TaskWI extends WorkItem {
 
     protected priorityEnum priority;
-    protected User owner;
-    protected Team team;
+    protected String owner;
+    protected String team;
     protected sprintEnum sprint;
     protected Integer estimate;
     protected Integer timeSpent;
@@ -22,8 +22,8 @@ public class TaskWI extends WorkItem {
         storyID = null;
     }
 
-    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
-                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
+                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
                              Integer storyID, String foundVersion)
     {
         super.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
@@ -47,20 +47,20 @@ public class TaskWI extends WorkItem {
     }
 
 
-    public User getOwner() {
+    public String  getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
 
-    public Team getTeam() {
+    public String getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 
