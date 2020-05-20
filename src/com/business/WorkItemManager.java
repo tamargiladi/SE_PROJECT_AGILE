@@ -46,18 +46,19 @@ public class WorkItemManager {
     }
 
     // Addition of new work item to hashmap
-    public void addWorkItemToHashMap(WorkItem wi) {
+    public void addWorkItemToHashMap(WorkItem wi, boolean isNew) {
         workItems.put(wi.getId(), wi);
-        increaseNextAvailableId();
+        if (isNew)
+            increaseNextAvailableId();
     }
 
     // Save Work Item
-    public void saveWorkItem(WorkItem wi, String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, User owner,
-                             Integer epicID, Team team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
-                             Integer storyID, String foundVersion)
+    public void saveWorkItem(WorkItem wi, String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
+                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
+                             Integer storyID, String foundVersion, boolean isNew)
     {
         wi.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
-        addWorkItemToHashMap(wi);
+        addWorkItemToHashMap(wi, isNew);
     }
 
 
@@ -76,7 +77,7 @@ public class WorkItemManager {
             XMLDecoder decoder = new XMLDecoder(workItemsFile);
             WorkItem wi = (WorkItem) decoder.readObject();
             while (wi != null) {
-                addWorkItemToHashMap(wi);
+                addWorkItemToHashMap(wi, true);
                 wi = (WorkItem) decoder.readObject();
             }
             decoder.close();

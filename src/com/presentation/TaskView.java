@@ -89,7 +89,7 @@ public class TaskView extends StoryView {
         Insets insets = this.jPanel.getInsets();
         Dimension size;
         JLabel estimateLabel = new JLabel("Estimate [h]:");
-        if (wi != null)
+        if (wi != null && wi.getEstimate() != null)
             estimateTextBox.setText(Integer.toString(wi.getEstimate()));
         this.jPanel.add(estimateLabel);
         this.jPanel.add(estimateTextBox);
@@ -104,7 +104,7 @@ public class TaskView extends StoryView {
         Insets insets = this.jPanel.getInsets();
         Dimension size;
         JLabel timeSpentLabel = new JLabel("Time Spent [h]:");
-        if (wi != null)
+        if (wi != null && wi.getTimeSpent() != null)
             timeSpentTextBox.setText(Integer.toString(wi.getTimeSpent()));
         this.jPanel.add(timeSpentLabel);
         this.jPanel.add(timeSpentTextBox);
@@ -119,7 +119,7 @@ public class TaskView extends StoryView {
         Insets insets = this.jPanel.getInsets();
         Dimension size;
         JLabel targetVersionLabel = new JLabel("Target version:");
-        if (wi != null)
+        if (wi != null && wi.getTargetVersion() != null)
             targetVersionTextBox.setText(wi.getTargetVersion());
         this.jPanel.add(targetVersionLabel);
         this.jPanel.add(targetVersionTextBox);
@@ -151,18 +151,14 @@ public class TaskView extends StoryView {
                     String summary = summaryTextBox.getText();
                     WorkItem.priorityEnum priority = (WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem();
 
-                    //TODO: update owner as user
-                    //User owner = ownerCombo.getModel().getSelectedItem();
-                    User owner = null;
+                    String owner = (String) ownerCombo.getModel().getSelectedItem();
 
                     String ep = storyIDTextBox.getText();
                     Integer storyId = null;
                     if (ep.length() != 0)
                         storyId = Integer.parseInt(ep);
 
-                    //TODO:update to team
-                    //Team team = teamCombo.getModel().getSelectedItem();
-                    Team team = null;
+                    String team = (String) teamCombo.getModel().getSelectedItem();
 
                     WorkItem.sprintEnum sprint = (WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem();
 
@@ -183,19 +179,20 @@ public class TaskView extends StoryView {
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId) == null)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Story)
-                        JOptionPane.showMessageDialog(jPanel, "Parent ID is not Epic");
+                        JOptionPane.showMessageDialog(jPanel, "Parent ID is not Story");
                     else {
                         if (wi == null) {
                             WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Task);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null);
+                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null, true);
                         } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null);
+                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null, false);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
-                        MainUserInterface mainView = new MainUserInterface();
+
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
                         win.dispose();
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+                        MainUserInterface mainView = new MainUserInterface();
                     }
                 }
             }

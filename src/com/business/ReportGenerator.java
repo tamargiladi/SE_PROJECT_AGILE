@@ -2,7 +2,8 @@ package com.business;
 
 import com.persistent.User;
 import com.persistent.WorkItem;
-import com.business.WorkItemManager.*;
+import com.business.WorkItemManager;
+import com.presentation.MainUserInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +14,9 @@ public class ReportGenerator {
 
     private String chosenVersion;
     private WorkItem.sprintEnum chosenSprint;
-    private static HashMap<Integer, WorkItem> hashMap;
+    private HashMap<Integer, WorkItem> hashMap = MainUserInterface.WIManager.workItems;
 
-    public ReportGenerator(HashMap<Integer, WorkItem> workItems) {
-        hashMap = workItems;
+    public ReportGenerator() {
     }
 
     public String getChosenVersion() {
@@ -36,34 +36,74 @@ public class ReportGenerator {
     }
 
     // Reports
-    public HashMap<User, Integer> totalPlannedHoursPerMember() {
-        HashMap<User, Integer> sumHoursPerUser = new HashMap<>();
-        //implementation
+    public HashMap<String, Integer> totalPlannedHoursPerMember() {
+        HashMap<String, Integer> sumHoursPerUser = new HashMap<>(); //username, sum of number of estimated hours
+
+        for (Map.Entry entry : hashMap.entrySet()) {
+            WorkItem wi = (WorkItem) entry.getValue();
+            if (wi.getSprint() == chosenSprint && wi.getEstimate() != null) {
+                if (sumHoursPerUser.containsKey(wi.getOwner()))
+                    sumHoursPerUser.put(wi.getOwner(), sumHoursPerUser.get(wi.getOwner()) + wi.getEstimate());
+                else
+                    sumHoursPerUser.put(wi.getOwner(), wi.getEstimate());
+            }
+        }
         return sumHoursPerUser;
     }
 
-    public Map<WorkItem.statusEnum, Integer> workItemStatusDistribution() {
-        Map<WorkItem.statusEnum, Integer> distribution = new HashMap<>();
-        //implementation
+    public HashMap<WorkItem.statusEnum, Integer> workItemStatusDistribution() {
+        HashMap<WorkItem.statusEnum, Integer> distribution = new HashMap<>();
+        distribution.put(WorkItem.statusEnum.Done, 0);
+        distribution.put(WorkItem.statusEnum.InProgress, 0);
+        distribution.put(WorkItem.statusEnum.New, 0);
+        WorkItem.statusEnum status = null;
+
+        for (Map.Entry entry : hashMap.entrySet()) {
+            WorkItem wi = (WorkItem) entry.getValue();
+            if (wi.getSprint() == chosenSprint) {
+                status = wi.getStatus();
+                if (status == WorkItem.statusEnum.Done)
+                    distribution.put(status, distribution.get(status) + 1);
+                else if (status == WorkItem.statusEnum.InProgress)
+                    distribution.put(status, distribution.get(status) + 1);
+                else if (status == WorkItem.statusEnum.New)
+                    distribution.put(status, distribution.get(status) + 1);
+            }
+        }
         return distribution;
     }
 
     public List<WorkItem> bugsFoundInVersion() {
         List<WorkItem> bugsFound = new ArrayList<>();
-        //implementation
+
+        for (Map.Entry entry : hashMap.entrySet()) {
+            WorkItem wi = (WorkItem) entry.getValue();
+            if (wi.getFoundVersion() != null && wi.getFoundVersion().equals(chosenVersion) && wi.getType() == WorkItem.typeEnum.Bug)
+                    bugsFound.add(wi);
+        }
         return bugsFound;
     }
 
     public List<WorkItem> bugsSolvedInVersion() {
         List<WorkItem> bugsSolved = new ArrayList<>();
-        //implementation
+
+        for (Map.Entry entry : hashMap.entrySet()) {
+            WorkItem wi = (WorkItem) entry.getValue();
+            if (wi.getTargetVersion() != null && wi.getTargetVersion().equals(chosenVersion) && wi.getStatus() == WorkItem.statusEnum.Done && wi.getType() == WorkItem.typeEnum.Bug)
+                bugsSolved.add(wi);
+        }
         return bugsSolved;
     }
 
     public List<WorkItem> exceedingEstimations() {
-        List<WorkItem> exceedings = new ArrayList<>();
-        //implementation
-        return exceedings;
+        List<WorkItem> exceedingEst = new ArrayList<>();
+
+        for (Map.Entry entry : hashMap.entrySet()) {
+            WorkItem wi = (WorkItem) entry.getValue();
+            if (wi.getTimeSpent() != null && wi.getEstimate() != null && wi.getTimeSpent() > wi.getEstimate())
+                exceedingEst.add(wi);
+        }
+        return exceedingEst;
     }
 
 }
