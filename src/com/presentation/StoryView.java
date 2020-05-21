@@ -79,6 +79,7 @@ public class StoryView extends EpicView{
         epicIDTextBox.setBounds(insets.left + 200 , insets.top + 260, size.width - 150, size.height);
     }
 
+
     @Override
     public void setLayoutButtons(WorkItem wi) {
         Insets insets = this.jPanel.getInsets();
@@ -100,9 +101,9 @@ public class StoryView extends EpicView{
                     String desc = descTextBox.getText();
                     String summary = summaryTextBox.getText();
                     WorkItem.priorityEnum priority = (WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem();
-                    //TODO: update owner as user
-                    //User owner = ownerCombo.getModel().getSelectedItem();
-                    User owner = null;
+
+                    String owner = (String) ownerCombo.getModel().getSelectedItem();
+
                     String ep = epicIDTextBox.getText();
                     Integer epicId = null;
                     if (ep.length() != 0)
@@ -117,11 +118,11 @@ public class StoryView extends EpicView{
                     else {
                         if (wi == null) {
                             WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Story);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null);
+                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null, true);
                         } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null);
+                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null, false);
                         }
-                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
