@@ -22,6 +22,11 @@ public class User implements Serializable {
         this.team = team;
     }
 
+    public User(String userName)
+    {
+        this.userName=userName;
+    }
+
     public String getUserName(){
         return userName;
     }
