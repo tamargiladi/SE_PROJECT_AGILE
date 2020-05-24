@@ -23,6 +23,10 @@ public class ReportView extends JFrame {
     DefaultTableModel model = new DefaultTableModel(0,0);
     JTable resultsTable = new JTable(model);
     JScrollPane jScrollPane = new JScrollPane(resultsTable);
+    JLabel error = new JLabel("No matching results");
+
+    ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
+    JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
     public ReportView(String reportName) throws HeadlessException {
         this.reportName = reportName;
@@ -37,8 +41,8 @@ public class ReportView extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
-        this.jPanel.setLayout(null);
-        this.setContentPane(this.jPanel);
+        jPanel.setLayout(null);
+        setContentPane(jPanel);
 
         if (reportName == "Work Item distribution by status" || reportName == "Total planned hours per member") {
             setLayoutSprint();
@@ -52,6 +56,13 @@ public class ReportView extends JFrame {
             setLayoutButtonGen();
         }
 
+
+        error.setVisible(false);
+        this.jPanel.add(error);
+        error.setBounds(insets.left + 25 , insets.top + 70, error.getPreferredSize().width + 5, error.getPreferredSize().height);
+
+        jPanel.add(background);
+        background.setBounds(insets.left , insets.top - 35, 1000, 600);
     }
 
     public void setLayoutVersion() {
@@ -116,14 +127,16 @@ public class ReportView extends JFrame {
 
         Insets insets = this.jPanel.getInsets();
         Dimension size;
-        this.jPanel.add(generate);
+        jPanel.add(generate);
         size = generate.getPreferredSize();
         generate.setBounds(insets.left + 280 , insets.top + 15, size.width + 5, size.height);
 
         generate.addActionListener(actionListener);
     }
 
+    // Generate reports functions
     public void generateWorkItemDistribution() {
+        jPanel.remove(background);
         HashMap<WorkItem.statusEnum, Integer> distribution = new HashMap<>();
         MainUserInterface.reportGenerator.setChosenSprint((WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem());
         distribution = MainUserInterface.reportGenerator.workItemStatusDistribution();
@@ -145,41 +158,58 @@ public class ReportView extends JFrame {
         resultsTable.revalidate();
         Dimension tableSize = resultsTable.getPreferredSize();
         this.jPanel.add(jScrollPane).setBounds(insets.left + 10 , insets.top + 10, tableSize.width * 2 , tableSize.height + 25);
+        jPanel.add(background);
+        resultsTable.getTableHeader().setBackground(Color.WHITE);
+        resultsTable.getTableHeader().setForeground(new Color(0,49,82));
+
     }
 
     public void generateTotalPlannedHoursPerMember() {
+        jPanel.remove(background);
         HashMap<String, Integer> sumHoursPerUser = new HashMap<>();
         MainUserInterface.reportGenerator.setChosenSprint((WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem());
         sumHoursPerUser = MainUserInterface.reportGenerator.totalPlannedHoursPerMember();
 
-        for (Map.Entry<String, Integer> ent : sumHoursPerUser.entrySet())
-            if (ent.getValue() > 0) {
+        if (sumHoursPerUser.size() > 0) {
+            error.setVisible(false);
+            jScrollPane.setVisible(true);
+            for (Map.Entry<String, Integer> ent : sumHoursPerUser.entrySet()) {
                 resultsTable.setVisible(true);
                 //Setting table data and structure
                 model.setRowCount(0);
                 model.setColumnCount(0);
-                String[] columnNames = {"Owner", "Total Estimated Work [h]"};
+                String[] columnNames = {"Owner", "Total Estimated Work [h]", "Team"};
                 for (String col : columnNames) //adding columns
                     model.addColumn(col);
                 for (Map.Entry<String, Integer> entry : sumHoursPerUser.entrySet()) //adding rows
-                    model.addRow(new Object[]{entry.getKey(), entry.getValue()});
+                    if (entry.getKey() == null)
+                        model.addRow(new Object[]{"Unassigned", entry.getValue(), "Unassigned"});
+                    else if (LoginView.userManager.users.get(entry.getKey()).getTeam() != null)
+                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), LoginView.userManager.users.get(entry.getKey()).getTeam().getTeamsName()});
+                    else
+                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), "Unassigned"});
 
                 //set GUI
-                jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60,60,60,60),
+                jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60),
                         BorderFactory.createTitledBorder("Total work estimation per owner for sprint " + sprintCombo.getModel().getSelectedItem())));
                 Insets insets = this.jPanel.getInsets();
                 resultsTable.setDefaultEditor(Object.class, null);
                 resultsTable.revalidate();
                 Dimension tableSize = resultsTable.getPreferredSize();
-                this.jPanel.add(jScrollPane).setBounds(insets.left + 10 , insets.top + 10, tableSize.width * 2 , tableSize.height + 25);
+                this.jPanel.add(jScrollPane).setBounds(insets.left + 10, insets.top + 10, tableSize.width * 2, tableSize.height + 25);
+                jPanel.add(background);
                 return;
             }
-        resultsTable.setVisible(false);
-        resultsTable.revalidate();
+        }
+        else {
+                jScrollPane.setVisible(false);
+                error.setVisible(true);
+            }
+        jPanel.add(background);
     }
 
-
     public void generateBugsFoundInVersion() {
+        jPanel.remove(background);
         List<WorkItem> bugsFound = new ArrayList<>();
         MainUserInterface.reportGenerator.setChosenVersion(versionName.getText().split("\n")[0]);
         bugsFound = MainUserInterface.reportGenerator.bugsFoundInVersion();
@@ -188,22 +218,30 @@ public class ReportView extends JFrame {
         model.setRowCount(0);
         model.setColumnCount(0);
         String[] columnNames = {"Bug ID", "Summary", "Status", "Priority", "Owner", "Team", "Sprint", "Estimate[h]", "Time Spent[h]"};
-        for (String col : columnNames) //adding columns
-            model.addColumn(col);
-        for (Object obj : bugsFound) //adding rows
-        {
-            WorkItem wi = (WorkItem) obj;
-            model.addRow(new Object[]{((WorkItem) obj).getId(), ((WorkItem) obj).getSummary(), ((WorkItem) obj).getStatus(), ((WorkItem) obj).getPriority(), ((WorkItem) obj).getOwner(), ((WorkItem) obj).getTeam(), ((WorkItem) obj).getSprint(), ((WorkItem) obj).getEstimate(), ((WorkItem) obj).getTimeSpent()});
-        }
 
-        //set GUI
-        jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60,30,60,30),
-                BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
-        Insets insets = this.jPanel.getInsets();
-        resultsTable.setDefaultEditor(Object.class, null);
-        resultsTable.revalidate();
-        Dimension tableSize = resultsTable.getPreferredSize();
-        this.jPanel.add(jScrollPane).setBounds(insets.left + 10 , insets.top + 10, jPanel.getWidth() - 2 * insets.left - 20, tableSize.height + 40);
+        if (bugsFound.size() > 0) {
+            error.setVisible(false);
+            jScrollPane.setVisible(true);
+            for (String col : columnNames) //adding columns
+                model.addColumn(col);
+            for (Object obj : bugsFound) //adding rows
+            {
+                WorkItem wi = (WorkItem) obj;
+                model.addRow(new Object[]{((WorkItem) obj).getId(), ((WorkItem) obj).getSummary(), ((WorkItem) obj).getStatus(), ((WorkItem) obj).getPriority(), ((WorkItem) obj).getOwner(), ((WorkItem) obj).getTeam(), ((WorkItem) obj).getSprint(), ((WorkItem) obj).getEstimate(), ((WorkItem) obj).getTimeSpent()});
+            }
+            //set GUI
+            jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 30, 60, 30),
+                    BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
+            Insets insets = this.jPanel.getInsets();
+            resultsTable.setDefaultEditor(Object.class, null);
+            resultsTable.revalidate();
+            Dimension tableSize = resultsTable.getPreferredSize();
+            this.jPanel.add(jScrollPane).setBounds(insets.left + 10, insets.top + 10, jPanel.getWidth() - 2 * insets.left - 20, tableSize.height + 40);
+        }
+        else {
+            jScrollPane.setVisible(false);
+            error.setVisible(true);
+        }
 
         resultsTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -221,34 +259,43 @@ public class ReportView extends JFrame {
                 }
             }
         });
-
+        jPanel.add(background);
     }
 
     public void generateBugsSolvedInVersion() {
+        jPanel.remove(background);
         List<WorkItem> bugsSolved = new ArrayList<>();
         MainUserInterface.reportGenerator.setChosenVersion(versionName.getText().split("\n")[0]);
         bugsSolved = MainUserInterface.reportGenerator.bugsSolvedInVersion();
 
         //Setting table data and structure
-        model.setRowCount(0);
-        model.setColumnCount(0);
-        String[] columnNames = {"Bug ID", "Summary", "Status", "Priority", "Owner", "Team", "Sprint", "Estimate[h]", "Time Spent[h]"};
-        for (String col : columnNames) //adding columns
-            model.addColumn(col);
-        for (Object obj : bugsSolved) //adding rows
-        {
-            WorkItem wi = (WorkItem) obj;
-            model.addRow(new Object[]{((WorkItem) obj).getId(), ((WorkItem) obj).getSummary(), ((WorkItem) obj).getStatus(), ((WorkItem) obj).getPriority(), ((WorkItem) obj).getOwner(), ((WorkItem) obj).getTeam(), ((WorkItem) obj).getSprint(), ((WorkItem) obj).getEstimate(), ((WorkItem) obj).getTimeSpent()});
-        }
+        if (bugsSolved.size() > 0) {
+            jScrollPane.setVisible(true);
+            error.setVisible(false);
+            model.setRowCount(0);
+            model.setColumnCount(0);
+            String[] columnNames = {"Bug ID", "Summary", "Status", "Priority", "Owner", "Team", "Sprint", "Estimate[h]", "Time Spent[h]"};
+            for (String col : columnNames) //adding columns
+                model.addColumn(col);
+            for (Object obj : bugsSolved) //adding rows
+            {
+                WorkItem wi = (WorkItem) obj;
+                model.addRow(new Object[]{((WorkItem) obj).getId(), ((WorkItem) obj).getSummary(), ((WorkItem) obj).getStatus(), ((WorkItem) obj).getPriority(), ((WorkItem) obj).getOwner(), ((WorkItem) obj).getTeam(), ((WorkItem) obj).getSprint(), ((WorkItem) obj).getEstimate(), ((WorkItem) obj).getTimeSpent()});
+            }
 
-        //set GUI
-        jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60,30,60,30),
-                BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
-        Insets insets = this.jPanel.getInsets();
-        resultsTable.setDefaultEditor(Object.class, null);
-        resultsTable.revalidate();
-        Dimension tableSize = resultsTable.getPreferredSize();
-        this.jPanel.add(jScrollPane).setBounds(insets.left + 10 , insets.top + 10, jPanel.getWidth() - 2 * insets.left - 20, tableSize.height + 40);
+            //set GUI
+            jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 30, 60, 30),
+                    BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
+            Insets insets = this.jPanel.getInsets();
+            resultsTable.setDefaultEditor(Object.class, null);
+            resultsTable.revalidate();
+            Dimension tableSize = resultsTable.getPreferredSize();
+            this.jPanel.add(jScrollPane).setBounds(insets.left + 10, insets.top + 10, jPanel.getWidth() - 2 * insets.left - 20, tableSize.height + 40);
+        }
+        else {
+            jScrollPane.setVisible(false);
+            error.setVisible(true);
+        }
 
         resultsTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -266,10 +313,12 @@ public class ReportView extends JFrame {
                 }
             }
         });
+        jPanel.add(background);
 
     }
 
     public void generateExceedingEstimations() {
+        jPanel.remove(background);
         List<WorkItem> exceedingEstimations = new ArrayList<>();
         exceedingEstimations = MainUserInterface.reportGenerator.exceedingEstimations();
 
@@ -309,7 +358,7 @@ public class ReportView extends JFrame {
                 }
             }
         });
-
+        jPanel.add(background);
     }
 
 }
