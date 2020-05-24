@@ -15,9 +15,11 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
+import javax.swing.table.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+
+import static javax.swing.text.html.HTML.Tag.PRE;
 
 
 public class MainUserInterface extends JPanel {
@@ -61,9 +65,9 @@ public class MainUserInterface extends JPanel {
         LoginView.teamManager.addTeam("QA");
         LoginView.teamManager.addTeam("Hardware");
         LoginView.userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
-        LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Algo");
-        LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "Algo");
-        LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Algo");
+        LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Software");
+        LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "QA");
+        LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Hardware");
         //LoginView.userManager.login("Yuval Levi", "123");
 
 
@@ -94,6 +98,8 @@ public class MainUserInterface extends JPanel {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                     WIManager.updateWorkItemsFile();
+                    LoginView.userManager.updateUsersFile();
+                    LoginView.teamManager.updateTeamsFile();
                     System.exit(0);
                 }
             });
@@ -110,7 +116,6 @@ public class MainUserInterface extends JPanel {
         JLabel title = new JLabel("Agile Project Management Tool", vIcon, JLabel.LEFT);
         JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
-
         title.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         title.setForeground(new Color(0,49,82));
         mainFrame.add(title);
@@ -119,7 +124,7 @@ public class MainUserInterface extends JPanel {
         background.setVisible(true);
         Dimension size = title.getPreferredSize();
         title.setBounds(insets.left + 10 , insets.top - 15, size.width + 5, size.height);
-        background.setBounds(insets.left , insets.top - 35, size.width + 700, size.height + 550);
+        background.setBounds(insets.left - 45, insets.top - 35, size.width + 700, size.height + 550);
     }
 
     public static void workItemMenu(JFrame mainFrame) {
@@ -257,7 +262,7 @@ public class MainUserInterface extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String command = actionEvent.getActionCommand();
                 if(command.equals("Daily Board")) {
-
+                    dailyBoard();
                 } else if (command.equals("Stories Board")) {
                     storiesBoard();
                 }
@@ -273,7 +278,120 @@ public class MainUserInterface extends JPanel {
     }
 
     public static void storiesBoard() {
+        // Set JFrame
+        ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
+        JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
+        JFrame storiesBoard = new JFrame();
+        storiesBoard.setTitle("Hierarchy Board: Epic > Story > Task/Bug");
+        Insets insets = storiesBoard.getInsets();
+        storiesBoard.setSize(1000, 600);
+        storiesBoard.setLayout(null);
+        storiesBoard.setVisible(true);
+        storiesBoard.setLayout(null);
+        storiesBoard.setResizable(false);
+
+        //Initialize tree
+        DefaultMutableTreeNode epicT = new DefaultMutableTreeNode("<html><body style='width:600'><PRE><b>  >>  Epic\tUnassigned</PRE></html>");
+        DefaultMutableTreeNode storyT = new DefaultMutableTreeNode("<html><body style='width:600'><PRE>><b>  Story\tUnassigned</PRE></html>");
+        DefaultMutableTreeNode rootT = new DefaultMutableTreeNode("<html><body style='width:600'><PRE><b><font size=\"4\">\tType\t   ID\t\t   Status\t\t   Summary</PRE></html>");
+        DefaultMutableTreeNode tempNodeEpic, tempNodeStory, tempNodeWI;
+        JTree tree = new JTree(rootT); rootT.add(epicT); epicT.add(storyT);
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+        JScrollPane treeView = new JScrollPane(tree);
+        storiesBoard.setContentPane(treeView);
+
+        treeView.add(background);
+        storiesBoard.add(background);
+        background.setBounds(0,0, background.getPreferredSize().width, background.getPreferredSize().height);
+
+        //Adding nodes to tree
+        for (Map.Entry<Integer, WorkItem> entryEp : WIManager.workItems.entrySet()) {
+            // Set EPICS
+            if (entryEp.getValue().getType() == WorkItem.typeEnum.Epic) {
+                tempNodeEpic = new DefaultMutableTreeNode("<html><body style='width:850'><PRE><b><font size=\"4\">  >> " + entryEp.getValue().getType().name() + "\t" + entryEp.getKey() + "\t\t" + entryEp.getValue().getStatus() + "\t\t" + entryEp.getValue().getSummary()  + "</PRE></html>");
+                model.insertNodeInto(tempNodeEpic, root, root.getChildCount());
+                // Set STORIES
+                for (Map.Entry<Integer, WorkItem> entrySt : WIManager.workItems.entrySet())
+                    if (entrySt.getValue().getType() == WorkItem.typeEnum.Story && entrySt.getValue().getEpicID() == entryEp.getKey()) {
+                        tempNodeStory = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>> <b>" + entrySt.getValue().getType().name() + "\t     " + entrySt.getKey() + "\t     " + entrySt.getValue().getStatus() + "\t     " + entrySt.getValue().getSummary()  + "</PRE></html>");
+                        model.insertNodeInto(tempNodeStory, tempNodeEpic, tempNodeEpic.getChildCount());
+                        // Set BUGS / TASKS
+                        for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
+                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
+                                    if (entryTB.getValue().getStatus() == WorkItem.statusEnum.InProgress)
+                                        tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t  " + entryTB.getKey() + "\t\t  " + entryTB.getValue().getStatus() + "\t  " + entryTB.getValue().getSummary()  + "</PRE></html>");
+                                    else
+                                        tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t  " + entryTB.getKey() + "\t\t  " + entryTB.getValue().getStatus() + "\t\t  " + entryTB.getValue().getSummary()  + "</PRE></html>");
+                                    model.insertNodeInto(tempNodeWI, tempNodeStory, tempNodeStory.getChildCount());
+                                }
+                            }
+
+                    else if (entrySt.getValue().getType() == WorkItem.typeEnum.Story && entrySt.getValue().getEpicID() == null) {
+                        tempNodeStory = new DefaultMutableTreeNode("Story " + entrySt.getKey() + ": " + entrySt.getValue().getSummary());
+                        model.insertNodeInto(tempNodeStory, epicT, epicT.getChildCount());
+                        for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
+                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
+                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t" + entryTB.getKey() + "\t\t" + entryTB.getValue().getStatus() + "\t\t" + entryTB.getValue().getSummary()  + "</PRE></html>");
+                                model.insertNodeInto(tempNodeWI, storyT, storyT.getChildCount());
+                            }
+                    }
+            }
+            else if (entryEp.getValue().getType() == WorkItem.typeEnum.Task && entryEp.getValue().getStoryID() == null) {
+                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE> " + entryEp.getValue().getType().name() + "\t" + entryEp.getKey() + "\t\t" + entryEp.getValue().getStatus() + "\t\t" + entryEp.getValue().getSummary()  + "</PRE></html>");
+                model.insertNodeInto(tempNodeWI, storyT, storyT.getChildCount());
+            }
+        }
+        model.reload(root);
+    }
+
+    public static void dailyBoard() {
+        // Set JFrame
+        JFrame dailyBoard = new JFrame();
+        dailyBoard.setTitle("Daily Board");
+        Insets insets = dailyBoard.getInsets();
+        dailyBoard.setSize(1000, 600);
+        dailyBoard.setVisible(true);
+        dailyBoard.setLayout(null);
+        dailyBoard.setResizable(false);
+
+        //Initialize tree
+        DefaultMutableTreeNode rootT = new DefaultMutableTreeNode("Daily Board");
+        DefaultMutableTreeNode titleT = new DefaultMutableTreeNode("<html><body style='width:600'><PRE><b>Type\tID\tStatus\t\tSummary</PRE></html>");
+        DefaultMutableTreeNode teamT = new DefaultMutableTreeNode("Team - Unassigned");
+        DefaultMutableTreeNode ownerT = new DefaultMutableTreeNode("Owner - Unassigned");
+        DefaultMutableTreeNode tempNodeTeam, tempNodeUser, tempNodeWI;
+        JTree tree = new JTree(rootT); rootT.add(teamT); teamT.add(ownerT);
+        DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+
+
+        //Adding nodes to tree
+        for (Map.Entry<String, Team> entryTeam : LoginView.teamManager.teams.entrySet()) {
+            tempNodeTeam = new DefaultMutableTreeNode(entryTeam.getKey());
+            model.insertNodeInto(tempNodeTeam, root, root.getChildCount());
+            for (Map.Entry<String, User> entryOwner : LoginView.userManager.users.entrySet())
+                if (entryOwner.getValue().getTeam().getTeamsName().equals(entryTeam.getKey())) {
+                    tempNodeUser = new DefaultMutableTreeNode(entryOwner.getKey());
+                    model.insertNodeInto(tempNodeUser, tempNodeTeam, tempNodeTeam.getChildCount());
+                    model.insertNodeInto(new DefaultMutableTreeNode(titleT), tempNodeUser, tempNodeUser.getChildCount());
+                    for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet()) {
+                        if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals(entryOwner.getKey())) {
+                            if (entryWorkItem.getValue().getStatus() == WorkItem.statusEnum.InProgress)
+                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>");
+                            else
+                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>");
+                            model.insertNodeInto(tempNodeWI, tempNodeUser, tempNodeUser.getChildCount());
+
+                        }
+                    }
+                }
+        }
+        model.reload(root);
+        JScrollPane treeView = new JScrollPane(tree);
+        dailyBoard.setContentPane(treeView);
     }
 
     public void searchBox(JFrame mainFrame) {
@@ -346,7 +464,7 @@ public class MainUserInterface extends JPanel {
 
 //        //show on UI
         JLabel recentLabel = new JLabel("Recently created Work Items");
-        jScrollPane.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(75,10,205,410),
+        jScrollPane.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(75,10,205,150),
                 BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Recently Created Work Items", TitledBorder.CENTER, TitledBorder.TOP)));
         recentLabel.setVisible(true);
         Dimension size = recentLabel.getPreferredSize();
@@ -359,6 +477,17 @@ public class MainUserInterface extends JPanel {
         recentlyCreatedTable.getTableHeader().setBackground(Color.WHITE);
         recentlyCreatedTable.getTableHeader().setForeground(new Color(0,49,82));
 
+        // Resize Columns
+        final TableColumnModel columnModel = recentlyCreatedTable.getColumnModel();
+        for (int column = 0; column < recentlyCreatedTable.getColumnCount(); column++) {
+            int width = 15; // Min width
+            for (int row = 0; row < recentlyCreatedTable.getRowCount(); row++) {
+                TableCellRenderer renderer = recentlyCreatedTable.getCellRenderer(row, column);
+                Component comp = recentlyCreatedTable.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width , width);
+            }
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
 
         recentlyCreatedTable.addMouseListener(new MouseAdapter() {
             @Override
@@ -403,4 +532,9 @@ public class MainUserInterface extends JPanel {
 
     }
 
+
 }
+
+
+
+
