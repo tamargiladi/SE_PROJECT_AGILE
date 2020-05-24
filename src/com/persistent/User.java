@@ -6,8 +6,8 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    final private String userName;
-    final private String password;
+    private String userName;
+    private String password;
     private PermissionLevel permissionLevel;
     private Team team;
 

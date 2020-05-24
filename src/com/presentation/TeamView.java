@@ -3,8 +3,8 @@ package com.presentation;
 import com.business.TeamManager;
 import com.persistent.Team;
 import sun.applet.Main;
-import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
-import sun.jvm.hotspot.ui.tree.BooleanTreeNodeAdapter;
+//import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
+//import sun.jvm.hotspot.ui.tree.BooleanTreeNodeAdapter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -215,8 +215,8 @@ public class TeamView extends JFrame {
             MainUserInterface.teamManager.addMemberToTeam(MainUserInterface.userManager.users.get(username),
                     MainUserInterface.teamManager.teams.get(teamName));
 
-            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.teamManager.teams.get(teamName));
+            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username).getUserName(),
+                    MainUserInterface.teamManager.teams.get(teamName).getTeamsName());
 
             update();
             this.dispose();
@@ -235,8 +235,8 @@ public class TeamView extends JFrame {
             MainUserInterface.teamManager.removeMemberFromTeam(MainUserInterface.userManager.users.get(username),
                     MainUserInterface.userManager.users.get(username).getTeam());
 
-            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.teamManager.teams.get(teamName));
+            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username).getUserName(),
+                    MainUserInterface.teamManager.teams.get(teamName).getTeamsName());
 
 
 
