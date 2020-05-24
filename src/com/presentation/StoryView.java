@@ -69,7 +69,7 @@ public class StoryView extends EpicView{
         Insets insets = this.jPanel.getInsets();
         Dimension size;
         JLabel epicIdLabel = new JLabel("[Set Parent]   Epic ID:");
-        if (wi != null)
+        if (wi != null && wi.getEpicID() != null)
             epicIDTextBox.setText(Integer.toString(wi.getEpicID()));
         this.jPanel.add(epicIdLabel);
         this.jPanel.add(epicIDTextBox);

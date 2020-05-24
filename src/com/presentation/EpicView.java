@@ -1,6 +1,7 @@
 package com.presentation;
 
 import com.business.UserManager;
+import com.business.WorkItemManager;
 import com.persistent.WorkItem;
 
 import javax.swing.*;
@@ -149,11 +150,16 @@ public class EpicView extends JFrame {
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
                     else {
-                        if (wi == null) {
+                        if (wi == null && WorkItemManager.getAvailableId() != 100) {
                             WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Epic);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary,status,desc,null, null, null, null, null,null,null,null,null,null, false);
-                        } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
+                            MainUserInterface.WIManager.saveWorkItem(newWI, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
+                        }
+                        else if (wi == null && WorkItemManager.getAvailableId() == 100) {
+                            WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Epic);
+                            MainUserInterface.WIManager.saveWorkItem(newWI, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
+                        }
+                        else {
+                            MainUserInterface.WIManager.saveWorkItem(wi, summary,status,desc,null, null, null, null, null,null,null,null,null,null, false);
                         }
 //                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
