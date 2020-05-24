@@ -60,10 +60,10 @@ public class MainUserInterface extends JPanel {
         teamManager.addTeam("Software");
         teamManager.addTeam("QA");
         teamManager.addTeam("Hardware");
-        userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, algo);
-        userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, algo);
-        userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, algo);
-        userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, algo);
+        userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
+        userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Algo");
+        userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "Algo");
+        userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Algo");
         userManager.login("Yuval Levi", "123");
 
 

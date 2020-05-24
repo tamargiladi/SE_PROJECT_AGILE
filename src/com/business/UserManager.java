@@ -1,6 +1,8 @@
 package com.business;
 
 import com.persistent.*;
+import com.presentation.LoginView;
+
 import java.io.*;
 import java.util.*;
 //import java.beans.XMLDecoder;
@@ -12,7 +14,7 @@ public class UserManager {
     public User loggedInUser;
     public HashMap<String, User> users;
 
-    public UserManager(TeamManager teamManager) {
+    public UserManager() {
         try {
             users = new HashMap<>();
             loadUsersFileToHashMap();
@@ -23,8 +25,8 @@ public class UserManager {
             if(!(isUserExist("admin"))){
                 /*for adding a user must be a team
                   create default team */
-                teamManager.addTeam("default");
-                addUser("admin","admin", User.PermissionLevel.admin,"default",teamManager);
+                LoginView.teamManager.addTeam("default");
+                addUser("admin","admin", User.PermissionLevel.admin,"default");
             }
 
         }catch (Exception e) {
@@ -33,14 +35,14 @@ public class UserManager {
         }
     }
 
-    public void addUser(String username, String password, User.PermissionLevel permission, String teamName, TeamManager teamManager) {
+    public void addUser(String username, String password, User.PermissionLevel permission, String teamName) {
         //if (isActionPermitted())
             //check if user not exist in system
             if (!(isUserExist(username))) {
                 //create user object
-                User newUser = new User(username, password, permission,teamManager.teams.get(teamName));
+                User newUser = new User(username, password, permission,LoginView.teamManager.teams.get(teamName));
                 //insert new user to team list
-                teamManager.addMemberToTeam(newUser, newUser.getTeam());
+                LoginView.teamManager.addMemberToTeam(newUser, newUser.getTeam());
                 //insert new user to users HashMap
                 users.put(username, newUser);
                 //update the user file with new user
@@ -52,19 +54,23 @@ public class UserManager {
         return users.containsKey(username);
     }
 
-    public void removeUser(String username, TeamManager teamManager) {
+    public void removeUser(String username) {
         if (isActionPermitted()) {
-            //remove user from the team list
-            teamManager.removeMemberFromTeam(users.get(username), users.get(username).getTeam());
-            //remove the user
-            //TODO: check if u User remove
-            User u=users.get(username);
-            u=null;
-            //remove user from users HashMap
-            users.remove(username, users.get(username));
-            //update file
-            updateUsersFile();
-            System.out.println("user removed\n");
+            if (!(username.equals(loggedInUser.getUserName()))) {
+                //remove user from the team list
+                LoginView.teamManager.removeMemberFromTeam(users.get(username), users.get(username).getTeam());
+                //remove the user
+                //TODO: check if u User remove
+                User u = users.get(username);
+                u = null;
+                //remove user from users HashMap
+                users.remove(username, users.get(username));
+                //update file
+                updateUsersFile();
+                System.out.println("user removed\n");
+            }
+            else
+                System.out.println("user can't remove himself\n");
         }
         else
             System.out.println("Action no permitted\n");
@@ -79,14 +85,14 @@ public class UserManager {
         else System.out.println("Action no permitted\n");
     }
 
-    public void updateUserTeam(String username, String newTeamName,TeamManager teamManager) {
+    public void updateUserTeam(String username, String newTeamName) {
         if (isActionPermitted()){
             //remove the user from previous team
-            teamManager.removeMemberFromTeam(users.get(username),users.get(username).getTeam());
+            LoginView.teamManager.removeMemberFromTeam(users.get(username),users.get(username).getTeam());
             //set user team to new team
-            users.get(username).setTeam(teamManager.teams.get(newTeamName));
+            users.get(username).setTeam(LoginView.teamManager.teams.get(newTeamName));
             //insert the user to current list team
-            teamManager.addMemberToTeam(users.get(username),users.get(username).getTeam());
+            LoginView.teamManager.addMemberToTeam(users.get(username),users.get(username).getTeam());
             updateUsersFile();
          }
         else System.out.println("Action no permitted\n");
