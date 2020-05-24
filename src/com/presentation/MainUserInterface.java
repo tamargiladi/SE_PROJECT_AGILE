@@ -63,7 +63,7 @@ public class MainUserInterface extends JPanel {
         userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, algo);
         userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, algo);
         userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, algo);
-        userManager.addUser("Yuval Levi", "123", User.PermissionLevel.manager, algo);
+        userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, algo);
         userManager.login("Yuval Levi", "123");
 
 
@@ -159,15 +159,51 @@ public class MainUserInterface extends JPanel {
     }
 
     public static void teamMenu(JFrame mainFrame) {
+
+        //TODO:================================================================
+        //TODO:                          TAMAR
+        //TODO:================================================================
+
+
         JMenu menuTeam;
         menuTeam = new JMenu("Team Management");
         mb.add(menuTeam);
         menuTeam.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
 
+        JMenuItem mAddTeam = new JMenuItem("Add Team");
+        JMenuItem mRemoveTeam = new JMenuItem("Remove Team");
+        JMenuItem mAddUserToTeam = new JMenuItem("Add User To Team");
+        JMenuItem mRemoveUserFromTeam = new JMenuItem("Remove User From Team");
+
+
         if (userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
             menuTeam.setEnabled(false);
             menuTeam.setToolTipText("You have no permissions to this area");
         }
+        else {
+
+            ActionListener actionListener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    String command = actionEvent.getActionCommand();
+                    TeamView tv = new TeamView(command);
+                }
+            };
+
+            menuTeam.add(mAddTeam);mAddTeam.addActionListener(actionListener);
+            menuTeam.add(mRemoveTeam);mRemoveTeam.addActionListener(actionListener);
+            menuTeam.add(mAddUserToTeam);mAddUserToTeam.addActionListener(actionListener);
+            menuTeam.add(mRemoveUserFromTeam);mRemoveUserFromTeam.addActionListener(actionListener);
+
+
+
+
+
+        }
+
+        //================================================================
+        //TODO:                          TAMAR
+        //================================================================
     }
 
     public static void userMenu(JFrame mainFrame) {
@@ -180,6 +216,8 @@ public class MainUserInterface extends JPanel {
             menuUser.setEnabled(false);
             menuUser.setToolTipText("You have no permissions to this area");
         }
+
+
 
     }
 
@@ -333,6 +371,7 @@ public class MainUserInterface extends JPanel {
                     WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
                     MainUserInterface.returnWorkItemFromSearch(foundWI);
                     MainUserInterface.WIManager.updateWorkItemsFile();
+                    MainUserInterface.teamManager.updateTeamsFile();//Updates the team's file.
                     MainUserInterface.mainFrame.dispose();
                 }
             }
