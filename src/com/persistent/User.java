@@ -1,14 +1,19 @@
 package com.persistent;
 
-public class User {
+import java.io.Serializable;
 
-    public enum PermissionLevel{
-        member, manager,admin}
+public class User implements Serializable {
 
-    private String userName;
-    private String password;
+    private static final long serialVersionUID = 1L;
+
+    final private String userName;
+    final private String password;
     private PermissionLevel permissionLevel;
     private Team team;
+
+    public enum PermissionLevel{
+        member, manager, admin
+    }
 
     public User(String userName, String password, PermissionLevel permissionLevel, Team team) {
         this.userName = userName;
