@@ -98,7 +98,7 @@ public class ReportView extends JFrame {
         Insets insets = this.jPanel.getInsets();
         Dimension size;
         JLabel sprintLabel;
-        sprintLabel = new JLabel("Enter version:");
+        sprintLabel = new JLabel("Choose Sprint:");
         this.jPanel.add(sprintLabel);
         this.jPanel.add(sprintCombo);
         size = sprintLabel.getPreferredSize();
