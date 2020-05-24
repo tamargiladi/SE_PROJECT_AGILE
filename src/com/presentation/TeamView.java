@@ -155,13 +155,13 @@ public class TeamView extends JFrame {
     public void generateAddTeam(String teamName){
 
 
-        if (MainUserInterface.teamManager.isTeamExist(teamName))
+        if (LoginView.teamManager.isTeamExist(teamName))
         {
             JOptionPane.showMessageDialog(this, "The team already exists!");
 
         }
         else {
-            MainUserInterface.teamManager.addTeam(teamName);
+            LoginView.teamManager.addTeam(teamName);
 
             this.dispose();
 
@@ -174,7 +174,7 @@ public class TeamView extends JFrame {
     }
     public void generateRemoveTeam(String text)
     {
-       if(!MainUserInterface.teamManager.isTeamExist(text))
+       if(!LoginView.teamManager.isTeamExist(text))
        {
            //The team doesn't exist. Cannot be removed!
            JOptionPane.showMessageDialog(this, "The team doesn't exist. Cannot be removed!");
@@ -182,7 +182,7 @@ public class TeamView extends JFrame {
        }
        else
        {
-           MainUserInterface.teamManager.removeTeam(new Team(text));
+           LoginView.teamManager.removeTeam(new Team(text));
            update();
            this.dispose();
        }
@@ -196,7 +196,7 @@ public class TeamView extends JFrame {
         //xTODO:Input box
         //xTODO:OK button
 
-        if(MainUserInterface.userManager.users.get(username).getTeam().getTeamsName()==teamName)
+        if(LoginView.userManager.users.get(username).getTeam().getTeamsName()==teamName)
         {
             //The user already belongs to this team.
             JOptionPane.showMessageDialog(this, "The user already belongs to this team.");
@@ -207,16 +207,16 @@ public class TeamView extends JFrame {
         {
 
             //Removes from previous team
-            MainUserInterface.teamManager.removeMemberFromTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.userManager.users.get(username).getTeam());
+            LoginView.teamManager.removeMemberFromTeam(LoginView.userManager.users.get(username),
+                    LoginView.userManager.users.get(username).getTeam());
 
 
 
-            MainUserInterface.teamManager.addMemberToTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.teamManager.teams.get(teamName));
+            LoginView.teamManager.addMemberToTeam(LoginView.userManager.users.get(username),
+                    LoginView.teamManager.teams.get(teamName));
 
-            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username).getUserName(),
-                    MainUserInterface.teamManager.teams.get(teamName).getTeamsName());
+            LoginView.userManager.updateUserTeam(LoginView.userManager.users.get(username).getUserName(),
+                    LoginView.teamManager.teams.get(teamName).getTeamsName());
 
             update();
             this.dispose();
@@ -228,15 +228,15 @@ public class TeamView extends JFrame {
     {
 
 
-        if(MainUserInterface.userManager.users.get(username).getTeam().getTeamsName()==teamName) {
-            MainUserInterface.teamManager.addMemberToTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.teamManager.teams.get("default"));
+        if(LoginView.userManager.users.get(username).getTeam().getTeamsName()==teamName) {
+            LoginView.teamManager.addMemberToTeam(LoginView.userManager.users.get(username),
+                    LoginView.teamManager.teams.get("default"));
 
-            MainUserInterface.teamManager.removeMemberFromTeam(MainUserInterface.userManager.users.get(username),
-                    MainUserInterface.userManager.users.get(username).getTeam());
+            LoginView.teamManager.removeMemberFromTeam(LoginView.userManager.users.get(username),
+                    LoginView.userManager.users.get(username).getTeam());
 
-            MainUserInterface.userManager.updateUserTeam(MainUserInterface.userManager.users.get(username).getUserName(),
-                    MainUserInterface.teamManager.teams.get(teamName).getTeamsName());
+            LoginView.userManager.updateUserTeam(LoginView.userManager.users.get(username).getUserName(),
+                    LoginView.teamManager.teams.get(teamName).getTeamsName());
 
 
 
@@ -297,8 +297,8 @@ public class TeamView extends JFrame {
     }
     private void update()
     {
-        MainUserInterface.teamManager.updateTeamsFile();
-        MainUserInterface.userManager.updateUsersFile();
+        LoginView.teamManager.updateTeamsFile();
+        LoginView.userManager.updateUsersFile();
     }
 
     //xTODO:Add a method that would generate the **use'rs*** input box

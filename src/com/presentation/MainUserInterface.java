@@ -34,8 +34,8 @@ import java.util.List;
 public class MainUserInterface extends JPanel {
 
     public static WorkItemManager WIManager = new WorkItemManager();
-    public static UserManager userManager = new UserManager();
-    public static TeamManager teamManager = new TeamManager();
+    //public static UserManager userManager = new UserManager();
+    //public static TeamManager teamManager = new TeamManager();
     public static ReportGenerator reportGenerator = new ReportGenerator();
     public static JFrame mainFrame;
     public static JMenuBar mb;
@@ -56,15 +56,15 @@ public class MainUserInterface extends JPanel {
 
         //TODO: yuval test - delete later
         Team algo = new Team("Algo");
-        teamManager.addTeam("Algo");
-        teamManager.addTeam("Software");
-        teamManager.addTeam("QA");
-        teamManager.addTeam("Hardware");
-        userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
-        userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Algo");
-        userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "Algo");
-        userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Algo");
-        userManager.login("Yuval Levi", "123");
+        LoginView.teamManager.addTeam("Algo");
+        LoginView.teamManager.addTeam("Software");
+        LoginView.teamManager.addTeam("QA");
+        LoginView.teamManager.addTeam("Hardware");
+        LoginView.userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
+        LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Algo");
+        LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "Algo");
+        LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Algo");
+        //LoginView.userManager.login("Yuval Levi", "123");
 
 
         mainFrame = new JFrame("Agile Project Management");
@@ -84,7 +84,7 @@ public class MainUserInterface extends JPanel {
         reportGenMenu(mainFrame);
         boardsMenu(mainFrame);
         searchBox(mainFrame);
-        if (userManager.loggedInUser != null)
+        if (LoginView.userManager.loggedInUser != null)
             userConnected(mainFrame);
         mainFrame.setJMenuBar(mb);
         recentlyCreated(mainFrame);
@@ -176,7 +176,7 @@ public class MainUserInterface extends JPanel {
         JMenuItem mRemoveUserFromTeam = new JMenuItem("Remove User From Team");
 
 
-        if (userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
+        if (LoginView.userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
             menuTeam.setEnabled(false);
             menuTeam.setToolTipText("You have no permissions to this area");
         }
@@ -212,7 +212,7 @@ public class MainUserInterface extends JPanel {
         menuUser.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
         mb.add(menuUser);
 
-        if (userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
+        if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
             menuUser.setEnabled(false);
             menuUser.setToolTipText("You have no permissions to this area");
         }
@@ -242,7 +242,7 @@ public class MainUserInterface extends JPanel {
         menuReports.add(mRep1); menuReports.add(mRep2); menuReports.add(mRep3); menuReports.add(mRep4); menuReports.add(mRep5);
         menuReports.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
         mb.add(menuReports);
-        if (userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
+        if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
             menuReports.setEnabled(false);
             menuReports.setToolTipText("You have no permissions to this area");
         }
@@ -371,7 +371,7 @@ public class MainUserInterface extends JPanel {
                     WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
                     MainUserInterface.returnWorkItemFromSearch(foundWI);
                     MainUserInterface.WIManager.updateWorkItemsFile();
-                    MainUserInterface.teamManager.updateTeamsFile();//Updates the team's file.
+                    LoginView.teamManager.updateTeamsFile();//Updates the team's file.
                     MainUserInterface.mainFrame.dispose();
                 }
             }
@@ -379,7 +379,7 @@ public class MainUserInterface extends JPanel {
     }
 
     public static void userConnected(JFrame mainFrame) {
-        JLabel usernameLabel = new JLabel(userManager.loggedInUser.getUserName() + "  (" + userManager.loggedInUser.getPermissionLevel().name() + ")   ");
+        JLabel usernameLabel = new JLabel(LoginView.userManager.loggedInUser.getUserName() + "  (" + LoginView.userManager.loggedInUser.getPermissionLevel().name() + ")   ");
         JButton logoutButton = new JButton("Logout");
 
         ActionListener actionListener = new ActionListener() {
