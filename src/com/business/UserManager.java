@@ -98,19 +98,19 @@ public class UserManager {
         else System.out.println("Action no permitted\n");
     }
 
-    public Boolean login(String username,String password){
+    public Integer login(String username,String password){
         if (isUserExist(username))
             if ((users.get(username).getPassword().equals(password))) {
                 this.loggedInUser = users.get(username);
-                return true;
+                return 1;
             }
             else{
                   System.out.println("invalid password\n");
-                  return false;
+                  return 2;
                 }
 
          System.out.println("User not exist\n");
-         return false;
+         return 0;
     }
 
     public Boolean isActionPermitted(){

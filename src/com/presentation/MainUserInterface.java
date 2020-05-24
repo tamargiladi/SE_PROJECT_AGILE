@@ -516,7 +516,13 @@ public class MainUserInterface extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String command = actionEvent.getActionCommand();
                 if(command.equals("Logout")) {
-
+                    JComponent comp = (JComponent) actionEvent.getSource();
+                    Window win = SwingUtilities.getWindowAncestor(comp);
+                    win.dispose();
+                    LoginView.userNameTextField.setText("");
+                    LoginView.passwordPasswordField.setText("");
+                    LoginView frame = new LoginView();
+                    LoginView.loginScreenFrame.setVisible(true);
                 }
             }
         };
