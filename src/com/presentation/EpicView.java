@@ -18,10 +18,10 @@ public class EpicView extends JFrame {
     JTextField summaryTextBox = new JTextField("",30);
     JComboBox statusCombo = new JComboBox(WorkItem.statusEnum.values());
     JComboBox priorityCombo = new JComboBox(WorkItem.priorityEnum.values());
-    JComboBox ownerCombo = new JComboBox(MainUserInterface.userManager.users.keySet().toArray());
+    JComboBox ownerCombo = new JComboBox(LoginView.userManager.users.keySet().toArray());
     JTextField epicIDTextBox = new JTextField("",30);
     JTextField storyIDTextBox = new JTextField("",30);
-    JComboBox teamCombo = new JComboBox(MainUserInterface.teamManager.teams.keySet().toArray());
+    JComboBox teamCombo = new JComboBox(LoginView.teamManager.teams.keySet().toArray());
     JComboBox sprintCombo = new JComboBox(WorkItem.sprintEnum.values());
     JTextField estimateTextBox = new JTextField("",30);
     JTextField timeSpentTextBox = new JTextField("",30);
