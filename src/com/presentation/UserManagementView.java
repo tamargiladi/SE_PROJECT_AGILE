@@ -8,15 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-public class UsersView extends JFrame{
+public class UserManagementView extends JFrame{
 
-    public static JPanel usersScreenViewPanel= new JPanel();
+    public JPanel usersScreenViewPanel= new JPanel();
     public static User foundUser; //User that selected in user table
     private DefaultTableModel model = new DefaultTableModel(0,0);
     private JTable usersTable = new JTable(model);
     private JScrollPane jScrollPane = new JScrollPane(usersTable);
 
-    JButton addUser,editUser,removeUser;
+    JButton addUser,editUser,removeUser,cancelButton;
 
     ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
@@ -25,16 +25,16 @@ public class UsersView extends JFrame{
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                UsersView frame = new UsersView("View All Users");
+                UserManagementView frame = new UserManagementView("User Management Area");
             }
         });
     }
 
-    public UsersView(String title) throws HeadlessException {
+    public UserManagementView(String title) throws HeadlessException {
         setTitle(title);
         setResizable(false);
         setSize(1000, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
         usersScreenViewPanel.setLayout(null);
         setContentPane(usersScreenViewPanel);
@@ -73,6 +73,11 @@ public class UsersView extends JFrame{
         removeUser.setFont(new Font(removeUser.getFont().getName(), Font.BOLD, 16));
         usersScreenViewPanel.add(removeUser);
 
+        cancelButton = new JButton("Cancel");
+        cancelButton.setBounds(760,350,160,40);
+        cancelButton.setFont(new Font(removeUser.getFont().getName(), Font.BOLD, 16));
+        usersScreenViewPanel.add(cancelButton);
+
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -97,32 +102,44 @@ public class UsersView extends JFrame{
                         else
                             JOptionPane.showMessageDialog(usersScreenViewPanel, "Please select user from the table");
                     }
+                    else {
+                        //command.equals("Remove User")
+                        if (command.equals("Remove User")) {
+                            if (getSelectedRow()){
+                                switch (LoginView.userManager.removeUser(foundUser.getUserName())) {
+                                    case 1:
+                                        JOptionPane.showMessageDialog(usersScreenViewPanel, "User " + foundUser.getUserName() + " deleted");
+                                        JComponent comp = (JComponent) actionEvent.getSource();
+                                        Window win = SwingUtilities.getWindowAncestor(comp);
+                                        win.dispose();
+                                        UserManagementView uv=new UserManagementView(command);
+                                        //UserManagementView.usersScreenViewPanel.setVisible(true);
+                                        break;
+                                    case 2:
+                                        JOptionPane.showMessageDialog(usersScreenViewPanel, "Action no permitted");
+                                        break;
+                                    case 3:
+                                        JOptionPane.showMessageDialog(usersScreenViewPanel, "Invalid to edit admin user");
+                                        break;
+                                    case 4:
+                                        JOptionPane.showMessageDialog(usersScreenViewPanel, "User can't remove himself");
+                                        break;
+                                }
+                            }
+                            else
+                                JOptionPane.showMessageDialog(usersScreenViewPanel, "Please select user from the table");
+                        }
 
-                    //command.equals("Remove User")
-                    else if (command.equals("Remove User")) {
-                        if (getSelectedRow()){
-                            switch (LoginView.userManager.removeUser(foundUser.getUserName())) {
-                                case 1:
-                                    JOptionPane.showMessageDialog(usersScreenViewPanel, "User " + foundUser.getUserName() + " deleted");
-                                    JComponent comp = (JComponent) actionEvent.getSource();
-                                    Window win = SwingUtilities.getWindowAncestor(comp);
-                                    win.dispose();
-                                    UsersView uv=new UsersView(command);
-                                    UsersView.usersScreenViewPanel.setVisible(true);
-                                    break;
-                                case 2:
-                                    JOptionPane.showMessageDialog(usersScreenViewPanel, "Action no permitted");
-                                    break;
-                                case 3:
-                                    JOptionPane.showMessageDialog(usersScreenViewPanel, "Invalid to edit admin user");
-                                    break;
-                                case 4:
-                                    JOptionPane.showMessageDialog(usersScreenViewPanel, "User can't remove himself");
-                                    break;
+                        //command.equals("Cancel")
+                        else {
+                            if (command.equals("Cancel")) {
+                                JComponent comp = (JComponent) actionEvent.getSource();
+                                Window win = SwingUtilities.getWindowAncestor(comp);
+                                win.dispose();
+                                MainUserInterface mu = new MainUserInterface();
                             }
                         }
-                        else
-                            JOptionPane.showMessageDialog(usersScreenViewPanel, "Please select user from the table");
+
                     }
                 }
             }
@@ -130,6 +147,7 @@ public class UsersView extends JFrame{
          addUser.addActionListener(actionListener);
          editUser.addActionListener(actionListener);
          removeUser.addActionListener(actionListener);
+         cancelButton.addActionListener(actionListener);
     }
 
     public void usersTableCreated() {
@@ -141,18 +159,20 @@ public class UsersView extends JFrame{
         String[] columnNames = {"User Name", "Permission Level", "Team"};
         for (String col : columnNames) //adding columns
             model.addColumn(col);
-        for (Map.Entry<String,User> entry : LoginView.userManager.users.entrySet()) //adding rows
-            model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeam().getTeamsName()});
+        for (Map.Entry<String,User> entry : LoginView.userManager.users.entrySet()) { //adding rows
+            if (!(entry.getValue().getUserName().equals("admin")))
+                model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeam().getTeamsName()});
+        }
         usersTable.setDefaultEditor(Object.class, null);
 
 //      show on UI
-        JLabel recentLabel = new JLabel("All Users");
-        recentLabel.setVisible(true);
-        Dimension size = recentLabel.getPreferredSize();
-        recentLabel.setBounds(insets.left + 20 , insets.top + 40, size.width , size.height);
-        usersScreenViewPanel.add(recentLabel);
-        recentLabel.setFont(new Font(recentLabel.getFont().getName(), Font.BOLD, 12));
-        recentLabel.setForeground(new Color(0,49,82));
+        JLabel allUsersLabel = new JLabel("All Users");
+        allUsersLabel.setVisible(true);
+        Dimension size = allUsersLabel.getPreferredSize();
+        allUsersLabel.setBounds(insets.left + 20 , insets.top + 40, size.width , size.height);
+        usersScreenViewPanel.add(allUsersLabel);
+        allUsersLabel.setFont(new Font(allUsersLabel.getFont().getName(), Font.BOLD, 12));
+        allUsersLabel.setForeground(new Color(0,49,82));
 
         usersTable.setDefaultEditor(Object.class, null);
         Dimension tableSize = usersTable.getPreferredSize();

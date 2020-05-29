@@ -59,7 +59,7 @@ public class MainUserInterface extends JPanel {
     public MainUserInterface() throws HeadlessException {
 
         //TODO: yuval test - delete later
-        Team algo = new Team("Algo");
+        /*Team algo = new Team("Algo");
         LoginView.teamManager.addTeam("Algo");
         LoginView.teamManager.addTeam("Software");
         LoginView.teamManager.addTeam("QA");
@@ -69,7 +69,7 @@ public class MainUserInterface extends JPanel {
         LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Software");
         LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "QA");
         LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Hardware");
-        LoginView.userManager.login("Yuval Levi", "123");
+        LoginView.userManager.login("Yuval Levi", "123");*/
 
 
         mainFrame = new JFrame("Agile Project Management");
@@ -218,7 +218,7 @@ public class MainUserInterface extends JPanel {
         menuUsers.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
         mb.add(menuUsers);
 
-        JMenuItem mViewUsers = new JMenuItem("View All Users");
+        JMenuItem mViewUsers = new JMenuItem("User Management Area");
         menuUsers.add(mViewUsers);
 
         if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
@@ -230,10 +230,9 @@ public class MainUserInterface extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String command = actionEvent.getActionCommand();
-                if (command.equals(("View All Users"))) {
-                    UsersView uv = new UsersView(command);
-                    UsersView.usersScreenViewPanel.setVisible(true);
-
+                if (command.equals(("User Management Area"))) {
+                    MainUserInterface.mainFrame.dispose();
+                    UserManagementView uv = new UserManagementView(command);
                 }
             }
         };
