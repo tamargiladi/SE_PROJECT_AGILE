@@ -45,6 +45,7 @@ public class ReportView extends JFrame {
         jPanel.setLayout(null);
         jPanel.add(title);
         setContentPane(jPanel);
+        resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 
         if (reportName == "Work Item distribution by status" || reportName == "Total planned hours per member") {
