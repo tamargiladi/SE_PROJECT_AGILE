@@ -63,12 +63,13 @@ public class MainUserInterface extends JPanel {
         LoginView.teamManager.addTeam("Algo");
         LoginView.teamManager.addTeam("Software");
         LoginView.teamManager.addTeam("QA");
+        LoginView.userManager.login("admin", "admin");
         LoginView.teamManager.addTeam("Hardware");
         LoginView.userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
         LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Software");
         LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "QA");
         LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Hardware");
-        //LoginView.userManager.login("Yuval Levi", "123");
+        LoginView.userManager.login("Yuval Levi", "123");
 
 
         mainFrame = new JFrame("Agile Project Management");
@@ -212,18 +213,31 @@ public class MainUserInterface extends JPanel {
     }
 
     public static void userMenu(JFrame mainFrame) {
-        JMenu menuUser;
-        menuUser = new JMenu("User Management");
-        menuUser.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
-        mb.add(menuUser);
+        JMenu menuUsers;
+        menuUsers = new JMenu("User Management");
+        menuUsers.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
+        mb.add(menuUsers);
+
+        JMenuItem mViewUsers = new JMenuItem("View All Users");
+        menuUsers.add(mViewUsers);
 
         if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
-            menuUser.setEnabled(false);
-            menuUser.setToolTipText("You have no permissions to this area");
+            menuUsers.setEnabled(false);
+            menuUsers.setToolTipText("You have no permissions to this area");
         }
 
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String command = actionEvent.getActionCommand();
+                if (command.equals(("View All Users"))) {
+                    UsersView uv = new UsersView(command);
+                    UsersView.usersScreenViewPanel.setVisible(true);
 
-
+                }
+            }
+        };
+        mViewUsers.addActionListener(actionListener);
     }
 
     public static void reportGenMenu(JFrame mainFrame) {
