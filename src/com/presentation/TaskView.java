@@ -176,6 +176,8 @@ public class TaskView extends StoryView {
 
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
+                    else if (descTextBox.getText().length() == 0)
+                        JOptionPane.showMessageDialog(jPanel, "Please fill description field");
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId) == null)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Story)

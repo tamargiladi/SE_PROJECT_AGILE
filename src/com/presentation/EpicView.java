@@ -30,6 +30,10 @@ public class EpicView extends JFrame {
     JTextField foundInVersionTextBox = new JTextField("",30);
 
     public EpicView(WorkItem wi) throws HeadlessException {
+        ownerCombo.addItem("Unassigned");
+        ownerCombo.setSelectedItem("Unassigned");
+        teamCombo.addItem("Unassigned");
+        teamCombo.setSelectedItem("Unassigned");
         setLayout(wi);
     }
 
@@ -149,6 +153,8 @@ public class EpicView extends JFrame {
                     String summary = summaryTextBox.getText();
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
+                    else if (descTextBox.getText().length() == 0)
+                        JOptionPane.showMessageDialog(jPanel, "Please fill description field");
                     else {
                         if (wi == null && WorkItemManager.getAvailableId() != 100) {
                             WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Epic);
