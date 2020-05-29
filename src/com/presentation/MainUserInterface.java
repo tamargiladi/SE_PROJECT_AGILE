@@ -46,6 +46,10 @@ public class MainUserInterface extends JPanel {
     private DefaultTableModel model = new DefaultTableModel(0,0);
     private JTable recentlyCreatedTable = new JTable(model);
     private JScrollPane jScrollPane = new JScrollPane(recentlyCreatedTable);
+    private DefaultTableModel modelMyTasks = new DefaultTableModel(0,0);
+    private JTable myTasksTable = new JTable(modelMyTasks);
+    private JScrollPane myTasksPane = new JScrollPane(myTasksTable);
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
@@ -93,6 +97,7 @@ public class MainUserInterface extends JPanel {
             userConnected(mainFrame);
         mainFrame.setJMenuBar(mb);
         recentlyCreated(mainFrame);
+        myTasks(mainFrame);
         title(mainFrame);
 
         mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -310,6 +315,7 @@ public class MainUserInterface extends JPanel {
         DefaultMutableTreeNode rootT = new DefaultMutableTreeNode("<html><body style='width:600'><PRE><b><font size=\"4\">\tType\t   ID\t\t   Status\t\t   Summary</PRE></html>");
         DefaultMutableTreeNode tempNodeEpic, tempNodeStory, tempNodeWI;
         JTree tree = new JTree(rootT); rootT.add(epicT); epicT.add(storyT);
+        tree.setCellRenderer(new WorkItemTreeCellRenderer());
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
@@ -377,6 +383,7 @@ public class MainUserInterface extends JPanel {
         DefaultMutableTreeNode ownerT = new DefaultMutableTreeNode("Owner - Unassigned");
         DefaultMutableTreeNode tempNodeTeam, tempNodeUser, tempNodeWI;
         JTree tree = new JTree(rootT); rootT.add(teamT); teamT.add(ownerT);
+        tree.setCellRenderer(new WorkItemTreeCellRenderer());
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
 
@@ -402,6 +409,10 @@ public class MainUserInterface extends JPanel {
                     }
                 }
         }
+        for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet())
+            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned") && entryWorkItem.getValue().getTeam() == "Unassigned")
+                model.insertNodeInto(new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>"), ownerT, ownerT.getChildCount());
+
         model.reload(root);
         JScrollPane treeView = new JScrollPane(tree);
         dailyBoard.setContentPane(treeView);
@@ -467,7 +478,7 @@ public class MainUserInterface extends JPanel {
             model.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getSummary()});
         recentlyCreatedTable.setDefaultEditor(Object.class, null);
 
-//        // Sort work items by id - descending (most recently created)
+        // Sort work items by id - descending (most recently created)
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(recentlyCreatedTable.getModel());
         recentlyCreatedTable.setRowSorter(sorter);
         List<RowSorter.SortKey> sortKeys = new ArrayList<>();
@@ -475,7 +486,7 @@ public class MainUserInterface extends JPanel {
         sorter.setSortKeys(sortKeys);
         sorter.sort();
 
-//        //show on UI
+        //show on UI
         JLabel recentLabel = new JLabel("Recently created Work Items");
         jScrollPane.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(75,10,205,150),
                 BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Recently Created Work Items", TitledBorder.CENTER, TitledBorder.TOP)));
@@ -549,6 +560,129 @@ public class MainUserInterface extends JPanel {
         mb.add(logoutButton);
         mainFrame.setJMenuBar(mb);
 
+    }
+
+    public void myTasks(JFrame mainFrame) {
+
+        Insets insets = mainFrame.getInsets();
+        //Prepare table data
+        modelMyTasks.setRowCount(0);
+        modelMyTasks.setColumnCount(0);
+        String[] columnNames = {"ID", "Type", "Status", "Owner", "Summary"};
+        for (String col : columnNames) //adding columns
+            modelMyTasks.addColumn(col);
+        for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) //adding rows
+            if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(LoginView.userManager.loggedInUser.getUserName()))
+                modelMyTasks.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getSummary()});
+        myTasksTable.setDefaultEditor(Object.class, null);
+
+
+        //show on UI
+        JLabel myWorkItemsLabel = new JLabel("My Work Items");
+        myTasksTable.setModel(modelMyTasks);
+        mainFrame.add(myTasksPane).setBounds(insets.left + 12 , insets.top + 345, 825, 150);
+        myWorkItemsLabel.setVisible(true);
+        Dimension size = myWorkItemsLabel.getPreferredSize();
+        myWorkItemsLabel.setBounds(insets.left + 12 , insets.top + 325, size.width * 2, size.height);
+        mainFrame.add(myWorkItemsLabel);
+        myWorkItemsLabel.setFont(new Font(myWorkItemsLabel.getFont().getName(), Font.BOLD, 12));
+        myWorkItemsLabel.setForeground(new Color(0,49,82));
+        myTasksTable.setDefaultEditor(Object.class, null);
+        myTasksTable.getTableHeader().setBackground(Color.WHITE);
+        myTasksTable.getTableHeader().setForeground(new Color(0,49,82));
+
+        // Resize Columns
+        final TableColumnModel columnModel = myTasksTable.getColumnModel();
+        for (int column = 0; column < myTasksTable.getColumnCount(); column++) {
+            int width = 10; // Min width
+            for (int row = 0; row < myTasksTable.getRowCount(); row++) {
+                TableCellRenderer renderer = myTasksTable.getCellRenderer(row, column);
+                Component comp = myTasksTable.prepareRenderer(renderer, row, column);
+                width = Math.max(comp.getPreferredSize().width , width);
+            }
+            columnModel.getColumn(column).setPreferredWidth(width);
+        }
+
+        // Sort work items by id - descending (most recently created)
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(myTasksTable.getModel());
+        myTasksTable.setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+        sortKeys.add(new RowSorter.SortKey(0, SortOrder.DESCENDING));
+        sorter.setSortKeys(sortKeys);
+        sorter.sort();
+
+
+        myTasksTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent) {
+                JTable table =(JTable) mouseEvent.getSource();
+                Point point = mouseEvent.getPoint();
+                int row = table.rowAtPoint(point);
+                if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+                    Integer val = (Integer) myTasksTable.getValueAt(row,0);
+                    WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
+                    MainUserInterface.returnWorkItemFromSearch(foundWI);
+                    MainUserInterface.WIManager.updateWorkItemsFile();
+                    LoginView.teamManager.updateTeamsFile();//Updates the team's file.
+                    MainUserInterface.mainFrame.dispose();
+                }
+            }
+        });
+    }
+
+    static class WorkItemTreeCellRenderer implements TreeCellRenderer {
+        private JLabel label;
+        ImageIcon bugIcon = new ImageIcon("src/com/presentation/images/bug-icon.png");
+        Image resizedBugIcon = bugIcon.getImage().getScaledInstance(20,20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon storyIcon = new ImageIcon("src/com/presentation/images/story-icon.png");
+        Image resizedStoryIcon = storyIcon.getImage().getScaledInstance(20,20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon epicIcon = new ImageIcon("src/com/presentation/images/epic-icon.png");
+        Image resizedEpicIcon = epicIcon.getImage().getScaledInstance(20,20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon taskIcon = new ImageIcon("src/com/presentation/images/task-icon.png");
+        Image resizedTaskIcon = taskIcon.getImage().getScaledInstance(20,20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon infoIcon = new ImageIcon("src/com/presentation/images/info-icon.png");
+        Image resizedInfoIcon = infoIcon.getImage().getScaledInstance(20,20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon teamIcon = new ImageIcon("src/com/presentation/images/team-icon.png");
+        Image resizedTeamIcon = teamIcon.getImage().getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING);
+
+        ImageIcon userIcon = new ImageIcon("src/com/presentation/images/user-icon.png");
+        Image resizedUserIcon = userIcon.getImage().getScaledInstance(20, 20, Image.SCALE_AREA_AVERAGING);
+
+
+        WorkItemTreeCellRenderer() {
+            label = new JLabel();
+        }
+
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected, boolean expanded,
+                                                      boolean leaf, int row, boolean hasFocus) {
+
+            Object obj = ((DefaultMutableTreeNode) value).getUserObject();
+            String text = (String) obj.toString();
+            Integer level = ((DefaultMutableTreeNode) value).getLevel();
+
+
+            if (text.contains("Bug"))
+                label.setIcon(new ImageIcon(resizedBugIcon));
+            else if (text.contains("Story"))
+                label.setIcon(new ImageIcon(resizedStoryIcon));
+            else if (text.contains("Epic"))
+                label.setIcon(new ImageIcon(resizedEpicIcon));
+            else if (text.contains("Task"))
+                label.setIcon(new ImageIcon(resizedTaskIcon));
+            else if (level == 1 && !text.contains("Epic"))
+                label.setIcon(new ImageIcon(resizedTeamIcon));
+            else if (level == 2 && !text.contains("Story"))
+                label.setIcon(new ImageIcon(resizedUserIcon));
+            else
+                label.setIcon(new ImageIcon(resizedInfoIcon));
+            label.setText(text);
+            return label;
+        }
     }
 
 
