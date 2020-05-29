@@ -135,8 +135,8 @@ public class UserView extends JPanel {
                                     JComponent comp = (JComponent) actionEvent.getSource();
                                     Window win = SwingUtilities.getWindowAncestor(comp);
                                     win.dispose();
-                                    UsersView uv = new UsersView("View All Users");
-                                    uv.usersScreenViewPanel.setVisible(true);
+                                    UserManagementView uv = new UserManagementView("User Management Area");
+                                    //uv.usersScreenViewPanel.setVisible(true);
                                     break;
                                 case 2:
                                     JOptionPane.showMessageDialog(userViewFrame, "Action no permitted");
@@ -152,12 +152,21 @@ public class UserView extends JPanel {
                         switch (LoginView.userManager.updateUserPermission(userName, permissionLevel)) {
                             case 1:
                                 LoginView.userManager.updateUserTeam(userName, teamName);
-                                JOptionPane.showMessageDialog(userViewFrame, "User saved successfully");
-                                JComponent comp = (JComponent) actionEvent.getSource();
-                                Window win = SwingUtilities.getWindowAncestor(comp);
-                                win.dispose();
-                                UsersView uv = new UsersView("View All Users");
-                                uv.usersScreenViewPanel.setVisible(true);
+                                if (LoginView.userManager.isActionPermitted()){
+                                    JOptionPane.showMessageDialog(userViewFrame, "User saved successfully");
+                                    JComponent comp = (JComponent) actionEvent.getSource();
+                                    Window win = SwingUtilities.getWindowAncestor(comp);
+                                    win.dispose();
+                                    UserManagementView uv = new UserManagementView("User Management Area");
+                                }
+                                //if no permission to loggedInUser
+                                else{
+                                    JOptionPane.showMessageDialog(userViewFrame, "User saved successfully");
+                                    JComponent comp = (JComponent) actionEvent.getSource();
+                                    Window win = SwingUtilities.getWindowAncestor(comp);
+                                    win.dispose();
+                                    MainUserInterface uv = new MainUserInterface();
+                                }
                                 break;
                             case 2:
                                 JOptionPane.showMessageDialog(userViewFrame, "Action no permitted");
@@ -174,8 +183,8 @@ public class UserView extends JPanel {
                     JComponent comp = (JComponent) actionEvent.getSource();
                     Window win = SwingUtilities.getWindowAncestor(comp);
                     win.dispose();
-                    UsersView uv = new UsersView("View All Users");
-                    uv.usersScreenViewPanel.setVisible(true);
+                    UserManagementView uv = new UserManagementView("User Management Area");
+                    //uv.usersScreenViewPanel.setVisible(true);
                 }
             }
 
@@ -205,19 +214,14 @@ public class UserView extends JPanel {
 
         //the action is "Edit User"
         else {
-            UserView.userNameField.setText(UsersView.foundUser.getUserName());
+            UserView.userNameField.setText(UserManagementView.foundUser.getUserName());
             UserView.userNameField.setEnabled(false);
             UserView.passwordField.setText("*****");
             UserView.passwordField.setEnabled(false);
-            UserView.teamCombo.setSelectedItem(UsersView.foundUser.getTeam().getTeamsName());
-            UserView.permissionLevelCombo.setSelectedItem(UsersView.foundUser.getPermissionLevel());
+            UserView.teamCombo.setSelectedItem(UserManagementView.foundUser.getTeam().getTeamsName());
+            UserView.permissionLevelCombo.setSelectedItem(UserManagementView.foundUser.getPermissionLevel());
         }
 
     }
-
-       /* public static void setToUserValue(User user){
-            userNameField.setText(user.getUserName());
-            teamCombo.setSelectedItem(user.getTeam());
-            permissionLevelCombo.setSelectedItem(user.getPermissionLevel());*/
 
 }
