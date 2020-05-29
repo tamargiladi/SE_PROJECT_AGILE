@@ -491,6 +491,7 @@ public class MainUserInterface extends JPanel {
         jScrollPane.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(75,10,205,150),
                 BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Recently Created Work Items", TitledBorder.CENTER, TitledBorder.TOP)));
         recentLabel.setVisible(true);
+        recentlyCreatedTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         Dimension size = recentLabel.getPreferredSize();
         recentLabel.setBounds(insets.left + 12 , insets.top + 40, size.width * 2, size.height);
         mainFrame.add(recentLabel);
@@ -580,6 +581,7 @@ public class MainUserInterface extends JPanel {
         //show on UI
         JLabel myWorkItemsLabel = new JLabel("My Work Items");
         myTasksTable.setModel(modelMyTasks);
+        myTasksTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         mainFrame.add(myTasksPane).setBounds(insets.left + 12 , insets.top + 345, 825, 150);
         myWorkItemsLabel.setVisible(true);
         Dimension size = myWorkItemsLabel.getPreferredSize();
