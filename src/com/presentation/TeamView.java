@@ -1,8 +1,6 @@
 package com.presentation;
 
-import com.business.TeamManager;
 import com.persistent.Team;
-import sun.applet.Main;
 //import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
 //import sun.jvm.hotspot.ui.tree.BooleanTreeNodeAdapter;
 
@@ -159,7 +157,7 @@ public class TeamView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                TeamViewList tvl = new TeamViewList();
+                TeamManagerGUI tvl = new TeamManagerGUI();
 
             }
         };
