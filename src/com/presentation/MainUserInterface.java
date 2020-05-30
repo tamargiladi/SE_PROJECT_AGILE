@@ -1,38 +1,26 @@
 package com.presentation;
 
 import com.business.ReportGenerator;
-import com.business.TeamManager;
-import com.business.UserManager;
 import com.business.WorkItemManager;
 import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.Color;
-import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreeModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-
-import static javax.swing.text.html.HTML.Tag.PRE;
 
 
 public class MainUserInterface extends JPanel {
@@ -176,11 +164,12 @@ public class MainUserInterface extends JPanel {
         mb.add(menuTeam);
         menuTeam.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
 
-        JMenuItem mAddTeam = new JMenuItem("Add Team");
-        JMenuItem mRemoveTeam = new JMenuItem("Remove Team");
-        JMenuItem mAddUserToTeam = new JMenuItem("Add User To Team");
-        JMenuItem mRemoveUserFromTeam = new JMenuItem("Remove User From Team");
+        JMenuItem mClick = new JMenuItem("View all teams");
 
+        // JMenuItem mAddTeam = new JMenuItem("View all teams");
+      /*  JMenuItem mRemoveTeam = new JMenuItem("Remove Team");
+        JMenuItem mAddUserToTeam = new JMenuItem("Add User To Team");
+        JMenuItem mRemoveUserFromTeam = new JMenuItem("Remove User From Team");*/
 
         if (LoginView.userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
             menuTeam.setEnabled(false);
@@ -191,15 +180,18 @@ public class MainUserInterface extends JPanel {
             ActionListener actionListener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    String command = actionEvent.getActionCommand();
-                    TeamView tv = new TeamView(command);
+
+                    TeamManagerGUI tvl = new TeamManagerGUI();
+
+                  /* String command = actionEvent.getActionCommand();
+                         TeamView tv = new TeamView(command);*/
                 }
             };
 
-            menuTeam.add(mAddTeam);mAddTeam.addActionListener(actionListener);
-            menuTeam.add(mRemoveTeam);mRemoveTeam.addActionListener(actionListener);
+            menuTeam.add(mClick);mClick.addActionListener(actionListener);
+           /* menuTeam.add(mRemoveTeam);mRemoveTeam.addActionListener(actionListener);
             menuTeam.add(mAddUserToTeam);mAddUserToTeam.addActionListener(actionListener);
-            menuTeam.add(mRemoveUserFromTeam);mRemoveUserFromTeam.addActionListener(actionListener);
+            menuTeam.add(mRemoveUserFromTeam);mRemoveUserFromTeam.addActionListener(actionListener);*/
 
 
 

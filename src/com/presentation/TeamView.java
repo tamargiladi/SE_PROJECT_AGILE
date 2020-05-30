@@ -23,7 +23,7 @@ public class TeamView extends JFrame {
     JTextArea teamNameBox = new JTextArea("");
     JTextArea userNameBox = new JTextArea("");
     JButton btnTeam = new JButton();
-    JButton btnList = new JButton();
+
 
     
 
@@ -35,6 +35,7 @@ public class TeamView extends JFrame {
         this.actionType=title;
 
         setLayout();
+
 
     }
 
@@ -64,7 +65,7 @@ public class TeamView extends JFrame {
 
         setLayoutInputBoxTeam(insets,verLabel);
         setLayoutButtonTeam(insets,verLabel);
-        setLayoutButtonTmp(insets,verLabel);
+        //setLayoutButtonTmp(insets,verLabel);
 
     }
 
@@ -127,7 +128,9 @@ public class TeamView extends JFrame {
                 switch(actionType)
                 {
                     case "Add Team":
-                        generateAddTeam(teamNameBox.getText());break;
+                        generateAddTeam(teamNameBox.getText());
+                        showMessageDialog(null, "In order to watch the new team, please reopen this window.");
+                        break;
                     case "Remove Team":
                         generateRemoveTeam(teamNameBox.getText());break;
                     case "Add User To Team":
@@ -145,7 +148,7 @@ public class TeamView extends JFrame {
 
     }
 
-    public void setLayoutButtonTmp(Insets insets, JLabel verLabel )
+   /* public void setLayoutButtonTmp(Insets insets, JLabel verLabel )
     {
         Dimension size;
         this.jPanel.add(btnList);//add to the interface
@@ -167,7 +170,7 @@ public class TeamView extends JFrame {
         size = btnList.getPreferredSize();
         btnList.setBounds(insets.left + verLabel.getWidth() + teamNameBox.getY() + teamNameBox.getWidth()+ 70 , insets.top + 60, size.width + 5, size.height);
 
-    }
+    }*/
     public void generateAddTeam(String teamName){
 
 
