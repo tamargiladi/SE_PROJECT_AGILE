@@ -61,7 +61,7 @@ public class StoryView extends EpicView{
         size = ownerLabel.getPreferredSize();
         ownerLabel.setBounds(insets.left + 75 , insets.top + 140, size.width + 5, size.height);
         size = ownerCombo.getPreferredSize();
-        ownerCombo.setBounds(insets.left + 140 , insets.top + 135, size.width + 150, size.height);
+        ownerCombo.setBounds(insets.left + 140 , insets.top + 135, size.width + 115, size.height);
     }
 
     @Override
@@ -111,6 +111,8 @@ public class StoryView extends EpicView{
 
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
+                    else if (descTextBox.getText().length() == 0)
+                        JOptionPane.showMessageDialog(jPanel, "Please fill description field");
                     else if (epicId != null && MainUserInterface.WIManager.searchWorkItem(epicId) == null)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
                     else if (epicId != null && MainUserInterface.WIManager.searchWorkItem(epicId).getType() != WorkItem.typeEnum.Epic)

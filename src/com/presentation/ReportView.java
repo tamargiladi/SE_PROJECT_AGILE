@@ -24,6 +24,7 @@ public class ReportView extends JFrame {
     JTable resultsTable = new JTable(model);
     JScrollPane jScrollPane = new JScrollPane(resultsTable);
     JLabel error = new JLabel("No matching results");
+    JLabel title = new JLabel();
 
     ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
@@ -42,7 +43,10 @@ public class ReportView extends JFrame {
         setVisible(true);
         setResizable(false);
         jPanel.setLayout(null);
+        jPanel.add(title);
         setContentPane(jPanel);
+        resultsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 
         if (reportName == "Work Item distribution by status" || reportName == "Total planned hours per member") {
             setLayoutSprint();
@@ -137,6 +141,7 @@ public class ReportView extends JFrame {
     // Generate reports functions
     public void generateWorkItemDistribution() {
         jPanel.remove(background);
+        jPanel.remove(title);
         HashMap<WorkItem.statusEnum, Integer> distribution = new HashMap<>();
         MainUserInterface.reportGenerator.setChosenSprint((WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem());
         distribution = MainUserInterface.reportGenerator.workItemStatusDistribution();
@@ -154,6 +159,9 @@ public class ReportView extends JFrame {
         jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60,60,60,60),
                 BorderFactory.createTitledBorder("Work Item Distribution by Status for Sprint " + sprintCombo.getModel().getSelectedItem())));
         Insets insets = this.jPanel.getInsets();
+        title = new JLabel("Work Item Distribution by Status for Sprint " + sprintCombo.getModel().getSelectedItem());
+        title.setBounds(insets.left + 5, insets.top - 15, title.getPreferredSize().width, title.getPreferredSize().height);
+        jPanel.add(title);
         resultsTable.setDefaultEditor(Object.class, null);
         resultsTable.revalidate();
         Dimension tableSize = resultsTable.getPreferredSize();
@@ -166,6 +174,7 @@ public class ReportView extends JFrame {
 
     public void generateTotalPlannedHoursPerMember() {
         jPanel.remove(background);
+        jPanel.remove(title);
         HashMap<String, Integer> sumHoursPerUser = new HashMap<>();
         MainUserInterface.reportGenerator.setChosenSprint((WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem());
         sumHoursPerUser = MainUserInterface.reportGenerator.totalPlannedHoursPerMember();
@@ -193,6 +202,9 @@ public class ReportView extends JFrame {
                 jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60),
                         BorderFactory.createTitledBorder("Total work estimation per owner for sprint " + sprintCombo.getModel().getSelectedItem())));
                 Insets insets = this.jPanel.getInsets();
+                title = new JLabel("Total work estimation per owner for sprint " + sprintCombo.getModel().getSelectedItem());
+                title.setBounds(insets.left + 5, insets.top - 15, title.getPreferredSize().width, title.getPreferredSize().height);
+                jPanel.add(title);
                 resultsTable.setDefaultEditor(Object.class, null);
                 resultsTable.revalidate();
                 Dimension tableSize = resultsTable.getPreferredSize();
@@ -210,6 +222,7 @@ public class ReportView extends JFrame {
 
     public void generateBugsFoundInVersion() {
         jPanel.remove(background);
+        jPanel.remove(title);
         List<WorkItem> bugsFound = new ArrayList<>();
         MainUserInterface.reportGenerator.setChosenVersion(versionName.getText().split("\n")[0]);
         bugsFound = MainUserInterface.reportGenerator.bugsFoundInVersion();
@@ -233,6 +246,9 @@ public class ReportView extends JFrame {
             jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 30, 60, 30),
                     BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
             Insets insets = this.jPanel.getInsets();
+            title = new JLabel("Bugs found in version " + versionName.getText());
+            title.setBounds(insets.left + 5, insets.top - 15, title.getPreferredSize().width, title.getPreferredSize().height);
+            jPanel.add(title);
             resultsTable.setDefaultEditor(Object.class, null);
             resultsTable.revalidate();
             Dimension tableSize = resultsTable.getPreferredSize();
@@ -264,6 +280,7 @@ public class ReportView extends JFrame {
 
     public void generateBugsSolvedInVersion() {
         jPanel.remove(background);
+        jPanel.remove(title);
         List<WorkItem> bugsSolved = new ArrayList<>();
         MainUserInterface.reportGenerator.setChosenVersion(versionName.getText().split("\n")[0]);
         bugsSolved = MainUserInterface.reportGenerator.bugsSolvedInVersion();
@@ -285,8 +302,11 @@ public class ReportView extends JFrame {
 
             //set GUI
             jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(60, 30, 60, 30),
-                    BorderFactory.createTitledBorder("Bugs found in version " + versionName.getText())));
+                    BorderFactory.createTitledBorder("Bugs solved in version " + versionName.getText())));
             Insets insets = this.jPanel.getInsets();
+            title = new JLabel("Bugs solved in version " + versionName.getText());
+            title.setBounds(insets.left + 5, insets.top - 15, title.getPreferredSize().width, title.getPreferredSize().height);
+            jPanel.add(title);
             resultsTable.setDefaultEditor(Object.class, null);
             resultsTable.revalidate();
             Dimension tableSize = resultsTable.getPreferredSize();
@@ -319,6 +339,7 @@ public class ReportView extends JFrame {
 
     public void generateExceedingEstimations() {
         jPanel.remove(background);
+        jPanel.remove(title);
         List<WorkItem> exceedingEstimations = new ArrayList<>();
         exceedingEstimations = MainUserInterface.reportGenerator.exceedingEstimations();
 
@@ -338,6 +359,9 @@ public class ReportView extends JFrame {
         jPanel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(45,30,45,30),
                 BorderFactory.createTitledBorder("Exceeding Estimations")));
         Insets insets = this.jPanel.getInsets();
+        title = new JLabel("Exceeding Estimations");
+        title.setBounds(insets.left + 5, insets.top - 25, title.getPreferredSize().width, title.getPreferredSize().height);
+        jPanel.add(title);
         resultsTable.setDefaultEditor(Object.class, null);
         resultsTable.revalidate();
         Dimension tableSize = resultsTable.getPreferredSize();
