@@ -25,7 +25,9 @@ public class TeamView extends JFrame {
     JTextArea teamNameBox = new JTextArea("");
     JTextArea userNameBox = new JTextArea("");
     JButton btnTeam = new JButton();
+    JButton btnList = new JButton();
 
+    
 
     //Views
     public TeamView(String title)
@@ -42,8 +44,7 @@ public class TeamView extends JFrame {
 
     public void setLayout()
     {
-
-        //Initial modifications
+        //=====WINDOW==========
         Insets insets =  jPanel.getInsets();
         setTitle("Team Manager");
         setSize(1000,600);
@@ -54,11 +55,8 @@ public class TeamView extends JFrame {
         this.setContentPane(this.jPanel);
 
 
-
-
-        Dimension size;
-
         //========LABEL===========
+        Dimension size;
         JLabel verLabel;
         verLabel = new JLabel("Enter team name:");
         this.jPanel.add(verLabel);//Adding the 'verLabel' to the interface
@@ -66,18 +64,23 @@ public class TeamView extends JFrame {
         verLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
 
 
-        //============END OF LABEL=============
+        setLayoutInputBoxTeam(insets,verLabel);
+        setLayoutButtonTeam(insets,verLabel);
+        setLayoutButtonTmp(insets,verLabel);
+
+    }
 
 
-        //============INPUT BOX================
+    public void setLayoutInputBoxTeam(Insets insets, JLabel verLabel)
+    {
+        Dimension size;
         size = teamNameBox.getPreferredSize();
         teamNameBox.setBounds(insets.left + verLabel.getWidth() + 40 , insets.top + 20, size.width + 150, size.height + 5);
         teamNameBox.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        this.jPanel.add(teamNameBox);
+        this.jPanel.add(teamNameBox);//Adding to interface
 
-
-        /***Actions**/
+        //-------------Actions----------------//
         teamNameBox.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
@@ -92,15 +95,15 @@ public class TeamView extends JFrame {
             public void keyReleased(KeyEvent e) {
             }
         });
-
+        //---------------END actions-----------//
 
         //==============END OF INPUT BOX===========
+    }
+    public void setLayoutButtonTeam(Insets insets, JLabel verLabel )
+    {
 
-
-
-        //==============BUTTON==================
-        this.jPanel.add(btnTeam);
-
+        Dimension size;
+        this.jPanel.add(btnTeam);//add to the interface
 
 
         if(actionType=="Add Team")
@@ -108,7 +111,6 @@ public class TeamView extends JFrame {
         else if(actionType=="Add User To Team") {
             btnTeam.setText("Add");
             generateUsernameInput(insets.left + verLabel.getWidth() + 40);
-
         }
         else if(actionType=="Remove User From Team") {
             btnTeam.setText("Remove");
@@ -117,7 +119,7 @@ public class TeamView extends JFrame {
         else
             btnTeam.setText("Remove");
 
-
+        //------actions-------//
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -137,21 +139,37 @@ public class TeamView extends JFrame {
                 }
             }
         };
+        btnTeam.addActionListener(actionListener);
+        //------ end actions-------//
 
         size = btnTeam.getPreferredSize();
         btnTeam.setBounds(insets.left + verLabel.getWidth() + teamNameBox.getY() + teamNameBox.getWidth()+ 40 , insets.top + 15, size.width + 5, size.height);
-            btnTeam.addActionListener(actionListener);
-
-
-
-        //Actions
-
-
-        //==========END OF BUTTON==============
-
 
     }
 
+    public void setLayoutButtonTmp(Insets insets, JLabel verLabel )
+    {
+        Dimension size;
+        this.jPanel.add(btnList);//add to the interface
+
+
+       btnList.setText("Open");
+        //------actions-------//
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                TeamViewList tvl = new TeamViewList();
+
+            }
+        };
+        btnList.addActionListener(actionListener);
+        //------ end actions-------//
+
+        size = btnList.getPreferredSize();
+        btnList.setBounds(insets.left + verLabel.getWidth() + teamNameBox.getY() + teamNameBox.getWidth()+ 70 , insets.top + 60, size.width + 5, size.height);
+
+    }
     public void generateAddTeam(String teamName){
 
 

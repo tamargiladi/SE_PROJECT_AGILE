@@ -21,6 +21,11 @@ public class Team implements Serializable {
 
     }
 
+    public Team(Team tm)
+    {
+        this.teamsName = tm.teamsName;
+        this.users.addAll(tm.users);
+    }
     /**
      * The function is adding a user to the list, due to request from TeamManager Class.
      * @param user The user that is being added to the list.
@@ -41,7 +46,6 @@ public class Team implements Serializable {
     }
 
 
-
     public String getTeamsName(){
         return teamsName;
     }
@@ -52,5 +56,10 @@ public class Team implements Serializable {
 
     public List<User> getUsers(){
         return users;
+    }
+
+    public List<User> getUsersList()
+    {
+        return this.users;
     }
 }
