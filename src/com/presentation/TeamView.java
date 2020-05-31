@@ -150,7 +150,7 @@ public class TeamView extends JFrame {
         btnTeam.setBounds(insets.left + verLabel.getWidth() + teamNameBox.getY() + teamNameBox.getWidth()+ 40 , insets.top + 15, size.width + 5, size.height);
 
     }
-
+//
     public void generateAddTeam(String teamName){
 
 
