@@ -2,6 +2,7 @@ package com.business;
 
 import com.persistent.*;
 import com.presentation.LoginView;
+import com.presentation.MainUserInterface;
 
 import java.io.*;
 import java.util.*;
@@ -82,10 +83,10 @@ public class UserManager {
                 if (!(username.equals(loggedInUser.getUserName()))) {
                     //remove user from the team list
                     LoginView.teamManager.removeMemberFromTeam(users.get(username), users.get(username).getTeam());
-                    //remove the user
-                    //TODO: check if u User remove
-                    User u = users.get(username);
-                    u = null;
+                    //change the owner of all WI under the username to Unassigned
+                    for (Map.Entry<Integer, WorkItem> entry : MainUserInterface.WIManager.workItems.entrySet()) //adding rows
+                        if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(users.get(username).getUserName()))
+                            entry.getValue().setOwner("Unassigned");
                     //remove user from users HashMap
                     users.remove(username, users.get(username));
                     //update file
