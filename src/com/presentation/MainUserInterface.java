@@ -403,7 +403,7 @@ public class MainUserInterface extends JPanel {
                 }
         }
         for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet())
-            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned") && entryWorkItem.getValue().getTeam() == "Unassigned")
+            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned") && entryWorkItem.getValue().getTeam().equals("Unassigned"))
                 model.insertNodeInto(new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>"), ownerT, ownerT.getChildCount());
 
         model.reload(root);
