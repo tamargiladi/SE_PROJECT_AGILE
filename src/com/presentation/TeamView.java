@@ -1,5 +1,6 @@
 package com.presentation;
 
+import com.business.TeamManager;
 import com.persistent.Team;
 //import sun.jvm.hotspot.debugger.posix.elf.ELFSectionHeader;
 //import sun.jvm.hotspot.ui.tree.BooleanTreeNodeAdapter;
@@ -10,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.Map;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -24,29 +27,29 @@ public class TeamView extends JFrame {
     JTextArea userNameBox = new JTextArea("");
     JButton btnTeam = new JButton();
 
+    JComboBox<String> jComboTeam = new JComboBox<>();
+    JButton btnMove = new JButton("Move");
+    String[] str;
 
-    
 
     //Views
     public TeamView(String title)
     {
         //TODO:Make all the additional windows hidden
-
         this.actionType=title;
+
 
         setLayout();
 
 
     }
 
-
-
     public void setLayout()
     {
         //=====WINDOW==========
         Insets insets =  jPanel.getInsets();
         setTitle("Team Manager");
-        setSize(1000,600);
+        setSize(400,200);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
@@ -55,17 +58,26 @@ public class TeamView extends JFrame {
 
 
         //========LABEL===========
-        Dimension size;
-        JLabel verLabel;
-        verLabel = new JLabel("Enter team name:");
-        this.jPanel.add(verLabel);//Adding the 'verLabel' to the interface
-        size = verLabel.getPreferredSize();
-        verLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
 
 
-        setLayoutInputBoxTeam(insets,verLabel);
-        setLayoutButtonTeam(insets,verLabel);
-        //setLayoutButtonTmp(insets,verLabel);
+        if(actionType=="Add Team") {
+            Dimension size;
+            JLabel verLabel;
+            verLabel = new JLabel("Enter team name:");
+            this.jPanel.add(verLabel);//Adding the 'verLabel' to the interface
+            size = verLabel.getPreferredSize();
+            verLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
+
+            setLayoutInputBoxTeam(insets, verLabel);
+            setLayoutButtonTeam(insets, verLabel);
+        }
+        else
+        {
+            generateComboBox();
+            //generateButtonMove();
+
+
+        }
 
     }
 
@@ -96,7 +108,6 @@ public class TeamView extends JFrame {
         });
         //---------------END actions-----------//
 
-        //==============END OF INPUT BOX===========
     }
     public void setLayoutButtonTeam(Insets insets, JLabel verLabel )
     {
@@ -107,14 +118,14 @@ public class TeamView extends JFrame {
 
         if(actionType=="Add Team")
             btnTeam.setText("Add");
-        else if(actionType=="Add User To Team") {
+     /*   else if(actionType=="Add User To Team") {
             btnTeam.setText("Add");
             generateUsernameInput(insets.left + verLabel.getWidth() + 40);
         }
         else if(actionType=="Remove User From Team") {
             btnTeam.setText("Remove");
             generateUsernameInput(insets.left + verLabel.getWidth() + 40);
-        }
+        }*/
         else
             btnTeam.setText("Remove");
 
@@ -148,29 +159,6 @@ public class TeamView extends JFrame {
 
     }
 
-   /* public void setLayoutButtonTmp(Insets insets, JLabel verLabel )
-    {
-        Dimension size;
-        this.jPanel.add(btnList);//add to the interface
-
-
-       btnList.setText("Open");
-        //------actions-------//
-        ActionListener actionListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-
-                TeamManagerGUI tvl = new TeamManagerGUI();
-
-            }
-        };
-        btnList.addActionListener(actionListener);
-        //------ end actions-------//
-
-        size = btnList.getPreferredSize();
-        btnList.setBounds(insets.left + verLabel.getWidth() + teamNameBox.getY() + teamNameBox.getWidth()+ 70 , insets.top + 60, size.width + 5, size.height);
-
-    }*/
     public void generateAddTeam(String teamName){
 
 
@@ -190,6 +178,18 @@ public class TeamView extends JFrame {
 
 
 
+    }
+
+    public void generateComboBox()
+    {
+        Dimension size;
+        Insets insets = jPanel.getInsets();
+
+
+        generateStringArrayCombo();
+        jComboTeam = new JComboBox<>(str);
+        jComboTeam.setBounds(insets.left + 120 , insets.top + 15, 250, 40);
+        this.jPanel.add(jComboTeam);
     }
     public void generateRemoveTeam(String text)
     {
@@ -314,6 +314,35 @@ public class TeamView extends JFrame {
             }
         });
     }
+
+  /*  public void generateButtonMove()
+
+    {
+
+        //Style & initialization//
+        Insets insets = jPanel.getInsets();
+        this.jPanel.add(btnMove);//adds to the interface
+
+
+        //Actions//
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                LoginView.teamManager.removeMemberFromTeam(TeamManagerGUI.foundUser, TeamManagerGUI.getSelectedTeam());
+                LoginView.teamManager.addMemberToTeam(TeamManagerGUI.foundUser, getSelectedTeam());
+
+            }
+
+
+        };
+        btnMove.addActionListener(actionListener);
+        Dimension size =btnMove.getPreferredSize();
+
+        size = btnMove.getPreferredSize();
+        btnMove.setBounds(insets.left + 810 , insets.top + 200, size.width + 5, size.height);
+
+    }*/
     private void update()
     {
         LoginView.teamManager.updateTeamsFile();
@@ -321,6 +350,28 @@ public class TeamView extends JFrame {
     }
 
     //xTODO:Add a method that would generate the **use'rs*** input box
+
+    private void generateStringArrayCombo()
+    {
+        int length = LoginView.teamManager.teams.size();
+        ArrayList<String> listArr = new ArrayList<String>();
+        str = new String[length];
+
+        int ind = 0;
+        for (Map.Entry<String, Team> me : LoginView.teamManager.teams.entrySet()) {
+            if(!me.getKey().equals("default"))
+                str[ind++]=me.getKey();
+        }
+
+      /*  for(int i=0;i<length;i++)//length-1 : because the 'default' group is not included.
+            str[i]=listArr.get(i);*/
+    }
+
+    public Team getSelectedTeam() {
+        String teamName = jComboTeam.getSelectedItem().toString();
+        return LoginView.teamManager.teams.get(teamName);
+    }
+
 
 
 
