@@ -60,7 +60,7 @@ public class TeamView extends JFrame {
         //========LABEL===========
 
 
-        if(actionType=="Add Team") {
+        if(actionType.equals("Add Team")) {
             Dimension size;
             JLabel verLabel;
             verLabel = new JLabel("Enter team name:");
@@ -116,16 +116,8 @@ public class TeamView extends JFrame {
         this.jPanel.add(btnTeam);//add to the interface
 
 
-        if(actionType=="Add Team")
+        if(actionType.equals("Add Team"))
             btnTeam.setText("Add");
-     /*   else if(actionType=="Add User To Team") {
-            btnTeam.setText("Add");
-            generateUsernameInput(insets.left + verLabel.getWidth() + 40);
-        }
-        else if(actionType=="Remove User From Team") {
-            btnTeam.setText("Remove");
-            generateUsernameInput(insets.left + verLabel.getWidth() + 40);
-        }*/
         else
             btnTeam.setText("Remove");
 
@@ -215,7 +207,7 @@ public class TeamView extends JFrame {
         //xTODO:Input box
         //xTODO:OK button
 
-        if(LoginView.userManager.users.get(username).getTeam().getTeamsName()==teamName)
+        if(LoginView.userManager.users.get(username).getTeam().getTeamsName().equals(teamName))
         {
             //The user already belongs to this team.
             JOptionPane.showMessageDialog(this, "The user already belongs to this team.");
@@ -247,7 +239,7 @@ public class TeamView extends JFrame {
     {
 
 
-        if(LoginView.userManager.users.get(username).getTeam().getTeamsName()==teamName) {
+        if(LoginView.userManager.users.get(username).getTeam().getTeamsName().equals(teamName)) {
             LoginView.teamManager.addMemberToTeam(LoginView.userManager.users.get(username),
                     LoginView.teamManager.teams.get("default"));
 
