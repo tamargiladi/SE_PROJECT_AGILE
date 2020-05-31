@@ -233,8 +233,14 @@ public class TeamManagerGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                removeTeamUI();
-                update();
+                if(getSelectedTeam().getUsersList().size()==0) {
+                    removeTeamUI();
+                    update();
+                }
+                else
+                {
+                    JOptionPane.showConfirmDialog(null,  "The team must be empty in order to delete it.");
+                }
 
 
             }

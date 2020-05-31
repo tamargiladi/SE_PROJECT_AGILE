@@ -221,7 +221,7 @@ public class UserView extends JPanel {
             UserView.teamCombo.setSelectedItem(UserManagementView.foundUser.getTeam().getTeamsName());
             UserView.permissionLevelCombo.setSelectedItem(UserManagementView.foundUser.getPermissionLevel());
         }
-
+///
     }
 
 }
