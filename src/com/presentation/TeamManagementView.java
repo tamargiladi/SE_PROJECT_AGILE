@@ -1,5 +1,6 @@
 package com.presentation;
 
+import com.business.TeamManager;
 import com.persistent.Team;
 import com.persistent.User;
 
@@ -18,7 +19,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class TeamManagementView extends JFrame {
 
 
-    private JPanel listViewWindow = new JPanel();
+    private JPanel teamsScreenViewPanel = new JPanel();
 
     //Combo box variables
     public static JComboBox<String> comboTeamView = new JComboBox<>();
@@ -67,13 +68,13 @@ public class TeamManagementView extends JFrame {
         editPanel.setVisible(false);
 
         //=========jPanel initialization==============//
-        Insets insets = listViewWindow.getInsets();
+        Insets insets = teamsScreenViewPanel.getInsets();
         setTitle("Team Manager");
         setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
         setResizable(false);
-        this.listViewWindow.setLayout(null);
+        this.teamsScreenViewPanel.setLayout(null);
 
        /* ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
         JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
@@ -93,28 +94,14 @@ public class TeamManagementView extends JFrame {
         //   generateButtonMove();
         generateButtonEdit();
 
-        listViewWindow.add(background);
+        teamsScreenViewPanel.add(background);
         background.setBounds(insets.left, insets.top - 35, 1000, 600);
 
-        add(listViewWindow);
+        add(teamsScreenViewPanel);
 
 
     }
 
-    private void generateTeamCombo() {
-        Dimension size;
-        Insets insets = listViewWindow.getInsets();
-
-
-
-         comboTeamView.removeAllItems();
-        generateStringArrayCombo();
-        comboTeamView.setBounds(insets.left + 120, insets.top + 15, 250, 40);
-
-        this.listViewWindow.add(comboTeamView);
-
-
-    }
 
     private void generateStringArrayCombo() {
         int length = LoginView.teamManager.teams.size();
@@ -135,7 +122,7 @@ public class TeamManagementView extends JFrame {
     public void generateTable() {
 
 
-        Insets insets = listViewWindow.getInsets();
+        Insets insets = teamsScreenViewPanel.getInsets();
 
 
         model.setRowCount(0);
@@ -161,7 +148,7 @@ public class TeamManagementView extends JFrame {
         usersTable.getTableHeader().setBackground(Color.WHITE);
         usersTable.getTableHeader().setForeground(new Color(0, 49, 82));
 
-        listViewWindow.add(jScrollPane).setBounds(insets.left + 20, insets.top + 100, 700, 400);
+        teamsScreenViewPanel.add(jScrollPane).setBounds(insets.left + 20, insets.top + 100, 700, 400);
 
 
         final TableColumnModel columnModel = usersTable.getColumnModel();
@@ -176,10 +163,36 @@ public class TeamManagementView extends JFrame {
         }
     }
 
+    private void generateTeamCombo() {
+        Dimension size;
+        Insets insets = teamsScreenViewPanel.getInsets();
+
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                generateTable();
+
+
+            }
+        };
+        comboTeamView.addActionListener(actionListener);
+        //------ end actions-------//
+
+
+
+        comboTeamView.removeAllItems();
+        generateStringArrayCombo();
+        comboTeamView.setBounds(insets.left + 120, insets.top + 15, 250, 40);
+
+        this.teamsScreenViewPanel.add(comboTeamView);
+
+
+    }
 
     public void generateButtonConfirm() {
-        Insets insets = listViewWindow.getInsets();
-        this.listViewWindow.add(btnConfirm);//adds to the interface
+        Insets insets = teamsScreenViewPanel.getInsets();
+        this.teamsScreenViewPanel.add(btnConfirm);//adds to the interface
 
         //------actions-------//
         ActionListener actionListener = new ActionListener() {
@@ -205,8 +218,8 @@ public class TeamManagementView extends JFrame {
 
 
     public void generateButtonEdit() {
-        Insets insets = listViewWindow.getInsets();
-        this.listViewWindow.add(btnEdit);//adds to the interface
+        Insets insets = teamsScreenViewPanel.getInsets();
+        this.teamsScreenViewPanel.add(btnEdit);//adds to the interface
 
         //------actions-------//
         ActionListener actionListener = new ActionListener() {
@@ -236,8 +249,8 @@ public class TeamManagementView extends JFrame {
 
     public void generateButtonAddTeam() {
         //Style & initialization//
-        Insets insets = listViewWindow.getInsets();
-        this.listViewWindow.add(btnAddTeam);
+        Insets insets = teamsScreenViewPanel.getInsets();
+        this.teamsScreenViewPanel.add(btnAddTeam);
 
         Dimension size = btnAddTeam.getPreferredSize();
         size = btnAddTeam.getPreferredSize();
@@ -263,8 +276,8 @@ public class TeamManagementView extends JFrame {
 
     public void generateButtonRemoveTeam() {
         //Style & initialization//
-        Insets insets = listViewWindow.getInsets();
-        this.listViewWindow.add(btnRemoveTeam);
+        Insets insets = teamsScreenViewPanel.getInsets();
+        this.teamsScreenViewPanel.add(btnRemoveTeam);
 
 
         //Actions//
@@ -342,10 +355,29 @@ public class TeamManagementView extends JFrame {
                 "In order to delete '" + comboTeamView.getSelectedItem().toString() + "' click OK. Otherwise quit this window.", "Be ok!", JOptionPane.DEFAULT_OPTION);
         // 0=ok
         if (input == 0) {
-            LoginView.teamManager.removeTeam(new Team(comboTeamView.getSelectedItem().toString()));
-            update();
-            comboTeamView.removeItem(itemSelected);
-            this.dispose();
+            int usersSize = getSelectedTeam().getUsers().size();
+            int teamsSize =  LoginView.teamManager.teams.size();
+            if(usersSize==0)
+            {
+
+                LoginView.teamManager.removeTeam(LoginView.teamManager.teams.get(getSelectedTeam().toString()));
+
+                if(LoginView.teamManager.teams.size()<teamsSize) {
+                    //ok!;
+                }
+            }
+            else
+            {
+                int inputB = JOptionPane.showConfirmDialog(null,
+                        "Do you wish to transfer all the users from the Team first?");
+                if(inputB == 0) {
+                    moveUsersFromTeam(getSelectedTeam().getTeamsName(), "default");
+                    LoginView.teamManager.removeTeam(LoginView.teamManager.teams.get(getSelectedTeam().toString()));
+                }
+
+
+            }
+
 
         }
 
@@ -402,6 +434,11 @@ public class TeamManagementView extends JFrame {
         fieldEdit.setPreferredSize(new Dimension(200,20));
         fieldEdit.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
         editPanel.add(fieldEdit);
+
+
+        //------ end actions-------//
+
+
     }
 
     public void generateBtnEditConfirm()
@@ -414,7 +451,13 @@ public class TeamManagementView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
+                changeTeamsName(getSelectedTeam().getTeamsName(),fieldEdit.getText());
 
+                update();
+                JComponent comp = (JComponent) actionEvent.getSource();
+                Window win = SwingUtilities.getWindowAncestor(comp);
+                win.dispose();
+                TeamManagementView uv=new TeamManagementView();
             }
         };
         btnEditConfirm.addActionListener(actionListener);
@@ -448,10 +491,22 @@ public class TeamManagementView extends JFrame {
     }
 
 
+    public void moveUsersFromTeam(String oldTeam, String newTeam)
+    {
+
+        for (User user : LoginView.teamManager.teams.get(oldTeam).getUsers()) {
+            LoginView.userManager.users.get(user.getUserName()).setTeam(LoginView.teamManager.teams.get(newTeam));
+        }
+    }
+
+    public User getUserByTeamAndInd(String teamName, int ind)
+    {
+        return LoginView.teamManager.teams.get(teamName).getUsersList().get(ind);
+    }
 
     }
 
-    
+
 
 
 

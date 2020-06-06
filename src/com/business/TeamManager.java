@@ -80,7 +80,7 @@ public class TeamManager {
         if(isActionPermitted())
         {
             if(isTeamExist(team.getTeamsName()))
-              teams.remove(team.getTeamsName());
+              this.teams.remove(team.getTeamsName(),teams.get(team.getTeamsName()));
         }
         else
             return false;
