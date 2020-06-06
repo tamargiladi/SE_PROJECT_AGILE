@@ -15,7 +15,7 @@ import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class TeamManagerGUI extends JFrame {
+public class TeamManagementView extends JFrame {
 
 
     private JPanel listViewWindow = new JPanel();
@@ -23,7 +23,6 @@ public class TeamManagerGUI extends JFrame {
     //Combo box variables
     public static JComboBox<String> comboTeamView = new JComboBox<>();
     JButton btnConfirm = new JButton("Confirm");
-
     //Table variables
     DefaultTableModel model = new DefaultTableModel(0, 0);
     JTable usersTable = new JTable(model);
@@ -32,13 +31,23 @@ public class TeamManagerGUI extends JFrame {
     //public static User foundUser; //User that selected in user table
 
 
+
     //TeamManager variables&buttons
     JButton btnAddTeam = new JButton("Add Team");
     JButton btnRemoveTeam = new JButton("Remove team");//Add modfication that the team
     //  JButton btnMoveUser = new JButton("Move User");
 
+    //TeamManager name editing
+    JFrame editFrame = new JFrame();
+    JPanel editPanel = new JPanel();
+    JButton btnEdit = new JButton("Edit");
+    JTextField fieldEdit = new JTextField("");
+    JButton btnEditConfirm = new JButton("Confirm");
+
     ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
+
+
 
     final int colSize = 2;
 
@@ -48,12 +57,15 @@ public class TeamManagerGUI extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                TeamManagerGUI tGUI = new TeamManagerGUI();
+                TeamManagementView tGUI = new TeamManagementView();
             }
         });
     }
 
-    public TeamManagerGUI() {
+    public TeamManagementView() {
+        editFrame.setVisible(false);
+        editPanel.setVisible(false);
+
         //=========jPanel initialization==============//
         Insets insets = listViewWindow.getInsets();
         setTitle("Team Manager");
@@ -79,7 +91,7 @@ public class TeamManagerGUI extends JFrame {
         generateButtonAddTeam();
         generateButtonRemoveTeam();
         //   generateButtonMove();
-
+        generateButtonEdit();
 
         listViewWindow.add(background);
         background.setBounds(insets.left, insets.top - 35, 1000, 600);
@@ -191,6 +203,33 @@ public class TeamManagerGUI extends JFrame {
 
     }
 
+
+    public void generateButtonEdit() {
+        Insets insets = listViewWindow.getInsets();
+        this.listViewWindow.add(btnEdit);//adds to the interface
+
+        //------actions-------//
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                generateEditWindow(getSelectedTeam().getTeamsName());
+
+            }
+        };
+        btnEdit.addActionListener(actionListener);
+        //------ end actions-------//
+
+
+        btnEdit.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+
+        Dimension size = btnEdit.getPreferredSize();
+
+        size = btnEdit.getPreferredSize();
+        btnEdit.setBounds(insets.left + 850, insets.top + 200, size.width + 5, size.height);
+
+
+    }
     public List<User> getUsersListByCombo() {
         return LoginView.teamManager.teams.get(comboTeamView.getSelectedItem().toString()).getUsersList();
     }
@@ -256,6 +295,8 @@ public class TeamManagerGUI extends JFrame {
 
 
 
+
+
    /* public void generateButtonMove()
     {
         //Style & initialization//
@@ -313,7 +354,29 @@ public class TeamManagerGUI extends JFrame {
 
     private void update() {
         LoginView.teamManager.updateTeamsFile();
-        LoginView.userManager.updateUsersFile();
+       // LoginView.userManager.updateUsersFile();
+    }
+
+    public void generateEditWindow(String oldTeam)
+    {
+
+        editFrame.setVisible(true);
+        editPanel.setVisible(true);
+
+
+
+        //=======Sets the edit window layout
+        Insets insets = editPanel.getInsets();
+        setTitle("Team Manager");
+        editFrame.setSize(1000, 600);
+        editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        editFrame.add(editPanel);
+
+        //Generates edit-window components
+        generateInputBoxEdit();
+        generateBtnEditConfirm();
+
     }
 /*
     public boolean getSelectedRow() {
@@ -333,8 +396,66 @@ public class TeamManagerGUI extends JFrame {
     }
 
 
+    public void generateInputBoxEdit()
+    {
 
-}
+        fieldEdit.setPreferredSize(new Dimension(200,20));
+        fieldEdit.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        editPanel.add(fieldEdit);
+    }
+
+    public void generateBtnEditConfirm()
+    {
+        Insets insets = editPanel.getInsets();
+        this.editPanel.add(btnEditConfirm);//adds to the interface
+
+        //------actions-------//
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+
+            }
+        };
+        btnEditConfirm.addActionListener(actionListener);
+        //------ end actions-------//
+
+
+        btnEditConfirm.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+
+        Dimension size = btnEditConfirm.getPreferredSize();
+
+        size = btnEditConfirm.getPreferredSize();
+        btnEditConfirm.setBounds(insets.left + 850, insets.top + 200, size.width + 5, size.height);
+
+
+    }
+
+    public void changeTeamsName(String oldTeam, String newTeam)
+    {
+        //d:TeamManager operations:
+            //TODO:Iterate through all the users in the team and change their teams name with the function 'updateUserTeam'
+
+            LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
+
+        Iterator<Map.Entry<String, User>> it = LoginView.userManager.users.entrySet().iterator();
+
+        while(it.hasNext()) {
+                LoginView.userManager.updateUserTeam(it.next().getKey(),newTeam);
+        }
+
+            update();
+    }
+
+
+
+    }
+
+    
+
+
+
+
 
 
 

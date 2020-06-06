@@ -153,6 +153,13 @@ public class TeamManager {
 
     }
 
+
+
+    public void updateTeamsName(String oldName, String newName)
+    {
+        teams.get(oldName).setTeamsName(newName);
+
+    }
     public void printFile()
     {
 

@@ -50,8 +50,17 @@ public class Team implements Serializable {
         return teamsName;
     }
 
-    public void setTeamsName(String teamsName){
-        this.teamsName = teamsName;
+    public void setTeamsName(String newTeamName){
+
+        Iterator<User> it = this.users.iterator();
+        Team newTeam = new Team(newTeamName);
+
+        while(it.hasNext())
+        {
+            it.next().setTeam(newTeam);
+        }
+
+        this.teamsName=newTeamName;
     }
 
     public List<User> getUsers(){
@@ -62,4 +71,6 @@ public class Team implements Serializable {
     {
         return this.users;
     }
+
+
 }
