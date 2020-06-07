@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MainUserInterface extends JPanel {
 
-    public static WorkItemManager WIManager = new WorkItemManager();
+    public static WorkItemManager WIManager = WorkItemManager.getInstance();
     //public static UserManager userManager = new UserManager();
     //public static TeamManager teamManager = new TeamManager();
     public static ReportGenerator reportGenerator = new ReportGenerator();
