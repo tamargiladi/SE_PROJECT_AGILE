@@ -379,7 +379,7 @@ public class MainUserInterface extends JPanel {
         tree.setCellRenderer(new WorkItemTreeCellRenderer());
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-
+        model.insertNodeInto(new DefaultMutableTreeNode(titleT), ownerT, ownerT.getChildCount());
 
         //Adding nodes to tree
         for (Map.Entry<String, Team> entryTeam : LoginView.teamManager.teams.entrySet()) {
