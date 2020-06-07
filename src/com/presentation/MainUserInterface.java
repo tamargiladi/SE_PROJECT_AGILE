@@ -386,7 +386,7 @@ public class MainUserInterface extends JPanel {
             tempNodeTeam = new DefaultMutableTreeNode(entryTeam.getKey());
             model.insertNodeInto(tempNodeTeam, root, root.getChildCount());
             for (Map.Entry<String, User> entryOwner : LoginView.userManager.users.entrySet())
-                if (entryOwner.getValue().getTeam().getTeamsName().equals(entryTeam.getKey())) {
+                if (entryOwner.getValue().getTeamName().equals(entryTeam.getKey())) {
                     tempNodeUser = new DefaultMutableTreeNode(entryOwner.getKey());
                     model.insertNodeInto(tempNodeUser, tempNodeTeam, tempNodeTeam.getChildCount());
                     model.insertNodeInto(new DefaultMutableTreeNode(titleT), tempNodeUser, tempNodeUser.getChildCount());

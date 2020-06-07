@@ -184,7 +184,6 @@ public class UserView extends JPanel {
                     Window win = SwingUtilities.getWindowAncestor(comp);
                     win.dispose();
                     UserManagementView uv = new UserManagementView("User Management Area");
-                    //uv.usersScreenViewPanel.setVisible(true);
                 }
             }
 
@@ -218,10 +217,9 @@ public class UserView extends JPanel {
             UserView.userNameField.setEnabled(false);
             UserView.passwordField.setText("*****");
             UserView.passwordField.setEnabled(false);
-            UserView.teamCombo.setSelectedItem(UserManagementView.foundUser.getTeam().getTeamsName());
+            UserView.teamCombo.setSelectedItem(UserManagementView.foundUser.getTeamName());
             UserView.permissionLevelCombo.setSelectedItem(UserManagementView.foundUser.getPermissionLevel());
         }
-///
     }
 
 }

@@ -193,8 +193,8 @@ public class ReportView extends JFrame {
                 for (Map.Entry<String, Integer> entry : sumHoursPerUser.entrySet()) //adding rows
                     if (entry.getKey() == null)
                         model.addRow(new Object[]{"Unassigned", entry.getValue(), "Unassigned"});
-                    else if (LoginView.userManager.users.get(entry.getKey()).getTeam() != null)
-                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), LoginView.userManager.users.get(entry.getKey()).getTeam().getTeamsName()});
+                    else if (LoginView.teamManager.teams.get(LoginView.userManager.users.get(entry.getKey()).getTeamName())!= null)
+                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), LoginView.userManager.users.get(entry.getKey()).getTeamName()});
                     else
                         model.addRow(new Object[]{entry.getKey(), entry.getValue(), "Unassigned"});
 

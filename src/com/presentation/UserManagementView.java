@@ -153,7 +153,7 @@ public class UserManagementView extends JFrame{
             model.addColumn(col);
         for (Map.Entry<String,User> entry : LoginView.userManager.users.entrySet()) { //adding rows
             if (!(entry.getValue().getUserName().equals("admin")))
-                model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeam().getTeamsName()});
+                model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeamName()});
         }
         usersTable.setDefaultEditor(Object.class, null);
 
