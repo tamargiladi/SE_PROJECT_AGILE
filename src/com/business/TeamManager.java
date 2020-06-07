@@ -1,6 +1,7 @@
 package com.business;
 import com.persistent.Team;
 import com.persistent.User;
+import com.presentation.LoginView;
 import com.presentation.MainUserInterface;
 
 import java.io.*;
@@ -13,18 +14,43 @@ public class TeamManager {
 
 
     private static String fileAddress = "src/com/data/teamsFile.ser";
-    public File teamsFile;
+   // public File teamsFile;
     public HashMap<String, Team> teams;
 
 
 
-    public TeamManager ()
-    {
+    public TeamManager () {
 
         this.teams = new HashMap<String, Team>();
-        HashMap<String,Team> map = new HashMap<>();
+        HashMap<String, Team> map = new HashMap<>();
+        //teamsFile = new File(fileAddress);
 
-        try
+        File teamsFile = new File(fileAddress);
+        if (teamsFile.length() != 0) {
+            // load users file to HashMap
+            try {
+                FileInputStream teamFileInputStream = new FileInputStream(fileAddress);
+                ObjectInputStream teamObjectInputStream = new ObjectInputStream(teamFileInputStream);
+                map = (HashMap) teamObjectInputStream.readObject();
+                teams.putAll(map);
+                teamObjectInputStream.close();
+                teamFileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                //System.out.println("failed to load users file to HashMap\n");
+            } catch (ClassNotFoundException c) {
+                c.printStackTrace();
+                System.out.println("Class not found");
+            }
+        }
+
+        if(teams.get("default")==null)//Default team
+            addTeam("default");
+             addTeam("Algo");
+             addTeam("SW");
+            //teams.put("default", new Team("default"));
+    }
+        /*try
         {
 
             FileInputStream fis = new FileInputStream(fileAddress);
@@ -58,7 +84,7 @@ public class TeamManager {
             teams.put("default", new Team("default"));
 
 
-    }
+    }*/
     /**
      *The method read teamFile file.
      */
