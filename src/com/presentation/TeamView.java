@@ -193,7 +193,7 @@ public class TeamView extends JFrame {
        }
        else
        {
-           LoginView.teamManager.removeTeam(new Team(text));
+           LoginView.teamManager.removeTeam(text);
            update();
            this.dispose();
        }

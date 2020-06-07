@@ -24,6 +24,8 @@ public class TeamManagementView extends JFrame {
     //Combo box variables
     public static JComboBox<String> comboTeamView = new JComboBox<>();
     JButton btnConfirm = new JButton("Confirm");
+    JButton btnCancel  = new JButton("Cancel");
+
     //Table variables
     DefaultTableModel model = new DefaultTableModel(0, 0);
     JTable usersTable = new JTable(model);
@@ -64,8 +66,9 @@ public class TeamManagementView extends JFrame {
     }
 
     public TeamManagementView() {
-        editFrame.setVisible(false);
-        editPanel.setVisible(false);
+
+        /*editFrame.setVisible(false);
+        editPanel.setVisible(false);*/
 
         //=========jPanel initialization==============//
         Insets insets = teamsScreenViewPanel.getInsets();
@@ -93,6 +96,7 @@ public class TeamManagementView extends JFrame {
         generateButtonRemoveTeam();
         //   generateButtonMove();
         generateButtonEdit();
+        generateButtonCancel();
 
         teamsScreenViewPanel.add(background);
         background.setBounds(insets.left, insets.top - 35, 1000, 600);
@@ -216,6 +220,37 @@ public class TeamManagementView extends JFrame {
 
     }
 
+    public void generateButtonCancel() {
+        Insets insets = teamsScreenViewPanel.getInsets();
+        this.teamsScreenViewPanel.add(btnCancel);//adds to the interface
+
+        //------actions-------//
+        ActionListener actionListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+
+                JComponent comp = (JComponent) actionEvent.getSource();
+                Window win = SwingUtilities.getWindowAncestor(comp);
+                win.dispose();
+                TeamManagementView tv = new TeamManagementView();
+
+                //BUG: THE window is open again but no properly
+            }
+        };
+
+        btnCancel.addActionListener(actionListener);
+        //------ end actions-------//
+
+
+        btnCancel.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+
+        Dimension size = btnCancel.getPreferredSize();
+
+        size = btnCancel.getPreferredSize();
+        btnCancel.setBounds(insets.left + 800, insets.top + 400, size.width + 5, size.height);
+
+    }
+
 
     public void generateButtonEdit() {
         Insets insets = teamsScreenViewPanel.getInsets();
@@ -308,8 +343,6 @@ public class TeamManagementView extends JFrame {
 
 
 
-
-
    /* public void generateButtonMove()
     {
         //Style & initialization//
@@ -341,39 +374,29 @@ public class TeamManagementView extends JFrame {
 
     public void removeTeamUI() {
         Object itemSelected = comboTeamView.getSelectedItem();
-        if (!LoginView.teamManager.isTeamExist(comboTeamView.getSelectedItem().toString())) {
+        /*if (!LoginView.teamManager.isTeamExist(comboTeamView.getSelectedItem().toString())) {
             //The team doesn't exist. Cannot be removed!
-
 
             JOptionPane.showMessageDialog(this, "The team doesn't exist. Cannot be removed!");
 
-        } else {
+        } */
             String message = "Are you sure you want to delete ";
             message.concat(comboTeamView.getSelectedItem().toString());
-        }
+
         int input = JOptionPane.showConfirmDialog(null,
                 "In order to delete '" + comboTeamView.getSelectedItem().toString() + "' click OK. Otherwise quit this window.", "Be ok!", JOptionPane.DEFAULT_OPTION);
         // 0=ok
         if (input == 0) {
+
             int usersSize = getSelectedTeam().getUsers().size();
             int teamsSize =  LoginView.teamManager.teams.size();
             if(usersSize==0)
             {
-
-                LoginView.teamManager.removeTeam(LoginView.teamManager.teams.get(getSelectedTeam().toString()));
-
-                if(LoginView.teamManager.teams.size()<teamsSize) {
-                    //ok!;
-                }
+                LoginView.teamManager.removeTeam(comboTeamView.getSelectedItem().toString());
             }
             else
             {
-                int inputB = JOptionPane.showConfirmDialog(null,
-                        "Do you wish to transfer all the users from the Team first?");
-                if(inputB == 0) {
-                    moveUsersFromTeam(getSelectedTeam().getTeamsName(), "default");
-                    LoginView.teamManager.removeTeam(LoginView.teamManager.teams.get(getSelectedTeam().toString()));
-                }
+                JOptionPane.showMessageDialog(this, "Team with users cannot be deleted!");
 
 
             }
@@ -381,6 +404,8 @@ public class TeamManagementView extends JFrame {
 
         }
 
+        LoginView.teamManager.printTeamManager();
+        update();
     }
 
 
@@ -394,6 +419,7 @@ public class TeamManagementView extends JFrame {
 
         editFrame.setVisible(true);
         editPanel.setVisible(true);
+
 
 
 
@@ -423,8 +449,9 @@ public class TeamManagementView extends JFrame {
     }*/
 
     static public Team getSelectedTeam() {
-        String teamName = comboTeamView.getSelectedItem().toString();
-        return LoginView.teamManager.teams.get(teamName);
+
+        String teamName = Objects.requireNonNull(comboTeamView.getSelectedItem()).toString();
+        return LoginView.teamManager.getTeam(teamName);
     }
 
 
@@ -444,6 +471,11 @@ public class TeamManagementView extends JFrame {
     public void generateBtnEditConfirm()
     {
         Insets insets = editPanel.getInsets();
+
+        editPanel.add(background);
+        background.setBounds(insets.left, insets.top - 35, 1000, 600);
+
+
         this.editPanel.add(btnEditConfirm);//adds to the interface
 
         //------actions-------//
@@ -452,12 +484,7 @@ public class TeamManagementView extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
 
                 changeTeamsName(getSelectedTeam().getTeamsName(),fieldEdit.getText());
-
                 update();
-                JComponent comp = (JComponent) actionEvent.getSource();
-                Window win = SwingUtilities.getWindowAncestor(comp);
-                win.dispose();
-                TeamManagementView uv=new TeamManagementView();
             }
         };
         btnEditConfirm.addActionListener(actionListener);
@@ -479,12 +506,10 @@ public class TeamManagementView extends JFrame {
         //d:TeamManager operations:
             //TODO:Iterate through all the users in the team and change their teams name with the function 'updateUserTeam'
 
-            LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
+                LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
 
-        Iterator<Map.Entry<String, User>> it = LoginView.userManager.users.entrySet().iterator();
-
-        while(it.hasNext()) {
-                LoginView.userManager.updateUserTeam(it.next().getKey(),newTeam);
+        for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
+            LoginView.userManager.updateUserTeam(stringUserEntry.getKey(), newTeam);
         }
 
             update();
@@ -502,6 +527,25 @@ public class TeamManagementView extends JFrame {
     public User getUserByTeamAndInd(String teamName, int ind)
     {
         return LoginView.teamManager.teams.get(teamName).getUsersList().get(ind);
+    }
+
+
+
+    private void resetFile()
+    {
+
+        for (Map.Entry<String, Team> stringTeamEntry : LoginView.teamManager.teams.entrySet()) {
+            String teamName = stringTeamEntry.getKey();
+            for (User user : LoginView.teamManager.teams.get(teamName).getUsersList()) {
+                String username = user.getUserName();
+                if (!LoginView.userManager.isUserExist(username))
+                    LoginView.teamManager.teams.get(teamName).removeUser(LoginView.userManager.users.get(username));
+
+            }
+
+        }
+
+        update();
     }
 
     }

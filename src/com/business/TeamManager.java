@@ -75,21 +75,22 @@ public class TeamManager {
 
     }
 
-    public Boolean removeTeam(Team team)
+    public Boolean removeTeam(String teamsName)
     {
-        if(isActionPermitted())
-        {
-            if(isTeamExist(team.getTeamsName()))
-              this.teams.remove(team.getTeamsName(),teams.get(team.getTeamsName()));
-        }
-        else
-            return false;
+        int size= this.teams.size();
 
-        return true;
+        if(isTeamExist(teamsName))
+            this.teams.remove(teamsName);
+
+        return size==(this.teams.size()+1);
     }
 
 
 
+    public Team getTeam(String teamName)
+    {
+        return this.teams.get(teamName);
+    }
     public void addMemberToTeam(User user, Team team)
     {
            team.addUser(user);
@@ -159,6 +160,22 @@ public class TeamManager {
     {
         teams.get(oldName).setTeamsName(newName);
 
+    }
+
+    public void printTeamManager()
+    {
+
+        for (Map.Entry<String, Team> stringTeamEntry : this.teams.entrySet()) {
+            String teamsName = stringTeamEntry.getKey();
+            Iterator<User> itUser = this.teams.get(teamsName).getUsersList().iterator();
+            System.out.printf(teamsName + ":\n{");
+
+            while (itUser.hasNext()) {
+                System.out.printf(itUser.next().getUserName() + ",");
+            }
+
+            System.out.printf("}\n\n");
+        }
     }
     public void printFile()
     {
