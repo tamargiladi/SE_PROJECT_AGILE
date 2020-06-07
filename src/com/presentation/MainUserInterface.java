@@ -561,12 +561,12 @@ public class MainUserInterface extends JPanel {
         //Prepare table data
         modelMyTasks.setRowCount(0);
         modelMyTasks.setColumnCount(0);
-        String[] columnNames = {"ID", "Type", "Status", "Owner", "Summary"};
+        String[] columnNames = {"ID", "Type", "Status", "Sprint", "Priority", "Summary"};
         for (String col : columnNames) //adding columns
             modelMyTasks.addColumn(col);
         for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) //adding rows
             if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(LoginView.userManager.loggedInUser.getUserName()))
-                modelMyTasks.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getSummary()});
+                modelMyTasks.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getSprint(), entry.getValue().getPriority(), entry.getValue().getSummary()});
         myTasksTable.setDefaultEditor(Object.class, null);
 
 
