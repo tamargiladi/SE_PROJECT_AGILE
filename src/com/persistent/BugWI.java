@@ -10,15 +10,6 @@ public class BugWI extends TaskWI {
         foundVersion = null;
     }
 
-    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
-                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
-                             Integer storyID, String foundVersion)
-    {
-        super.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
-        this.foundVersion = foundVersion;
-    }
-
-
     public String getFoundVersion() {
         return foundVersion;
     }

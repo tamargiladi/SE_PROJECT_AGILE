@@ -55,16 +55,6 @@ public abstract class WorkItem {
         Dec20
     }
 
-    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
-                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
-                             Integer storyID, String foundVersion) {
-        this.summary = summary;
-        this.status = status;
-        this.description = description;
-    }
-
-
-
     public String getSummary() {
         return summary;
     }

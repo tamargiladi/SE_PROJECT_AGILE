@@ -52,15 +52,6 @@ public class WorkItemManager {
             increaseNextAvailableId();
     }
 
-    // Save Work Item
-    public void saveWorkItem(WorkItem wi, String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
-                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
-                             Integer storyID, String foundVersion, boolean isNew)
-    {
-        //wi.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
-        addWorkItemToHashMap(wi, isNew);
-    }
-
 
     // search work item by id
     public WorkItem searchWorkItem(Integer id) {
