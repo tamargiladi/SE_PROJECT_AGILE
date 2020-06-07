@@ -7,14 +7,26 @@ import com.presentation.MainUserInterface;
 import java.io.*;
 import java.util.*;
 
+/***
+ Singleton class:
+ Managing users documentation, responsible for creating, editing and removing users
+ ***/
 
 public class UserManager {
+
+    private static UserManager UserManagerInstance; //Singleton instance
 
     private static String fileAddress = "src/com/data/usersFile.ser";
     public User loggedInUser;
     public HashMap<String, User> users;
 
-    public UserManager() {
+    public static UserManager getInstance() {
+        if (UserManagerInstance == null)
+            UserManagerInstance = new UserManager();
+        return  UserManagerInstance;
+    }
+
+    private UserManager() {
         try {
             users = new HashMap<>();
             loadUsersFileToHashMap();

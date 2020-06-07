@@ -9,7 +9,6 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private PermissionLevel permissionLevel;
-    //private Team team;
     private String teamName;
 
     public enum PermissionLevel{
