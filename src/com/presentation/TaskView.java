@@ -3,6 +3,7 @@ package com.presentation;
 import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
+import com.persistent.WorkItemBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,21 +147,13 @@ public class TaskView extends StoryView {
                     win.dispose();
                     MainUserInterface mainView = new MainUserInterface();
                 } else if (command.equals("Save")) {
-                    WorkItem.statusEnum status = (WorkItem.statusEnum) statusCombo.getModel().getSelectedItem();
                     String desc = descTextBox.getText();
                     String summary = summaryTextBox.getText();
-                    WorkItem.priorityEnum priority = (WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem();
-
-                    String owner = (String) ownerCombo.getModel().getSelectedItem();
 
                     String ep = storyIDTextBox.getText();
                     Integer storyId = null;
                     if (ep.length() != 0)
                         storyId = Integer.parseInt(ep);
-
-                    String team = (String) teamCombo.getModel().getSelectedItem();
-
-                    WorkItem.sprintEnum sprint = (WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem();
 
                     String est = estimateTextBox.getText();
                     Integer estimate = null;
@@ -172,8 +165,7 @@ public class TaskView extends StoryView {
                     if (tSpent.length() != 0)
                         timeSpent = Integer.parseInt(tSpent);
 
-                    String targetVersion = targetVersionTextBox.getText();
-
+                    //validation
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
                     else if (descTextBox.getText().length() == 0)
@@ -182,18 +174,23 @@ public class TaskView extends StoryView {
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Story)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID is not Story");
-                    else {
-                        if (wi == null) {
-                            WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Task);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null, true);
-                        } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, null, team, sprint, estimate, timeSpent, targetVersion, storyId, null, false);
-                        }
-
+                    else { //validation passed
+                        WorkItemBuilder.builder().
+                                withSummary(summary).
+                                withStatus((WorkItem.statusEnum) statusCombo.getModel().getSelectedItem()).
+                                withDescription(desc).
+                                withPriority((WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem()).
+                                withOwner((String) ownerCombo.getModel().getSelectedItem()).
+                                withTeam((String) teamCombo.getModel().getSelectedItem()).
+                                withSprint((WorkItem.sprintEnum) sprintCombo.getModel().getSelectedItem()).
+                                withEstimate(estimate).
+                                withTimeSpent(timeSpent).
+                                withTargetVersion(targetVersionTextBox.getText()).
+                                withStoryID(storyId).
+                                build(WorkItem.typeEnum.Task, wi);
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
                         win.dispose();
-//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
                         MainUserInterface mainView = new MainUserInterface();
                     }
                 }

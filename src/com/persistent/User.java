@@ -9,17 +9,17 @@ public class User implements Serializable {
     private String userName;
     private String password;
     private PermissionLevel permissionLevel;
-    private Team team;
+    private String teamName;
 
     public enum PermissionLevel{
         member, manager, admin
     }
 
-    public User(String userName, String password, PermissionLevel permissionLevel, Team team) {
+    public User(String userName, String password, PermissionLevel permissionLevel, String teamName) {
         this.userName = userName;
         this.password = password;
         this.permissionLevel = permissionLevel;
-        this.team = team;
+        this.teamName = teamName;
     }
 
     public User(String userName)
@@ -39,15 +39,15 @@ public class User implements Serializable {
         return permissionLevel;
     }
 
-    public Team getTeam(){
-        return team;
+    public String getTeamName(){
+        return teamName;
     }
 
     public void setPermissionLevel(PermissionLevel permissionLevel){
         this.permissionLevel = permissionLevel;
     }
 
-    public void setTeam(Team team){
-        this.team = team;
+    public void setTeam(String teamName){
+        this.teamName = teamName;
     }
 }

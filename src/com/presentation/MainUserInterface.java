@@ -26,7 +26,7 @@ import java.util.List;
 
 public class MainUserInterface extends JPanel {
 
-    public static WorkItemManager WIManager = new WorkItemManager();
+    public static WorkItemManager WIManager = WorkItemManager.getInstance();
     //public static UserManager userManager = new UserManager();
     //public static TeamManager teamManager = new TeamManager();
     public static ReportGenerator reportGenerator = new ReportGenerator();
@@ -379,14 +379,14 @@ public class MainUserInterface extends JPanel {
         tree.setCellRenderer(new WorkItemTreeCellRenderer());
         DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
-
+        model.insertNodeInto(new DefaultMutableTreeNode(titleT), ownerT, ownerT.getChildCount());
 
         //Adding nodes to tree
         for (Map.Entry<String, Team> entryTeam : LoginView.teamManager.teams.entrySet()) {
             tempNodeTeam = new DefaultMutableTreeNode(entryTeam.getKey());
             model.insertNodeInto(tempNodeTeam, root, root.getChildCount());
             for (Map.Entry<String, User> entryOwner : LoginView.userManager.users.entrySet())
-                if (entryOwner.getValue().getTeam().getTeamsName().equals(entryTeam.getKey())) {
+                if (entryOwner.getValue().getTeamName().equals(entryTeam.getKey())) {
                     tempNodeUser = new DefaultMutableTreeNode(entryOwner.getKey());
                     model.insertNodeInto(tempNodeUser, tempNodeTeam, tempNodeTeam.getChildCount());
                     model.insertNodeInto(new DefaultMutableTreeNode(titleT), tempNodeUser, tempNodeUser.getChildCount());
@@ -397,13 +397,12 @@ public class MainUserInterface extends JPanel {
                             else
                                 tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>");
                             model.insertNodeInto(tempNodeWI, tempNodeUser, tempNodeUser.getChildCount());
-
                         }
                     }
                 }
         }
         for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet())
-            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned") && entryWorkItem.getValue().getTeam() == "Unassigned")
+            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned"))
                 model.insertNodeInto(new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>"), ownerT, ownerT.getChildCount());
 
         model.reload(root);

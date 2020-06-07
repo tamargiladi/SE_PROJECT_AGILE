@@ -2,6 +2,7 @@ package com.presentation;
 
 import com.persistent.User;
 import com.persistent.WorkItem;
+import com.persistent.WorkItemBuilder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -97,18 +98,15 @@ public class StoryView extends EpicView{
                     win.dispose();
                     MainUserInterface mainView = new MainUserInterface();
                 } else if (command.equals("Save")) {
-                    WorkItem.statusEnum status = (WorkItem.statusEnum) statusCombo.getModel().getSelectedItem();
                     String desc = descTextBox.getText();
                     String summary = summaryTextBox.getText();
-                    WorkItem.priorityEnum priority = (WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem();
-
-                    String owner = (String) ownerCombo.getModel().getSelectedItem();
 
                     String ep = epicIDTextBox.getText();
                     Integer epicId = null;
                     if (ep.length() != 0)
                         epicId = Integer.parseInt(epicIDTextBox.getText());
 
+                    //validation on values
                     if (summary.length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill summary field");
                     else if (descTextBox.getText().length() == 0)
@@ -117,14 +115,15 @@ public class StoryView extends EpicView{
                         JOptionPane.showMessageDialog(jPanel, "Parent ID does not exist");
                     else if (epicId != null && MainUserInterface.WIManager.searchWorkItem(epicId).getType() != WorkItem.typeEnum.Epic)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID is not Epic");
-                    else {
-                        if (wi == null) {
-                            WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Story);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null, true);
-                        } else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary, status, desc, priority, owner, epicId, null, null, null, null, null, null, null, false);
-                        }
-//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+                    else { //validation passed - save work item
+                        WorkItemBuilder.builder().
+                                withSummary(summary).
+                                withStatus((WorkItem.statusEnum) statusCombo.getModel().getSelectedItem()).
+                                withDescription(desc).
+                                withPriority((WorkItem.priorityEnum) priorityCombo.getModel().getSelectedItem()).
+                                withOwner((String) ownerCombo.getModel().getSelectedItem()).
+                                withEpicID(epicId).
+                                build(WorkItem.typeEnum.Story, wi);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);

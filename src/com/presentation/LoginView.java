@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class LoginView extends JPanel{
 
     public static TeamManager teamManager = new TeamManager();
-    public static UserManager userManager = new UserManager();
+    public static UserManager userManager = UserManager.getInstance();
 
     public static JFrame loginScreenFrame;
     public static JTextField userNameTextField= new JTextField();

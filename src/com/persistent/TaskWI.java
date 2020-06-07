@@ -22,21 +22,6 @@ public class TaskWI extends WorkItem {
         storyID = null;
     }
 
-    public void updateWorkItem(String summary, WorkItem.statusEnum status, String description, WorkItem.priorityEnum priority, String owner,
-                             Integer epicID, String team, WorkItem.sprintEnum sprint, Integer estimate, Integer timeSpent, String targetVersion,
-                             Integer storyID, String foundVersion)
-    {
-        super.updateWorkItem(summary, status, description, priority, owner, epicID, team, sprint, estimate, timeSpent, targetVersion, storyID, foundVersion);
-        this.priority = priority;
-        this.owner = owner;
-        this.team = team;
-        this.sprint = sprint;
-        this.estimate = estimate;
-        this.timeSpent = timeSpent;
-        this.targetVersion = targetVersion;
-        this.storyID = storyID;
-    }
-
 
     public priorityEnum getPriority() {
         return priority;

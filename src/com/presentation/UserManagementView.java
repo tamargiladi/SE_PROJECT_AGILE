@@ -21,15 +21,6 @@ public class UserManagementView extends JFrame{
     ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                UserManagementView frame = new UserManagementView("User Management Area");
-            }
-        });
-    }
-
     public UserManagementView(String title) throws HeadlessException {
         setTitle(title);
         setResizable(false);
@@ -38,6 +29,7 @@ public class UserManagementView extends JFrame{
         setVisible(true);
         usersScreenViewPanel.setLayout(null);
         setContentPane(usersScreenViewPanel);
+        usersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         setLayout();
     }
 
@@ -161,7 +153,7 @@ public class UserManagementView extends JFrame{
             model.addColumn(col);
         for (Map.Entry<String,User> entry : LoginView.userManager.users.entrySet()) { //adding rows
             if (!(entry.getValue().getUserName().equals("admin")))
-                model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeam().getTeamsName()});
+                model.addRow(new Object[]{entry.getValue().getUserName(), entry.getValue().getPermissionLevel(), entry.getValue().getTeamName()});
         }
         usersTable.setDefaultEditor(Object.class, null);
 

@@ -191,10 +191,10 @@ public class ReportView extends JFrame {
                 for (String col : columnNames) //adding columns
                     model.addColumn(col);
                 for (Map.Entry<String, Integer> entry : sumHoursPerUser.entrySet()) //adding rows
-                    if (entry.getKey() == null)
+                    if (entry.getKey() == null || LoginView.userManager.users.get(entry.getKey()) == null)
                         model.addRow(new Object[]{"Unassigned", entry.getValue(), "Unassigned"});
-                    else if (LoginView.userManager.users.get(entry.getKey()).getTeam() != null)
-                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), LoginView.userManager.users.get(entry.getKey()).getTeam().getTeamsName()});
+                    else if (LoginView.userManager.users.get(entry.getKey()).getTeamName() != null && LoginView.teamManager.teams.get(LoginView.userManager.users.get(entry.getKey()).getTeamName())!= null)
+                        model.addRow(new Object[]{entry.getKey(), entry.getValue(), LoginView.userManager.users.get(entry.getKey()).getTeamName()});
                     else
                         model.addRow(new Object[]{entry.getKey(), entry.getValue(), "Unassigned"});
 
@@ -208,7 +208,7 @@ public class ReportView extends JFrame {
                 resultsTable.setDefaultEditor(Object.class, null);
                 resultsTable.revalidate();
                 Dimension tableSize = resultsTable.getPreferredSize();
-                this.jPanel.add(jScrollPane).setBounds(insets.left + 10, insets.top + 10, tableSize.width * 2, tableSize.height + 25);
+                this.jPanel.add(jScrollPane).setBounds(insets.left + 10, insets.top + 10, tableSize.width * 2, tableSize.height + 40);
                 jPanel.add(background);
                 return;
             }

@@ -3,6 +3,7 @@ package com.presentation;
 import com.business.UserManager;
 import com.business.WorkItemManager;
 import com.persistent.WorkItem;
+import com.persistent.WorkItemBuilder;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -156,26 +157,20 @@ public class EpicView extends JFrame {
                     else if (descTextBox.getText().length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill description field");
                     else {
-                        if (wi == null && WorkItemManager.getAvailableId() != 100) {
-                            WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Epic);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
-                        }
-                        else if (wi == null && WorkItemManager.getAvailableId() == 100) {
-                            WorkItem newWI = MainUserInterface.WIManager.createNewWI(WorkItem.typeEnum.Epic);
-                            MainUserInterface.WIManager.saveWorkItem(newWI, summary,status,desc,null, null, null, null, null,null,null,null,null,null, true);
-                        }
-                        else {
-                            MainUserInterface.WIManager.saveWorkItem(wi, summary,status,desc,null, null, null, null, null,null,null,null,null,null, false);
-                        }
-//                        MainUserInterface.recentlyCreated(MainUserInterface.mainFrame);
+                        WorkItemBuilder.builder().
+                                withSummary(summary).
+                                withStatus(status).
+                                withDescription(desc).
+                                build(WorkItem.typeEnum.Epic, wi);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
                         win.dispose();
                     }
+                    }
                 }
-            }
-        };
+            };
+
 
         // save button
         this.jPanel.add(saveButton);
