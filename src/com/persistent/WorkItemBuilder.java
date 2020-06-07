@@ -44,7 +44,12 @@ public class WorkItemBuilder {
         workItem.setStoryID(this.storyID);
         workItem.setFoundVersion(this.foundVersion);
 
-        WorkItemManager.getInstance().addWorkItemToHashMap(workItem, isNew);
+        if (this.summary == null || this.description == null)
+            System.out.println("Can't save Work Item: please verify summary and description fields are not empty");
+        else {
+            System.out.println("\nSaving work item " + workItem.getId());
+            WorkItemManager.getInstance().addWorkItemToHashMap(workItem, isNew);
+        }
         return workItem;
     }
 

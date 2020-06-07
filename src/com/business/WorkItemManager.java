@@ -41,6 +41,7 @@ public class WorkItemManager {
     }
 
     public static void increaseNextAvailableId() {
+        System.out.println("Increasing Work Item next available ID");
         nextAvailableId++;
     }
 
@@ -48,15 +49,22 @@ public class WorkItemManager {
     // Addition of new work item to hashmap
     public void addWorkItemToHashMap(WorkItem wi, boolean isNew) {
         workItems.put(wi.getId(), wi);
-        if (isNew)
+        if (isNew) {
+            System.out.println("Saved NEW work item: " + wi.getType() + " " +  wi.getId());
             increaseNextAvailableId();
+        }
+        else
+            System.out.println("Saved EXISTED work item: " + wi.getType() + " " + wi.getId());
     }
 
 
     // search work item by id
     public WorkItem searchWorkItem(Integer id) {
-        if (workItems.containsKey(id))
+        if (workItems.containsKey(id)) {
+            System.out.println("Work Item " + id + ": found a match");
             return workItems.get(id);
+        }
+        System.out.println("Work Item " + id + ": could not found a match");
         return null;
     }
 
@@ -73,8 +81,10 @@ public class WorkItemManager {
             }
             decoder.close();
             workItemsFile.close();
+            System.out.println("Loading work items from database to hashmap: succeeded");
         }
         catch (Exception e){
+            System.out.println("Loading work items from database to hashmap: failed");
             e.printStackTrace();
         }
     }
@@ -95,7 +105,9 @@ public class WorkItemManager {
                 }
                 encoder.close();
                 workItemsFile.close();
+                System.out.println("Loading work items from hashmap to database: succeeded");
             } catch (IOException e) {
+                System.out.println("Loading work items from hashmap to database: failed");
                 e.printStackTrace();
             }
         }

@@ -19,6 +19,13 @@ public class ReportGenerator {
     public ReportGenerator() {
     }
 
+    public boolean isActionPermitted() {
+        UserManager userManager = UserManager.getInstance();
+        if (userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member)
+            return false;
+        return true;
+    }
+
     public String getChosenVersion() {
         return chosenVersion;
     }
@@ -39,6 +46,11 @@ public class ReportGenerator {
     public HashMap<String, Integer> totalPlannedHoursPerMember() {
         HashMap<String, Integer> sumHoursPerUser = new HashMap<>(); //username, sum of number of estimated hours
 
+        if (isActionPermitted() == false) {
+            System.out.println("Report generator action declined: Action not permitted");
+            return sumHoursPerUser;
+        }
+
         for (Map.Entry entry : hashMap.entrySet()) {
             WorkItem wi = (WorkItem) entry.getValue();
             if (wi.getSprint() == chosenSprint && wi.getEstimate() != null) {
@@ -58,6 +70,11 @@ public class ReportGenerator {
         distribution.put(WorkItem.statusEnum.New, 0);
         WorkItem.statusEnum status = null;
 
+        if (isActionPermitted() == false) {
+            System.out.println("Report generator action declined: Action not permitted");
+            return distribution;
+        }
+
         for (Map.Entry entry : hashMap.entrySet()) {
             WorkItem wi = (WorkItem) entry.getValue();
             if (wi.getSprint() == chosenSprint) {
@@ -76,6 +93,11 @@ public class ReportGenerator {
     public List<WorkItem> bugsFoundInVersion() {
         List<WorkItem> bugsFound = new ArrayList<>();
 
+        if (isActionPermitted() == false) {
+            System.out.println("Report generator action declined: Action not permitted");
+            return bugsFound;
+        }
+
         for (Map.Entry entry : hashMap.entrySet()) {
             WorkItem wi = (WorkItem) entry.getValue();
             if (wi.getFoundVersion() != null && wi.getFoundVersion().equals(chosenVersion) && wi.getType() == WorkItem.typeEnum.Bug)
@@ -87,6 +109,11 @@ public class ReportGenerator {
     public List<WorkItem> bugsSolvedInVersion() {
         List<WorkItem> bugsSolved = new ArrayList<>();
 
+        if (isActionPermitted() == false) {
+            System.out.println("Report generator action declined: Action not permitted");
+            return bugsSolved;
+        }
+
         for (Map.Entry entry : hashMap.entrySet()) {
             WorkItem wi = (WorkItem) entry.getValue();
             if (wi.getTargetVersion() != null && wi.getTargetVersion().equals(chosenVersion) && wi.getStatus() == WorkItem.statusEnum.Done && wi.getType() == WorkItem.typeEnum.Bug)
@@ -97,6 +124,11 @@ public class ReportGenerator {
 
     public List<WorkItem> exceedingEstimations() {
         List<WorkItem> exceedingEst = new ArrayList<>();
+
+        if (isActionPermitted() == false) {
+            System.out.println("Report generator action declined: Action not permitted");
+            return exceedingEst;
+        }
 
         for (Map.Entry entry : hashMap.entrySet()) {
             WorkItem wi = (WorkItem) entry.getValue();

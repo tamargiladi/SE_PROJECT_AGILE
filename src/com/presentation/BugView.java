@@ -109,7 +109,7 @@ public class BugView extends TaskView {
                                 withTargetVersion(targetVersionTextBox.getText()).
                                 withStoryID(storyId).
                                 withFoundVersion(foundInVersionTextBox.getText()).
-                                build(WorkItem.typeEnum.Task, wi);
+                                build(WorkItem.typeEnum.Bug, wi);
                         MainUserInterface mainView = new MainUserInterface();
                         JComponent comp = (JComponent) actionEvent.getSource();
                         Window win = SwingUtilities.getWindowAncestor(comp);
