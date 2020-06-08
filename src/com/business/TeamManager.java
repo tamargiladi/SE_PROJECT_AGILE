@@ -117,15 +117,16 @@ public class TeamManager {
     {
         return this.teams.get(teamName);
     }
-    public void addMemberToTeam(User user, Team team)
+
+    public void addMemberToTeam(String username, Team team)
     {
-           team.addUser(user);
+           team.addUser(username);
     }
 
-    public void removeMemberFromTeam(User user, Team team)
+    public void removeMemberFromTeam(String username, Team team)
     {
-        if(isUserBelongToTeam(team.getTeamsName(), user))
-            team.removeUser(user);
+        if(isUserBelongToTeam(team.getTeamsName(), username))
+            team.removeUser(username);
     }
 
     public Boolean isTeamExist(String teamName)
@@ -139,7 +140,7 @@ public class TeamManager {
     }
 
 
-    public Boolean isUserBelongToTeam(String teamName, User user)
+    public Boolean isUserBelongToTeam(String teamName, String username)
     {
         if(!isTeamExist(teamName))
             return false;
@@ -147,7 +148,7 @@ public class TeamManager {
         {
             for(int i=0;i<teams.get(teamName).getUsers().size();i++)
             {
-                if(teams.get(teamName).getUsers().get(i).getUserName()==user.getUserName())
+                if(teams.get(teamName).getUsers().get(i).equals(username))
                     return true;
 
             }
@@ -182,22 +183,22 @@ public class TeamManager {
 
 
 
-    public void updateTeamsName(String oldName, String newName)
+    /*public void updateTeamsName(String oldName, String newName)
     {
-        teams.get(oldName).setTeamsName(newName);
+        teams.get(oldName)
 
-    }
+    }*/
 
     public void printTeamManager()
     {
 
         for (Map.Entry<String, Team> stringTeamEntry : this.teams.entrySet()) {
             String teamsName = stringTeamEntry.getKey();
-            Iterator<User> itUser = this.teams.get(teamsName).getUsersList().iterator();
+            Iterator<String> itUser = this.teams.get(teamsName).getUsers().iterator();
             System.out.printf(teamsName + ":\n{");
 
             while (itUser.hasNext()) {
-                System.out.printf(itUser.next().getUserName() + ",");
+                System.out.printf(itUser.next() + ",");
             }
 
             System.out.printf("}\n\n");

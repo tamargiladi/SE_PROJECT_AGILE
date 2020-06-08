@@ -52,7 +52,7 @@ public class TeamManagementView extends JFrame {
 
 
 
-    final int colSize = 2;
+   //final int colSize = 1;
 
 
     //TODO: Remove the main...
@@ -129,19 +129,22 @@ public class TeamManagementView extends JFrame {
         Insets insets = teamsScreenViewPanel.getInsets();
 
 
-        model.setRowCount(0);
+         model.setRowCount(0);
         model.setColumnCount(0);
-        String[] columnNames = {"Username", "Permission"};
+       // String[] columnNames = {"Username", "Permission"};
+        String[] columnNames = {"Username","Permission"};
+
         for (String col : columnNames)//adding columns
             model.addColumn(col);
 
 
-        Iterator<User> it = getUsersListByCombo().iterator();
-        Iterator<User> itPer = getUsersListByCombo().iterator();
+        Iterator<String> it = getUsersListByCombo().iterator();
+        Iterator<String> itPer = getUsersListByCombo().iterator();
 
         Random rnd = new Random();
         while (it.hasNext()) {
-            model.addRow(new Object[]{it.next().getUserName(), itPer.next().getPermissionLevel().name()});
+            String username = it.next();
+            model.addRow(new Object[]{username,LoginView.userManager.users.get(username).getPermissionLevel().name()});
         }
 
         usersTable.setDefaultEditor(Object.class, null);
@@ -278,8 +281,22 @@ public class TeamManagementView extends JFrame {
 
 
     }
-    public List<User> getUsersListByCombo() {
-        return LoginView.teamManager.teams.get(comboTeamView.getSelectedItem().toString()).getUsersList();
+    public List<String> getUsersListByCombo() {
+
+        Iterator<Map.Entry<String,User>> itUser = LoginView.userManager.users.entrySet().iterator();
+        List<String> usersList = new LinkedList<>();//explicit ..
+
+        String teamName = getSelectedTeam().getTeamsName();
+        while(itUser.hasNext())
+        {
+            String username = itUser.next().getKey(),
+                    userTeam = LoginView.userManager.users.get(username).getTeamName();
+            if(userTeam.equals(teamName))
+                usersList.add(username);
+
+        }
+
+        return usersList;
     }
 
     public void generateButtonAddTeam() {
@@ -320,7 +337,7 @@ public class TeamManagementView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                if(getSelectedTeam().getUsersList().size()==0) {
+                if(getSelectedTeam().getUsers().size()==0){
                     removeTeamUI();
                     update();
                 }
@@ -483,7 +500,7 @@ public class TeamManagementView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                changeTeamsName(getSelectedTeam().getTeamsName(),fieldEdit.getText());
+                //changeTeamsName(getSelectedTeam().getTeamsName(),fieldEdit.getText());
                 update();
             }
         };
@@ -501,7 +518,7 @@ public class TeamManagementView extends JFrame {
 
     }
 
-    public void changeTeamsName(String oldTeam, String newTeam)
+/*    public void changeTeamsName(String oldTeam, String newTeam)
     {
         //d:TeamManager operations:
             //TODO:Iterate through all the users in the team and change their teams name with the function 'updateUserTeam'
@@ -513,30 +530,31 @@ public class TeamManagementView extends JFrame {
         }
 
             update();
-    }
+    }*/
 
 
-    public void moveUsersFromTeam(String oldTeam, String newTeam)
+   /* public void moveUsersFromTeam(String oldTeam, String newTeam)
     {
 
-        for (User user : LoginView.teamManager.teams.get(oldTeam).getUsers()) {
-            LoginView.userManager.users.get(user.getUserName()).setTeam(LoginView.teamManager.teams.get(newTeam));
+        for (String username : LoginView.teamManager.teams.get(oldTeam).getUsers()) {
+           // LoginView.userManager.users.get(user.getUserName()).setTeam(LoginView.teamManager.teams.get(newTeam));
+           LoginView.
+
         }
-    }
+    }*/
 
-    public User getUserByTeamAndInd(String teamName, int ind)
+   /* public User getUserByTeamAndInd(String teamName, int ind)
     {
-        return LoginView.teamManager.teams.get(teamName).getUsersList().get(ind);
-    }
+        return LoginView.teamManager.teams.get(teamName).getUsers().get(ind);
+    }*/
 
 
-
-    private void resetFile()
+   /* private void resetFile()
     {
 
         for (Map.Entry<String, Team> stringTeamEntry : LoginView.teamManager.teams.entrySet()) {
             String teamName = stringTeamEntry.getKey();
-            for (User user : LoginView.teamManager.teams.get(teamName).getUsersList()) {
+            for (User user : LoginView.teamManager.teams.get(teamName).getUsers()) {
                 String username = user.getUserName();
                 if (!LoginView.userManager.isUserExist(username))
                     LoginView.teamManager.teams.get(teamName).removeUser(LoginView.userManager.users.get(username));
@@ -546,7 +564,7 @@ public class TeamManagementView extends JFrame {
         }
 
         update();
-    }
+    }*/
 
     }
 

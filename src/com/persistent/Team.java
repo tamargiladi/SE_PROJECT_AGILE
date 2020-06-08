@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class Team implements Serializable {
 
     private String teamsName;
-    private  List<User> users;
+    private  List<String> users;
 
 
     /**
@@ -28,21 +28,21 @@ public class Team implements Serializable {
     }
     /**
      * The function is adding a user to the list, due to request from TeamManager Class.
-     * @param user The user that is being added to the list.
+     * @param username The user that is being added to the list.
      */
-    public void addUser(User user)
+    public void addUser(String username)
     {
-        users.add(user);//The function operates only if the user is exist.(Checked in the TeamManager Class)
+        users.add(username);//The function operates only if the user is exist.(Checked in the TeamManager Class)
     }
 
 
     /**
      * The function is removing a user from the list
-     * @param user The user we want to delete
+     * @param username The user we want to delete
      */
-    public void removeUser(User user)
+    public void removeUser(String  username)
     {
-        users.remove(user);
+        users.remove(username);
     }
 
 
@@ -50,27 +50,24 @@ public class Team implements Serializable {
         return teamsName;
     }
 
-    public void setTeamsName(String newTeamName){
+   /* public void setTeamsName(String newTeamName){
 
-        Iterator<User> it = this.users.iterator();
+        Iterator<String> it = this.users.iterator();
         Team newTeam = new Team(newTeamName);
 
         while(it.hasNext())
         {
-            it.next().setTeam(newTeam);
-        }
+            it.next().setTeam(newT
 
         this.teamsName=newTeamName;
     }
-
-    public List<User> getUsers(){
+*/
+    public List<String> getUsers(){
         return users;
     }
 
-    public List<User> getUsersList()
-    {
-        return this.users;
-    }
+
 
 
 }
+

@@ -218,12 +218,12 @@ public class TeamView extends JFrame {
         {
 
             //Removes from previous team
-            LoginView.teamManager.removeMemberFromTeam(LoginView.userManager.users.get(username),
+            LoginView.teamManager.removeMemberFromTeam(username,
                     LoginView.teamManager.teams.get(LoginView.userManager.users.get(username).getTeamName()));
 
 
 
-            LoginView.teamManager.addMemberToTeam(LoginView.userManager.users.get(username),
+            LoginView.teamManager.addMemberToTeam(username,
                     LoginView.teamManager.teams.get(teamName));
 
             LoginView.userManager.updateUserTeam(LoginView.userManager.users.get(username).getUserName(),
@@ -240,10 +240,10 @@ public class TeamView extends JFrame {
 
 
         if(LoginView.userManager.users.get(username).getTeamName().equals(teamName)) {
-            LoginView.teamManager.addMemberToTeam(LoginView.userManager.users.get(username),
+            LoginView.teamManager.addMemberToTeam(username,
                     LoginView.teamManager.teams.get("default"));
 
-            LoginView.teamManager.removeMemberFromTeam(LoginView.userManager.users.get(username),
+            LoginView.teamManager.removeMemberFromTeam(username,
                     LoginView.teamManager.teams.get(teamName));
 
             LoginView.userManager.updateUserTeam(LoginView.userManager.users.get(username).getUserName(),
