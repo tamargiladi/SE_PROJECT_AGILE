@@ -78,7 +78,8 @@ public class UserManager {
             //create user object
             User newUser = new User(username, password, permission,teamName);
             //insert new user to team list
-            LoginView.teamManager.addMemberToTeam(newUser, LoginView.teamManager.teams.get(teamName));
+            //TODO: Changed by TAMAR
+            LoginView.teamManager.addMemberToTeam(username, LoginView.teamManager.teams.get(teamName));
             //insert new user to users HashMap
             users.put(username, newUser);
             //update the user file with new user
@@ -107,7 +108,7 @@ public class UserManager {
                 //user can't remove himself
                 if (!(username.equals(loggedInUser.getUserName()))) {
                     //remove user from the team list
-                    LoginView.teamManager.removeMemberFromTeam(users.get(username), LoginView.teamManager.teams.get(users.get(username).getTeamName()));
+                    LoginView.teamManager.removeMemberFromTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
                     //change the owner of all WI under the username to Unassigned
                     for (Map.Entry<Integer, WorkItem> entry : MainUserInterface.WIManager.workItems.entrySet()) //adding rows
                         if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(users.get(username).getUserName()))
@@ -172,11 +173,12 @@ public class UserManager {
         if (isActionPermitted()){
             if( !(username.equals("admin"))) {
                 //remove the user from previous team
-                LoginView.teamManager.removeMemberFromTeam(users.get(username), LoginView.teamManager.teams.get(users.get(username).getTeamName()));
+                LoginView.teamManager.removeMemberFromTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
                  //set user team to new team
                 users.get(username).setTeam(newTeamName);
                  //insert the user to current list team
-                LoginView.teamManager.addMemberToTeam(users.get(username), LoginView.teamManager.teams.get(users.get(username).getTeamName()));
+                //TODO:Changed by TAMAR
+                LoginView.teamManager.addMemberToTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
                 updateUsersFile();
                 return 1;
              }

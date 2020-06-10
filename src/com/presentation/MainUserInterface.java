@@ -187,7 +187,7 @@ public class MainUserInterface extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
 
-                    TeamManagerGUI tvl = new TeamManagerGUI();
+                    TeamManagementView tvl = new TeamManagementView();
 
                   /* String command = actionEvent.getActionCommand();
                          TeamView tv = new TeamView(command);*/
