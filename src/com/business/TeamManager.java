@@ -12,14 +12,20 @@ import java.util.Set;
 
 public class TeamManager {
 
+    private static TeamManager TeamManagerInstance; //Singleton instance
 
     private static String fileAddress = "src/com/data/teamsFile.ser";
    // public File teamsFile;
     public HashMap<String, Team> teams;
 
 
+    public static TeamManager getInstance() {
+        if (TeamManagerInstance == null)
+            TeamManagerInstance = new TeamManager();
 
-    public TeamManager () {
+        return  TeamManagerInstance;
+    }
+    private TeamManager () {
 
         this.teams = new HashMap<String, Team>();
         HashMap<String, Team> map = new HashMap<>();
