@@ -50,18 +50,17 @@ public class Team implements Serializable {
         return teamsName;
     }
 
-   /* public void setTeamsName(String newTeamName){
+    public void setTeamsName(String newTeamName){
 
         Iterator<String> it = this.users.iterator();
         Team newTeam = new Team(newTeamName);
 
-        while(it.hasNext())
+        /*while(it.hasNext())
         {
             it.next().setTeam(newT
-
+        }*/
         this.teamsName=newTeamName;
     }
-*/
     public List<String> getUsers(){
         return users;
     }
