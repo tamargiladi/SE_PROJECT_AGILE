@@ -175,7 +175,7 @@ public class MainUserInterface extends JPanel {
         mb.add(menuTeam);
         menuTeam.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
 
-        JMenuItem mClick = new JMenuItem("View all teams");
+        JMenuItem mClick = new JMenuItem("Team Management Area");
 
         // JMenuItem mAddTeam = new JMenuItem("View all teams");
       /*  JMenuItem mRemoveTeam = new JMenuItem("Remove Team");
@@ -476,6 +476,7 @@ public class MainUserInterface extends JPanel {
             mainFrame.dispose();
         }
     }
+
 
     public void recentlyCreated(JFrame mainFrame) {
         Insets insets = mainFrame.getInsets();
