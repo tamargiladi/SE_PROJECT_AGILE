@@ -11,8 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class TeamManagementView extends JFrame {
 
     //======== Combo box variables ===========
     public static JComboBox<String> comboTeamView = new JComboBox<>();
-    String selectedTeam;
+    String editFieldValue;
 
 
     //======= Add name =================
@@ -51,8 +50,6 @@ public class TeamManagementView extends JFrame {
     //======= Editing name ==================
     JTextField fieldEdit = new JTextField("");
     JButton btnEditConfirm = new JButton("Confirm");
-
-
 
 
     //========= Table variables ===========================
@@ -65,7 +62,7 @@ public class TeamManagementView extends JFrame {
 
 
     //======== Buttons ================
-    JButton btnConfirm = new JButton("Confirm");
+    //JButton btnConfirm = new JButton("Confirm");
     JButton btnAddTeam = new JButton("Add Team");
     JButton btnRemoveTeam = new JButton("Remove team");//Add modfication that the team
     JButton btnEdit = new JButton("Edit");
@@ -99,9 +96,6 @@ public class TeamManagementView extends JFrame {
         this.teamsScreenViewPanel.setLayout(null);
 
 
-
-        
-
         //========= Generates =========
         generateTeamCombo();
         generateTable();
@@ -109,8 +103,8 @@ public class TeamManagementView extends JFrame {
         //--------- Buttons -----------
         generateButtonAddTeam();
         generateButtonRemoveTeam();
-        generateButtonConfirm();
-        //generateButtonEdit();
+        //generateButtonConfirm();
+        generateButtonEdit();
        // generateButtonExit();
 
 
@@ -124,13 +118,7 @@ public class TeamManagementView extends JFrame {
     }
 
     public void generateRemoveWindow() {
-        Object itemSelected = comboTeamView.getSelectedItem();
-        /*if (!LoginView.teamManager.isTeamExist(comboTeamView.getSelectedItem().toString())) {
-            //The team doesn't exist. Cannot be removed!
 
-            JOptionPane.showMessageDialog(this, "The team doesn't exist. Cannot be removed!");
-
-        } */
         String message = "Are you sure you want to delete ";
         message.concat(comboTeamView.getSelectedItem().toString());
 
@@ -156,31 +144,31 @@ public class TeamManagementView extends JFrame {
         }
 
         LoginView.teamManager.printTeamManager();
-        update();
     }
 
-   /* public void generateEditWindow() {
+   public void generateEditWindow() {
 
-        addFrame.setVisible(true);
-        addPanel.setVisible(true);
+       editFrame.setVisible(true);
+       editPanel.setVisible(true);
 
-        setLayoutEdit();
+       setLayoutEdit();
 
-        //======== Components ===========
-        generateFieldAdd();
-        generateBtnAddConfirm();
+       //======== Components ===========
+       generateFieldEdit();
+       generateBtnEditConfirm();
 
 
-        //======= Style ==========
+       //======= Style ==========
 
-        Insets insets = addPanel.getInsets();
-        background.setBounds(insets.left, insets.top - 35, smallFrameWidth, smallFrameHeight);
-        addFrame.setContentPane(addPanel);
+       Insets insets = editPanel.getInsets();
+       background.setBounds(insets.left, insets.top - 35, smallFrameWidth, smallFrameHeight);
+       editFrame.setContentPane(editPanel);
 
-        addPanel.add(background);//Addition to the frame
-      // generateSmallWindow("EDIT");
+       editPanel.add(background);//Addition to the frame
 
-    }*/
+       //  generateSmallWindow("ADD");
+
+    }
 
     public void generateAddWindow() {
 
@@ -208,7 +196,7 @@ public class TeamManagementView extends JFrame {
     //============== Buttons =====================
 
     //------------ Main Screen ----------------
-    public void generateButtonConfirm() {
+  /*  public void generateButtonConfirm() {
         Insets insets = teamsScreenViewPanel.getInsets();
         this.teamsScreenViewPanel.add(btnConfirm);//adds to the interface
 
@@ -216,8 +204,7 @@ public class TeamManagementView extends JFrame {
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
-                generateTable();
+    generateTable();
             }
         };
         btnConfirm.addActionListener(actionListener);
@@ -231,9 +218,9 @@ public class TeamManagementView extends JFrame {
         size = btnConfirm.getPreferredSize();
         btnConfirm.setBounds(400, 20, 160, 40);
 
-    }
+    }*/
 
-   /* public void generateButtonEdit() {
+   public void generateButtonEdit() {
         Insets insets = teamsScreenViewPanel.getInsets();
         this.teamsScreenViewPanel.add(btnEdit);//adds to the interface
 
@@ -250,7 +237,7 @@ public class TeamManagementView extends JFrame {
         //------ end actions-------//
 
 
-        btnEdit.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+        btnEdit.setFont(new Font("Arial", Font.BOLD, 16));
 
         Dimension size = btnEdit.getPreferredSize();
 
@@ -258,7 +245,7 @@ public class TeamManagementView extends JFrame {
         btnEdit.setBounds( 790, insets.top + 200, 160, 40);
 
 
-    }*/
+    }
 
     public void generateButtonAddTeam() {
         //Style & initialization//
@@ -286,7 +273,7 @@ public class TeamManagementView extends JFrame {
         };
         btnAddTeam.addActionListener(actionListener);
         btnAddTeam.setBounds(790, insets.top + 100, 160, 40);
-        btnAddTeam.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+        btnAddTeam.setFont(new Font("Arial", Font.BOLD, 16));
 
     }
 
@@ -303,9 +290,7 @@ public class TeamManagementView extends JFrame {
 
                 if(getSelectedTeam().getUsers().size()==0) {
                     generateRemoveWindow();
-
-                    update();
-                    closeTeamsScreenViewPanel(actionEvent, true);
+                    closeTeamsScreenViewPanel(actionEvent);
 
 
 
@@ -319,7 +304,7 @@ public class TeamManagementView extends JFrame {
 
         };
         btnRemoveTeam.addActionListener(actionListener);
-        btnRemoveTeam.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+        btnRemoveTeam.setFont(new Font("Arial", Font.BOLD, 16));
         Dimension size = btnRemoveTeam.getPreferredSize();
 
         btnRemoveTeam.setBounds( 790, insets.top + 150, 160, 40);
@@ -362,11 +347,7 @@ public class TeamManagementView extends JFrame {
 
         Dimension size = addFrame.getSize();
 
-
-
         background.setSize(size.width,size.height);
-
-
 
         addPanel.add(btnAddConfirm);//adds to the interface
 
@@ -375,9 +356,14 @@ public class TeamManagementView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
 
-                if(!fieldAdd.getText().equals("")) {
-                    LoginView.teamManager.addTeam(fieldAdd.getText());
-                    closeTeamsScreenViewPanel(actionEvent, true);
+                if(!fieldAdd.getText().isEmpty()) {
+                    if(LoginView.teamManager.isTeamExist(fieldAdd.getText()))
+                        JOptionPane.showMessageDialog(null,"Team already exist. ");
+                    else {
+                        LoginView.teamManager.addTeam(fieldAdd.getText());
+                        addFrame.dispose();
+                        closeTeamsScreenViewPanel(actionEvent);
+                    }
                 }
                 else
                 {
@@ -390,7 +376,7 @@ public class TeamManagementView extends JFrame {
         btnAddConfirm.addActionListener(actionListener);
 
 
-        btnAddConfirm.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
+        btnAddConfirm.setFont(new Font("Arial", Font.BOLD, 16));
 
         Dimension btnSize = btnAddConfirm.getPreferredSize();
         btnAddConfirm.setBounds(fieldAdd.getX(), fieldAdd.getY() +50  , btnSize.width , btnHeight);
@@ -407,39 +393,59 @@ public class TeamManagementView extends JFrame {
 
     public void setLayoutEdit() {
 
+        editFrame.setContentPane(editPanel);
+        //addPanel.setBackground();
+
         Insets insets = editPanel.getInsets();
-        setTitle("Team Manager");
+        editFrame.setTitle("Team Manager");
         editFrame.setSize(smallFrameWidth, smallFrameHeight);
         editFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        editFrame.setVisible(true);
+        editFrame.setResizable(false);
+        editFrame.setLayout(null);
 
-
-
+        ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
+        JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
     }
 
     public void generateBtnEditConfirm() {
-        Insets insets = editPanel.getInsets();
+        Insets insets = editFrame.getInsets();
 
-        editPanel.add(background);
-        background.setBounds(790, insets.top - 35, 1000, 600);
+        Dimension size = editFrame.getSize();
 
+        background.setSize(size.width,size.height);
 
-        this.editPanel.add(btnEditConfirm);//adds to the interface
+        editPanel.add(btnEditConfirm);//adds to the interface
 
-        //------ Actions -------//
+        //------actions-------//
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+            //TODO:Add action for editing
 
-                //changeTeamsName(getSelectedTeam().getTeamsName(),fieldEdit.getText());
-                update();
+                String newTeamName = fieldEdit.getText(),
+                        oldName = getSelectedTeam().getTeamsName();
+                if(!newTeamName.equals(oldName)&&!newTeamName.isEmpty()) {
+                    changeTeamsName(oldName,newTeamName);
+                    editFrame.dispose();
+                    closeTeamsScreenViewPanel(actionEvent);
+
+                }
+                else if(newTeamName.isEmpty())
+                    JOptionPane.showMessageDialog(null,"The new name cannot be empty!.");
+                else
+                    JOptionPane.showMessageDialog(null,"The new name is the same as the old one.");
+
+
             }
         };
         btnEditConfirm.addActionListener(actionListener);
 
 
+        btnEditConfirm.setFont(new Font("Arial", Font.BOLD, 16));
 
-        btnEditConfirm.setFont(new Font(btnConfirm.getFont().getName(), Font.BOLD, 16));
-        btnEditConfirm.setBounds(insets.left + 850, insets.top + 200, btnWidth, btnHeight);
+        Dimension btnSize = btnEditConfirm.getPreferredSize();
+        btnEditConfirm.setBounds(fieldEdit.getX(), fieldEdit.getY() +50  , btnSize.width , btnHeight);
 
     }
 
@@ -447,10 +453,32 @@ public class TeamManagementView extends JFrame {
 
         fieldEdit.setBounds(20,20,fieldWidth,fieldHeight);
         fieldEdit.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
+        fieldEdit.setForeground(new Color(116, 116, 116));
+        fieldEdit.setText(getSelectedTeam().getTeamsName());
+
+        fieldEdit.addKeyListener(new KeyListener() {
+          @Override
+          public void keyTyped(KeyEvent e) {
+              fieldEdit.setForeground(new Color(0, 0, 0));
+
+          }
+
+          @Override
+          public void keyPressed(KeyEvent e) {
+
+          }
+
+          @Override
+          public void keyReleased(KeyEvent e) {
+
+
+
+          }
+      });
+
+
+
         editPanel.add(fieldEdit);
-
-
-        //------ end actions-------//
 
 
     }
@@ -458,7 +486,8 @@ public class TeamManagementView extends JFrame {
     private void generateStringArrayCombo() {
         int length = LoginView.teamManager.teams.size(),
                 existComboCount = comboTeamView.getItemCount();
-        ArrayList<String> listArr = new ArrayList<String>();
+
+
         str = new String[length];
 
         if(existComboCount>0)
@@ -470,6 +499,7 @@ public class TeamManagementView extends JFrame {
                 comboTeamView.removeItemAt(0);//The '0' item is being added twice.
 
             }
+
 
         for (Map.Entry<String, Team> me : LoginView.teamManager.teams.entrySet()) {
             if (!me.getKey().equals("default"))
@@ -534,13 +564,19 @@ public class TeamManagementView extends JFrame {
         Insets insets = teamsScreenViewPanel.getInsets();
 
 
-        //------ end actions-------//
 
         generateStringArrayCombo();
+
         comboTeamView.setBounds(insets.left + 120, 20, 250, 40);
 
-        this.teamsScreenViewPanel.add(comboTeamView);
+        comboTeamView.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                generateTable();
+            }
+        });
 
+        this.teamsScreenViewPanel.add(comboTeamView);
 
     }
 
@@ -565,8 +601,8 @@ public class TeamManagementView extends JFrame {
     private void update() {
         LoginView.teamManager.updateTeamsFile();
        // LoginView.userManager.updateUsersFile();
+       // LoginView.userManager.updateUsersFile();
     }
-
 
     static public Team getSelectedTeam() {
 
@@ -574,35 +610,27 @@ public class TeamManagementView extends JFrame {
         return LoginView.teamManager.getTeam(teamName);
     }
 
-
-    private void closeTeamsScreenViewPanel(ActionEvent actionEvent, boolean openAgain)
+    private void closeTeamsScreenViewPanel(ActionEvent actionEvent)
     {
-        JComponent comp = (JComponent) actionEvent.getSource();
-        Window win = SwingUtilities.getWindowAncestor(comp);
-        win.dispose();
 
-        if(openAgain)
-            MainUserInterface.reopenTeamWindow();
-
+        this.dispose();
+        MainUserInterface.reopenTeamWindow();
     }
 
 
-
-    //Comments to remove at THE END
-/*    public void changeTeamsName(String oldTeam, String newTeam)
+    public void changeTeamsName(String oldTeam, String newTeam)
     {
-        //d:TeamManager operations:
-            //TODO:Iterate through all the users in the team and change their teams name with the function 'updateUserTeam'
-
-                LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
-
         for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
-            LoginView.userManager.updateUserTeam(stringUserEntry.getKey(), newTeam);
+            String username = stringUserEntry.getKey();
+
+            if(username.equals(oldTeam))
+                 LoginView.userManager.updateUserTeam(username,newTeam);
         }
 
-            update();
-    }*/
+        LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
+    }
 
+    //Comments to remove at THE END
 
    /* public void moveUsersFromTeam(String oldTeam, String newTeam)
     {
