@@ -191,7 +191,10 @@
 
         public void updateTeamsName(String oldName, String newName)
         {
-            teams.get(oldName).setTeamsName(newName);
+            Team team = teams.get(oldName);
+            team.setTeamsName(newName);
+            teams.remove(oldName);
+            teams.put(newName, team);
 
         }
 
