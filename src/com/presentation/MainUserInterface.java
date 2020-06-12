@@ -32,12 +32,13 @@ public class MainUserInterface extends JPanel {
     public static ReportGenerator reportGenerator = new ReportGenerator();
     public static JFrame mainFrame;
     public static JMenuBar mb;
-    private DefaultTableModel model = new DefaultTableModel(0,0);
+    private DefaultTableModel model = new DefaultTableModel(0, 0);
     private JTable recentlyCreatedTable = new JTable(model);
     private JScrollPane jScrollPane = new JScrollPane(recentlyCreatedTable);
-    private DefaultTableModel modelMyTasks = new DefaultTableModel(0,0);
+    private DefaultTableModel modelMyTasks = new DefaultTableModel(0, 0);
     private JTable myTasksTable = new JTable(modelMyTasks);
     private JScrollPane myTasksPane = new JScrollPane(myTasksTable);
+
 
 
     public static void main(String[] args) {
@@ -67,7 +68,7 @@ public class MainUserInterface extends JPanel {
 
         mainFrame = new JFrame("Agile Project Management");
         mainFrame.setResizable(false);
-        mainFrame.setSize(1000,600);
+        mainFrame.setSize(1000, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
         mainFrame.setResizable(false);
@@ -75,7 +76,7 @@ public class MainUserInterface extends JPanel {
         mainFrame.setContentPane(jScrollPane);
 
         mb = new JMenuBar();
-        mb.setBackground(new Color(87,160,211));;
+        mb.setBackground(new Color(87, 160, 211));
         workItemMenu(mainFrame);
         userMenu(mainFrame);
         teamMenu(mainFrame);
@@ -92,12 +93,12 @@ public class MainUserInterface extends JPanel {
         mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                    WIManager.updateWorkItemsFile();
-                    LoginView.userManager.updateUsersFile();
-                    LoginView.teamManager.updateTeamsFile();
-                    System.exit(0);
-                }
-            });
+                WIManager.updateWorkItemsFile();
+                LoginView.userManager.updateUsersFile();
+                LoginView.teamManager.updateTeamsFile();
+                System.exit(0);
+            }
+        });
 
     }
 
@@ -106,19 +107,19 @@ public class MainUserInterface extends JPanel {
         Insets insets = mainFrame.getInsets();
         ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
         ImageIcon vIcon = new ImageIcon("src/com/presentation/images/v-icon.png");
-        Image newVIcon = vIcon.getImage().getScaledInstance(30,40, Image.SCALE_AREA_AVERAGING);
+        Image newVIcon = vIcon.getImage().getScaledInstance(30, 40, Image.SCALE_AREA_AVERAGING);
         vIcon = new ImageIcon(newVIcon);
         JLabel title = new JLabel("Agile Project Management Tool", vIcon, JLabel.LEFT);
         JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
         title.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
-        title.setForeground(new Color(0,49,82));
+        title.setForeground(new Color(0, 49, 82));
         mainFrame.add(title);
         mainFrame.add(background);
         title.setVisible(true);
         background.setVisible(true);
         Dimension size = title.getPreferredSize();
-        title.setBounds(insets.left + 10 , insets.top - 15, size.width + 5, size.height);
+        title.setBounds(insets.left + 10, insets.top - 15, size.width + 5, size.height);
         background.setBounds(insets.left - 45, insets.top - 35, size.width + 700, size.height + 550);
     }
 
@@ -130,16 +131,13 @@ public class MainUserInterface extends JPanel {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String command = actionEvent.getActionCommand();
-                if(command.equals("Epic")) {
+                if (command.equals("Epic")) {
                     EpicView ep = new EpicView(null);
-                }
-                else if(command.equals("Story")) {
+                } else if (command.equals("Story")) {
                     StoryView ep = new StoryView(null);
-                }
-                else if(command.equals("Task")) {
+                } else if (command.equals("Task")) {
                     TaskView ep = new TaskView(null);
-                }
-                else if(command.equals("Bug")) {
+                } else if (command.equals("Bug")) {
                     BugView ep = new BugView(null);
                 }
                 WIManager.updateWorkItemsFile();
@@ -149,13 +147,20 @@ public class MainUserInterface extends JPanel {
 
         // Work Item menu
         menuWorkItem = new JMenu("Create New Work Item");
-        mEpic = new JMenuItem("Epic"); mEpic.addActionListener(actionListener);
-        mStory = new JMenuItem("Story"); mStory.addActionListener(actionListener);
-        mTask = new JMenuItem("Task"); mTask.addActionListener(actionListener);
-        mBug = new JMenuItem("Bug"); mBug.addActionListener(actionListener);
-        menuWorkItem.add(mEpic); menuWorkItem.add(mStory); menuWorkItem.add(mTask); menuWorkItem.add(mBug);
+        mEpic = new JMenuItem("Epic");
+        mEpic.addActionListener(actionListener);
+        mStory = new JMenuItem("Story");
+        mStory.addActionListener(actionListener);
+        mTask = new JMenuItem("Task");
+        mTask.addActionListener(actionListener);
+        mBug = new JMenuItem("Bug");
+        mBug.addActionListener(actionListener);
+        menuWorkItem.add(mEpic);
+        menuWorkItem.add(mStory);
+        menuWorkItem.add(mTask);
+        menuWorkItem.add(mBug);
         mb.add(menuWorkItem);
-        menuWorkItem.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
+        menuWorkItem.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
     }
 
     public static void teamMenu(JFrame mainFrame) {
@@ -168,7 +173,7 @@ public class MainUserInterface extends JPanel {
         JMenu menuTeam;
         menuTeam = new JMenu("Team Management");
         mb.add(menuTeam);
-        menuTeam.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
+        menuTeam.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
 
         JMenuItem mClick = new JMenuItem("View all teams");
 
@@ -180,8 +185,7 @@ public class MainUserInterface extends JPanel {
         if (LoginView.userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
             menuTeam.setEnabled(false);
             menuTeam.setToolTipText("You have no permissions to this area");
-        }
-        else {
+        } else {
 
             ActionListener actionListener = new ActionListener() {
                 @Override
@@ -194,13 +198,11 @@ public class MainUserInterface extends JPanel {
                 }
             };
 
-            menuTeam.add(mClick);mClick.addActionListener(actionListener);
+            menuTeam.add(mClick);
+            mClick.addActionListener(actionListener);
            /* menuTeam.add(mRemoveTeam);mRemoveTeam.addActionListener(actionListener);
             menuTeam.add(mAddUserToTeam);mAddUserToTeam.addActionListener(actionListener);
             menuTeam.add(mRemoveUserFromTeam);mRemoveUserFromTeam.addActionListener(actionListener);*/
-
-
-
 
 
         }
@@ -213,7 +215,7 @@ public class MainUserInterface extends JPanel {
     public static void userMenu(JFrame mainFrame) {
         JMenu menuUsers;
         menuUsers = new JMenu("User Management");
-        menuUsers.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
+        menuUsers.setBorder(BorderFactory.createLineBorder(new Color(70, 130, 180), 1));
         mb.add(menuUsers);
 
         JMenuItem mViewUsers = new JMenuItem("User Management Area");
@@ -235,6 +237,10 @@ public class MainUserInterface extends JPanel {
             }
         };
         mViewUsers.addActionListener(actionListener);
+    }
+
+    public static void reopenTeamWindow() {
+        TeamManagementView tv = new TeamManagementView();
     }
 
     public static void reportGenMenu(JFrame mainFrame) {
@@ -656,7 +662,7 @@ public class MainUserInterface extends JPanel {
                                                       boolean leaf, int row, boolean hasFocus) {
 
             Object obj = ((DefaultMutableTreeNode) value).getUserObject();
-            String text = (String) obj.toString();
+            String text = obj.toString();
             Integer level = ((DefaultMutableTreeNode) value).getLevel();
 
 
