@@ -2,8 +2,11 @@ package com.presentation;
 
 import com.business.TeamManager;
 import com.business.UserManager;
+import com.business.WorkItemManager;
 import com.persistent.Team;
 import com.persistent.User;
+import com.persistent.WorkItem;
+import com.persistent.WorkItemBuilder;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 
@@ -41,7 +44,6 @@ public class TeamManagementView extends JFrame {
     JPanel addPanel =new JPanel();
 
     //======== Combo box variables ===========
-    //public static JComboBox<String> comboTeamView = new JComboBox(TeamManager.getInstance().teams.keySet().toArray());
     public static JComboBox<String> comboTeamView;
     String editFieldValue;
 
@@ -67,8 +69,8 @@ public class TeamManagementView extends JFrame {
     //======== Buttons ================
     //JButton btnConfirm = new JButton("Confirm");
     JButton btnAddTeam = new JButton("Add Team");
-    JButton btnRemoveTeam = new JButton("Remove team");//Add modfication that the team
-    JButton btnEdit = new JButton("Edit");
+    JButton btnRemoveTeam = new JButton("Remove Team");//Add modfication that the team
+    JButton btnEdit = new JButton("Edit Team");
 
 
     //============ Design =============
@@ -297,7 +299,7 @@ public class TeamManagementView extends JFrame {
                     closeTeamsScreenViewPanel(actionEvent);
                 }
                 else
-                    JOptionPane.showConfirmDialog(null,  "The team must be empty in order to delete it.");
+                    JOptionPane.showMessageDialog(null,  "The team must be empty in order to delete it.\nPlease assign new team to all team members.");
             }
 
         };
@@ -593,12 +595,22 @@ public class TeamManagementView extends JFrame {
 
     public void changeTeamsName(String oldTeam, String newTeam)
     {
-        LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
+        TeamManager.getInstance().updateTeamsName(oldTeam,newTeam);
+
+        // Change team name for all users belongs to that team
         for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
             String username = stringUserEntry.getKey();
             String userTeam = stringUserEntry.getValue().getTeamName();
             if(userTeam.equals(oldTeam))
                  LoginView.userManager.updateUserTeam(username,newTeam);
+        }
+
+        //Change team name for all work items associated with that team
+        for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
+            Integer id = workItemEntry.getKey();
+            String teamName = workItemEntry.getValue().getTeam();
+            if (teamName != null && teamName == oldTeam)
+                WorkItemBuilder.builder().withTeam(newTeam).build(workItemEntry.getValue().getType(), workItemEntry.getValue());
         }
 
     }
