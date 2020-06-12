@@ -482,11 +482,11 @@ public class MainUserInterface extends JPanel {
         //Prepare table data
         model.setRowCount(0);
         model.setColumnCount(0);
-        String[] columnNames = {"ID", "Type", "Status", "Owner", "Summary"};
+        String[] columnNames = {"ID", "Type", "Status", "Owner", "Team", "Priority", "Summary"};
         for (String col : columnNames) //adding columns
             model.addColumn(col);
         for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) //adding rows
-            model.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getSummary()});
+            model.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getOwner(), entry.getValue().getTeam(), entry.getValue().getPriority(), entry.getValue().getSummary()});
         recentlyCreatedTable.setDefaultEditor(Object.class, null);
 
         // Sort work items by id - descending (most recently created)

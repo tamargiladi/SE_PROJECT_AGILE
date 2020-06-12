@@ -1,6 +1,10 @@
 package com.presentation;
 
+import com.business.WorkItemManager;
 import com.persistent.User;
+import com.persistent.WorkItem;
+import com.persistent.WorkItemBuilder;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -101,6 +105,15 @@ public class UserManagementView extends JFrame{
                                 switch (LoginView.userManager.removeUser(foundUser.getUserName())) {
                                     case 1:
                                         JOptionPane.showMessageDialog(usersScreenViewPanel, "User " + foundUser.getUserName() + " deleted");
+
+                                        //Change user name for all work items owned by that user - to unassigned
+                                        for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
+                                            Integer id = workItemEntry.getKey();
+                                            String owner = workItemEntry.getValue().getOwner();
+                                            if (owner != null && owner == foundUser.getUserName())
+                                                WorkItemBuilder.builder().withOwner("Unassigned").build(workItemEntry.getValue().getType(), workItemEntry.getValue());
+                                        }
+
                                         JComponent comp = (JComponent) actionEvent.getSource();
                                         Window win = SwingUtilities.getWindowAncestor(comp);
                                         win.dispose();
