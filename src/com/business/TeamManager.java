@@ -1,6 +1,7 @@
     package com.business;
     import com.persistent.Team;
     import com.persistent.User;
+    import com.persistent.WorkItem;
     import com.presentation.LoginView;
     import com.presentation.MainUserInterface;
 
@@ -195,6 +196,22 @@
             team.setTeamsName(newName);
             teams.remove(oldName);
             teams.put(newName, team);
+
+            // Change team name for all users belongs to that team
+            for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
+                String username = stringUserEntry.getKey();
+                String userTeam = stringUserEntry.getValue().getTeamName();
+                if(userTeam.equals(oldName))
+                    LoginView.userManager.updateUserTeam(username,newName);
+            }
+
+            //Change team name for all work items associated with that team
+            for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
+                Integer id = workItemEntry.getKey();
+                String teamName = workItemEntry.getValue().getTeam();
+                if (teamName != null && teamName.equals(oldName))
+                    workItemEntry.getValue().setTeam(newName);
+            }
 
         }
 
