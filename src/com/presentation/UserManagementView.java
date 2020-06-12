@@ -105,15 +105,6 @@ public class UserManagementView extends JFrame{
                                 switch (LoginView.userManager.removeUser(foundUser.getUserName())) {
                                     case 1:
                                         JOptionPane.showMessageDialog(usersScreenViewPanel, "User " + foundUser.getUserName() + " deleted");
-
-                                        //Change user name for all work items owned by that user - to unassigned
-                                        for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
-                                            Integer id = workItemEntry.getKey();
-                                            String owner = workItemEntry.getValue().getOwner();
-                                            if (owner != null && owner == foundUser.getUserName())
-                                                WorkItemBuilder.builder().withOwner("Unassigned").build(workItemEntry.getValue().getType(), workItemEntry.getValue());
-                                        }
-
                                         JComponent comp = (JComponent) actionEvent.getSource();
                                         Window win = SwingUtilities.getWindowAncestor(comp);
                                         win.dispose();
