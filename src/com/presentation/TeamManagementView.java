@@ -609,8 +609,8 @@ public class TeamManagementView extends JFrame {
         for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
             Integer id = workItemEntry.getKey();
             String teamName = workItemEntry.getValue().getTeam();
-            if (teamName != null && teamName == oldTeam)
-                WorkItemBuilder.builder().withTeam(newTeam).build(workItemEntry.getValue().getType(), workItemEntry.getValue());
+            if (teamName != null && teamName.equals(oldTeam))
+                workItemEntry.getValue().setTeam(newTeam);
         }
 
     }
