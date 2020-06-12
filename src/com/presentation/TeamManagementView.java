@@ -548,7 +548,7 @@ public class TeamManagementView extends JFrame {
                 generateTable();
             }
         });
-
+        this.teamsScreenViewPanel.add(comboTeamView);
     }
 
     public List<String> getUsersListByCombo() {
