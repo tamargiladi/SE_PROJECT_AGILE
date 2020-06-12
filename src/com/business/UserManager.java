@@ -173,12 +173,14 @@ public class UserManager {
         if (isActionPermitted()){
             if( !(username.equals("admin"))) {
                 //remove the user from previous team
-                LoginView.teamManager.removeMemberFromTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
+                if (TeamManager.getInstance().teams.containsKey(users.get(username).getTeamName()))
+                    LoginView.teamManager.removeMemberFromTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
                  //set user team to new team
                 users.get(username).setTeam(newTeamName);
                  //insert the user to current list team
                 //TODO:Changed by TAMAR
-                LoginView.teamManager.addMemberToTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
+                if (TeamManager.getInstance().teams.containsKey(users.get(username).getTeamName()))
+                    TeamManager.getInstance().addMemberToTeam(username, LoginView.teamManager.teams.get(users.get(username).getTeamName()));
                 updateUsersFile();
                 return 1;
              }

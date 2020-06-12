@@ -329,36 +329,33 @@ public class MainUserInterface extends JPanel {
         for (Map.Entry<Integer, WorkItem> entryEp : WIManager.workItems.entrySet()) {
             // Set EPICS
             if (entryEp.getValue().getType() == WorkItem.typeEnum.Epic) {
-                tempNodeEpic = new DefaultMutableTreeNode("<html><body style='width:850'><PRE><b><font size=\"4\">  >> " + entryEp.getValue().getType().name() + "\t" + entryEp.getKey() + "\t\t" + entryEp.getValue().getStatus() + "\t\t" + entryEp.getValue().getSummary()  + "</PRE></html>");
+                tempNodeEpic = new DefaultMutableTreeNode(convertWorkItemToString(entryEp.getValue(), "story"));
                 model.insertNodeInto(tempNodeEpic, root, root.getChildCount());
                 // Set STORIES
                 for (Map.Entry<Integer, WorkItem> entrySt : WIManager.workItems.entrySet())
                     if (entrySt.getValue().getType() == WorkItem.typeEnum.Story && entrySt.getValue().getEpicID() == entryEp.getKey()) {
-                        tempNodeStory = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>> <b>" + entrySt.getValue().getType().name() + "\t     " + entrySt.getKey() + "\t     " + entrySt.getValue().getStatus() + "\t     " + entrySt.getValue().getSummary()  + "</PRE></html>");
+                        tempNodeStory = new DefaultMutableTreeNode(convertWorkItemToString(entrySt.getValue(), "story"));
                         model.insertNodeInto(tempNodeStory, tempNodeEpic, tempNodeEpic.getChildCount());
                         // Set BUGS / TASKS
                         for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
                             if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
-                                    if (entryTB.getValue().getStatus() == WorkItem.statusEnum.InProgress)
-                                        tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t  " + entryTB.getKey() + "\t\t  " + entryTB.getValue().getStatus() + "\t  " + entryTB.getValue().getSummary()  + "</PRE></html>");
-                                    else
-                                        tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t  " + entryTB.getKey() + "\t\t  " + entryTB.getValue().getStatus() + "\t\t  " + entryTB.getValue().getSummary()  + "</PRE></html>");
-                                    model.insertNodeInto(tempNodeWI, tempNodeStory, tempNodeStory.getChildCount());
-                                }
+                                tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryTB.getValue(), "story"));
+                                model.insertNodeInto(tempNodeWI, tempNodeStory, tempNodeStory.getChildCount());
                             }
+                    }
 
                     else if (entrySt.getValue().getType() == WorkItem.typeEnum.Story && entrySt.getValue().getEpicID() == null) {
                         tempNodeStory = new DefaultMutableTreeNode("Story " + entrySt.getKey() + ": " + entrySt.getValue().getSummary());
                         model.insertNodeInto(tempNodeStory, epicT, epicT.getChildCount());
                         for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
                             if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
-                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryTB.getValue().getType().name() + "\t" + entryTB.getKey() + "\t\t" + entryTB.getValue().getStatus() + "\t\t" + entryTB.getValue().getSummary()  + "</PRE></html>");
+                                tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryTB.getValue(), "story"));
                                 model.insertNodeInto(tempNodeWI, storyT, storyT.getChildCount());
                             }
                     }
             }
             else if (entryEp.getValue().getType() == WorkItem.typeEnum.Task && entryEp.getValue().getStoryID() == null) {
-                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE> " + entryEp.getValue().getType().name() + "\t" + entryEp.getKey() + "\t\t" + entryEp.getValue().getStatus() + "\t\t" + entryEp.getValue().getSummary()  + "</PRE></html>");
+                tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryEp.getValue(), "story"));
                 model.insertNodeInto(tempNodeWI, storyT, storyT.getChildCount());
             }
         }
@@ -398,10 +395,7 @@ public class MainUserInterface extends JPanel {
                     model.insertNodeInto(new DefaultMutableTreeNode(titleT), tempNodeUser, tempNodeUser.getChildCount());
                     for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet()) {
                         if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals(entryOwner.getKey())) {
-                            if (entryWorkItem.getValue().getStatus() == WorkItem.statusEnum.InProgress)
-                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>");
-                            else
-                                tempNodeWI = new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>");
+                            tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryWorkItem.getValue(), "daily"));
                             model.insertNodeInto(tempNodeWI, tempNodeUser, tempNodeUser.getChildCount());
                         }
                     }
@@ -409,11 +403,30 @@ public class MainUserInterface extends JPanel {
         }
         for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet())
             if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned"))
-                model.insertNodeInto(new DefaultMutableTreeNode("<html><body style='width:850'><PRE>" + entryWorkItem.getValue().getType().name() + "\t" + entryWorkItem.getKey() + "\t" + entryWorkItem.getValue().getStatus() + "\t\t" + entryWorkItem.getValue().getSummary()  + "\t</PRE></html>"), ownerT, ownerT.getChildCount());
+                model.insertNodeInto(new DefaultMutableTreeNode(convertWorkItemToString(entryWorkItem.getValue(), "daily")), ownerT, ownerT.getChildCount());
 
         model.reload(root);
         JScrollPane treeView = new JScrollPane(tree);
         dailyBoard.setContentPane(treeView);
+    }
+
+    public static String convertWorkItemToString(WorkItem wi, String boardType) {
+        if (boardType == "daily") {
+            if (wi.getStatus() == WorkItem.statusEnum.InProgress)
+                return ("<html><body style='width:850'><PRE>" + wi.getType().name() + "\t" + wi.getId() + "\t" + wi.getStatus() + "\t" + wi.getSummary() + "\t</PRE></html>");
+            else
+                return ("<html><body style='width:850'><PRE>" + wi.getType().name() + "\t" + wi.getId() + "\t" + wi.getStatus() + "\t\t" + wi.getSummary() + "\t</PRE></html>");
+        }
+        else {
+            if (wi.getType() == WorkItem.typeEnum.Epic)
+                return ("<html><body style='width:850'><PRE><b><font size=\"4\">  >> " + wi.getType().name() + "\t" + wi.getId() + "\t\t" + wi.getStatus() + "\t\t" + wi.getSummary()  + "\t</PRE></html>");
+            else if (wi.getType() == WorkItem.typeEnum.Story)
+                return ("<html><body style='width:850'><PRE>> <b>" + wi.getType().name() + "\t     " + wi.getId() + "\t     " + wi.getStatus() + "\t     " + wi.getSummary()  + "\t</PRE></html>");
+            else if (wi.getStatus() == WorkItem.statusEnum.InProgress)
+                return ("<html><body style='width:850'><PRE>" + wi.getType().name() + "\t  " + wi.getId() + "\t\t  " + wi.getStatus() + "\t  " + wi.getSummary()  + "</PRE></html>");
+            else
+                return ("<html><body style='width:850'><PRE>" + wi.getType().name() + "\t  " + wi.getId() + "\t\t  " + wi.getStatus() + "\t\t  " + wi.getSummary()  + "</PRE></html>");
+        }
     }
 
     public void searchBox(JFrame mainFrame) {

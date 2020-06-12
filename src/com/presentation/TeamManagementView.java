@@ -1,5 +1,7 @@
 package com.presentation;
 
+import com.business.TeamManager;
+import com.business.UserManager;
 import com.persistent.Team;
 import com.persistent.User;
 import javafx.scene.Scene;
@@ -39,7 +41,8 @@ public class TeamManagementView extends JFrame {
     JPanel addPanel =new JPanel();
 
     //======== Combo box variables ===========
-    public static JComboBox<String> comboTeamView = new JComboBox<>();
+    //public static JComboBox<String> comboTeamView = new JComboBox(TeamManager.getInstance().teams.keySet().toArray());
+    public static JComboBox<String> comboTeamView;
     String editFieldValue;
 
 
@@ -132,6 +135,7 @@ public class TeamManagementView extends JFrame {
             if(usersSize==0)
             {
                 LoginView.teamManager.removeTeam(comboTeamView.getSelectedItem().toString());
+                comboTeamView.removeItem(comboTeamView.getSelectedItem());
             }
             else
             {
@@ -291,15 +295,9 @@ public class TeamManagementView extends JFrame {
                 if(getSelectedTeam().getUsers().size()==0) {
                     generateRemoveWindow();
                     closeTeamsScreenViewPanel(actionEvent);
-
-
-
                 }
                 else
                     JOptionPane.showConfirmDialog(null,  "The team must be empty in order to delete it.");
-
-
-
             }
 
         };
@@ -361,6 +359,7 @@ public class TeamManagementView extends JFrame {
                         JOptionPane.showMessageDialog(null,"Team already exist. ");
                     else {
                         LoginView.teamManager.addTeam(fieldAdd.getText());
+                        comboTeamView.addItem(fieldAdd.getText());
                         addFrame.dispose();
                         closeTeamsScreenViewPanel(actionEvent);
                     }
@@ -483,32 +482,6 @@ public class TeamManagementView extends JFrame {
 
     }
 
-    private void generateStringArrayCombo() {
-        int length = LoginView.teamManager.teams.size(),
-                existComboCount = comboTeamView.getItemCount();
-
-
-        str = new String[length];
-
-        if(existComboCount>0)
-            {
-                for(int i=existComboCount-1;i>=1;i--)
-                {
-                    comboTeamView.removeItemAt(i);
-                }
-                comboTeamView.removeItemAt(0);//The '0' item is being added twice.
-
-            }
-
-
-        for (Map.Entry<String, Team> me : LoginView.teamManager.teams.entrySet()) {
-            if (!me.getKey().equals("default"))
-                comboTeamView.addItem(me.getKey());
-        }
-
-
-    }
-
     public void generateTable() {
         Insets insets = teamsScreenViewPanel.getInsets();
 
@@ -563,9 +536,7 @@ public class TeamManagementView extends JFrame {
         Dimension size;
         Insets insets = teamsScreenViewPanel.getInsets();
 
-
-
-        generateStringArrayCombo();
+        comboTeamView = new JComboBox(TeamManager.getInstance().teams.keySet().toArray());
 
         comboTeamView.setBounds(insets.left + 120, 20, 250, 40);
 
@@ -582,17 +553,19 @@ public class TeamManagementView extends JFrame {
 
     public List<String> getUsersListByCombo() {
 
-        Iterator<Map.Entry<String,User>> itUser = LoginView.userManager.users.entrySet().iterator();
+        Iterator<Map.Entry<String,User>> itUser = UserManager.getInstance().users.entrySet().iterator();
         List<String> usersList = new LinkedList<>();//explicit ..
 
-        String teamName = getSelectedTeam().getTeamsName();
-        while(itUser.hasNext())
-        {
-            String username = itUser.next().getKey(),
-                    userTeam = LoginView.userManager.users.get(username).getTeamName();
-            if(userTeam.equals(teamName))
-                usersList.add(username);
+        Team team = getSelectedTeam();
+        if (team != null) {
+            String teamName = team.getTeamsName();
+            while (itUser.hasNext()) {
+                String username = itUser.next().getKey(),
+                        userTeam = UserManager.getInstance().users.get(username).getTeamName();
+                if (userTeam.equals(teamName))
+                    usersList.add(username);
 
+            }
         }
 
         return usersList;
@@ -604,10 +577,10 @@ public class TeamManagementView extends JFrame {
        // LoginView.userManager.updateUsersFile();
     }
 
-    static public Team getSelectedTeam() {
+    public Team getSelectedTeam() {
 
         String teamName = Objects.requireNonNull(comboTeamView.getSelectedItem()).toString();
-        return LoginView.teamManager.getTeam(teamName);
+        return TeamManager.getInstance().getTeam(teamName);
     }
 
     private void closeTeamsScreenViewPanel(ActionEvent actionEvent)
@@ -620,14 +593,14 @@ public class TeamManagementView extends JFrame {
 
     public void changeTeamsName(String oldTeam, String newTeam)
     {
+        LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
         for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
             String username = stringUserEntry.getKey();
-
-            if(username.equals(oldTeam))
+            String userTeam = stringUserEntry.getValue().getTeamName();
+            if(userTeam.equals(oldTeam))
                  LoginView.userManager.updateUserTeam(username,newTeam);
         }
 
-        LoginView.teamManager.updateTeamsName(oldTeam,newTeam);
     }
 
     //Comments to remove at THE END
