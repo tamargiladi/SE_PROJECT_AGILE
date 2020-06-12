@@ -549,8 +549,6 @@ public class TeamManagementView extends JFrame {
             }
         });
 
-        this.teamsScreenViewPanel.add(comboTeamView);
-
     }
 
     public List<String> getUsersListByCombo() {
@@ -596,22 +594,6 @@ public class TeamManagementView extends JFrame {
     public void changeTeamsName(String oldTeam, String newTeam)
     {
         TeamManager.getInstance().updateTeamsName(oldTeam,newTeam);
-
-        // Change team name for all users belongs to that team
-        for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
-            String username = stringUserEntry.getKey();
-            String userTeam = stringUserEntry.getValue().getTeamName();
-            if(userTeam.equals(oldTeam))
-                 LoginView.userManager.updateUserTeam(username,newTeam);
-        }
-
-        //Change team name for all work items associated with that team
-        for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
-            Integer id = workItemEntry.getKey();
-            String teamName = workItemEntry.getValue().getTeam();
-            if (teamName != null && teamName.equals(oldTeam))
-                workItemEntry.getValue().setTeam(newTeam);
-        }
 
     }
 
