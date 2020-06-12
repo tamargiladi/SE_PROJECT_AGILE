@@ -103,6 +103,8 @@ public class TeamManagementView extends JFrame {
 
         //========= Generates =========
         generateTeamCombo();
+        if(getSelectedTeam().getTeamsName().equals("default"))
+            deactivateButtons();
         generateTable();
 
         //--------- Buttons -----------
@@ -434,8 +436,10 @@ public class TeamManagementView extends JFrame {
                 }
                 else if(newTeamName.isEmpty())
                     JOptionPane.showMessageDialog(null,"The new name cannot be empty!.");
-                else
+                else if(newTeamName.equals(oldName))
                     JOptionPane.showMessageDialog(null,"The new name is the same as the old one.");
+                else if(LoginView.teamManager.isTeamExist(newTeamName))
+                    JOptionPane.showMessageDialog(null,"There is already a team with the name " + newTeamName);
 
 
             }
@@ -546,6 +550,12 @@ public class TeamManagementView extends JFrame {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 generateTable();
+                if(getSelectedTeam().getTeamsName().equals("default"))
+                    deactivateButtons();
+                else
+                    activateButtons();
+
+
             }
         });
         this.teamsScreenViewPanel.add(comboTeamView);
@@ -597,6 +607,18 @@ public class TeamManagementView extends JFrame {
 
     }
 
+
+    public void deactivateButtons()
+    {
+        btnEdit.setEnabled(false);
+        btnRemoveTeam.setEnabled(false);
+    }
+
+    public void activateButtons()
+    {
+        btnEdit.setEnabled(true);
+        btnRemoveTeam.setEnabled(true);
+    }
     //Comments to remove at THE END
 
    /* public void moveUsersFromTeam(String oldTeam, String newTeam)
