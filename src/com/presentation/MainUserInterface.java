@@ -1,6 +1,8 @@
 package com.presentation;
 
 import com.business.ReportGenerator;
+import com.business.TeamManager;
+import com.business.UserManager;
 import com.business.WorkItemManager;
 import com.persistent.Team;
 import com.persistent.User;
@@ -38,33 +40,10 @@ public class MainUserInterface extends JPanel {
     private DefaultTableModel modelMyTasks = new DefaultTableModel(0, 0);
     private JTable myTasksTable = new JTable(modelMyTasks);
     private JScrollPane myTasksPane = new JScrollPane(myTasksTable);
+    private static JComboBox sprintCombo = new JComboBox(WorkItem.sprintEnum.values());
 
-
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                MainUserInterface frame = new MainUserInterface();
-            }
-        });
-    }
 
     public MainUserInterface() throws HeadlessException {
-
-        //TODO: yuval test - delete later
-        /*Team algo = new Team("Algo");
-        LoginView.teamManager.addTeam("Algo");
-        LoginView.teamManager.addTeam("Software");
-        LoginView.teamManager.addTeam("QA");
-        LoginView.userManager.login("admin", "admin");
-        LoginView.teamManager.addTeam("Hardware");
-        LoginView.userManager.addUser("Voldemort", "123", User.PermissionLevel.admin, "Algo");
-        LoginView.userManager.addUser("Harry Potter", "123", User.PermissionLevel.member, "Software");
-        LoginView.userManager.addUser("Albus Dumbledore", "123", User.PermissionLevel.manager, "QA");
-        LoginView.userManager.addUser("Yuval Levi", "123", User.PermissionLevel.admin, "Hardware");
-        LoginView.userManager.login("Yuval Levi", "123");*/
-
 
         mainFrame = new JFrame("Agile Project Management");
         mainFrame.setResizable(false);
@@ -74,7 +53,22 @@ public class MainUserInterface extends JPanel {
         mainFrame.setResizable(false);
         mainFrame.setLayout(null);
         mainFrame.setContentPane(jScrollPane);
+        setLayout(mainFrame);
 
+
+        mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                WIManager.updateWorkItemsFile();
+                UserManager.getInstance().updateUsersFile();
+                TeamManager.getInstance().updateTeamsFile();
+                System.exit(0);
+            }
+        });
+
+    }
+
+    public void setLayout(JFrame mainFrame) {
         mb = new JMenuBar();
         mb.setBackground(new Color(87, 160, 211));
         workItemMenu(mainFrame);
@@ -83,25 +77,14 @@ public class MainUserInterface extends JPanel {
         reportGenMenu(mainFrame);
         boardsMenu(mainFrame);
         searchBox(mainFrame);
-        if (LoginView.userManager.loggedInUser != null)
+        if (UserManager.getInstance().loggedInUser != null)
             userConnected(mainFrame);
         mainFrame.setJMenuBar(mb);
         recentlyCreated(mainFrame);
         myTasks(mainFrame);
+        currentSprint(mainFrame);
         title(mainFrame);
-
-        mainFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-                WIManager.updateWorkItemsFile();
-                LoginView.userManager.updateUsersFile();
-                LoginView.teamManager.updateTeamsFile();
-                System.exit(0);
-            }
-        });
-
     }
-
 
     public static void title(JFrame mainFrame) {
         Insets insets = mainFrame.getInsets();
@@ -121,6 +104,29 @@ public class MainUserInterface extends JPanel {
         Dimension size = title.getPreferredSize();
         title.setBounds(insets.left + 10, insets.top - 15, size.width + 5, size.height);
         background.setBounds(insets.left - 45, insets.top - 35, size.width + 700, size.height + 550);
+    }
+
+    public static void currentSprint(JFrame mainFrame) {
+        Insets insets = mainFrame.getInsets();
+        JLabel currentSprintLabel = new JLabel("Current Sprint:");
+
+        mainFrame.add(currentSprintLabel);
+        currentSprintLabel.setForeground(new Color(0, 49, 82));
+        sprintCombo.setBackground(Color.WHITE);
+        mainFrame.add(sprintCombo);
+
+        currentSprintLabel.setBounds(insets.left + 865, insets.top, currentSprintLabel.getPreferredSize().width + 10, currentSprintLabel.getPreferredSize().height);
+        sprintCombo.setBounds(insets.left + 860, insets.top + 25, sprintCombo.getPreferredSize().width + 10, sprintCombo.getPreferredSize().height);
+
+        sprintCombo.setSelectedItem(WorkItemManager.getInstance().getCurrentSprint());
+
+        sprintCombo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WorkItemManager.getInstance().setCurrentSprint((WorkItem.sprintEnum) sprintCombo.getSelectedItem());
+            }
+        });
+
     }
 
     public static void workItemMenu(JFrame mainFrame) {
@@ -182,7 +188,7 @@ public class MainUserInterface extends JPanel {
         JMenuItem mAddUserToTeam = new JMenuItem("Add User To Team");
         JMenuItem mRemoveUserFromTeam = new JMenuItem("Remove User From Team");*/
 
-        if (LoginView.userManager.loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
+        if (UserManager.getInstance().loggedInUser.getPermissionLevel() != User.PermissionLevel.admin) {
             menuTeam.setEnabled(false);
             menuTeam.setToolTipText("You have no permissions to this area");
         } else {
@@ -221,7 +227,7 @@ public class MainUserInterface extends JPanel {
         JMenuItem mViewUsers = new JMenuItem("User Management Area");
         menuUsers.add(mViewUsers);
 
-        if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
+        if (UserManager.getInstance().loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
             menuUsers.setEnabled(false);
             menuUsers.setToolTipText("You have no permissions to this area");
         }
@@ -264,7 +270,7 @@ public class MainUserInterface extends JPanel {
         menuReports.add(mRep1); menuReports.add(mRep2); menuReports.add(mRep3); menuReports.add(mRep4); menuReports.add(mRep5);
         menuReports.setBorder(BorderFactory.createLineBorder(new Color(70,130,180), 1));
         mb.add(menuReports);
-        if (LoginView.userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
+        if (UserManager.getInstance().loggedInUser.getPermissionLevel() == User.PermissionLevel.member) {
             menuReports.setEnabled(false);
             menuReports.setToolTipText("You have no permissions to this area");
         }
@@ -371,6 +377,7 @@ public class MainUserInterface extends JPanel {
         dailyBoard.setVisible(true);
         dailyBoard.setLayout(null);
         dailyBoard.setResizable(false);
+        WorkItem.sprintEnum currentSprint = (WorkItem.sprintEnum) sprintCombo.getSelectedItem();
 
         //Initialize tree
         DefaultMutableTreeNode rootT = new DefaultMutableTreeNode("Daily Board");
@@ -385,16 +392,16 @@ public class MainUserInterface extends JPanel {
         model.insertNodeInto(new DefaultMutableTreeNode(titleT), ownerT, ownerT.getChildCount());
 
         //Adding nodes to tree
-        for (Map.Entry<String, Team> entryTeam : LoginView.teamManager.teams.entrySet()) {
+        for (Map.Entry<String, Team> entryTeam : TeamManager.getInstance().teams.entrySet()) {
             tempNodeTeam = new DefaultMutableTreeNode(entryTeam.getKey());
             model.insertNodeInto(tempNodeTeam, root, root.getChildCount());
-            for (Map.Entry<String, User> entryOwner : LoginView.userManager.users.entrySet())
+            for (Map.Entry<String, User> entryOwner : UserManager.getInstance().users.entrySet())
                 if (entryOwner.getValue().getTeamName().equals(entryTeam.getKey())) {
                     tempNodeUser = new DefaultMutableTreeNode(entryOwner.getKey());
                     model.insertNodeInto(tempNodeUser, tempNodeTeam, tempNodeTeam.getChildCount());
                     model.insertNodeInto(new DefaultMutableTreeNode(titleT), tempNodeUser, tempNodeUser.getChildCount());
                     for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet()) {
-                        if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals(entryOwner.getKey())) {
+                        if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals(entryOwner.getKey()) && entryWorkItem.getValue().getSprint() == currentSprint) {
                             tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryWorkItem.getValue(), "daily"));
                             model.insertNodeInto(tempNodeWI, tempNodeUser, tempNodeUser.getChildCount());
                         }
@@ -402,7 +409,7 @@ public class MainUserInterface extends JPanel {
                 }
         }
         for (Map.Entry<Integer, WorkItem> entryWorkItem : WIManager.workItems.entrySet())
-            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned"))
+            if (entryWorkItem.getValue().getOwner() != null && entryWorkItem.getValue().getOwner().equals("Unassigned") && entryWorkItem.getValue().getSprint() == currentSprint)
                 model.insertNodeInto(new DefaultMutableTreeNode(convertWorkItemToString(entryWorkItem.getValue(), "daily")), ownerT, ownerT.getChildCount());
 
         model.reload(root);
@@ -438,8 +445,16 @@ public class MainUserInterface extends JPanel {
             public void actionPerformed(ActionEvent actionEvent) {
                 String command = actionEvent.getActionCommand();
                 if(command.equals("Search")) {
-                    WorkItem wi =  WIManager.searchWorkItem(Integer.parseInt(searchBox.getText()));
-                    returnWorkItemFromSearch(wi);
+                    try {
+                        WorkItem wi = WIManager.searchWorkItem(Integer.parseInt(searchBox.getText()));
+                        if (Integer.parseInt(searchBox.getText()) > 0)
+                            returnWorkItemFromSearch(wi);
+                        else
+                            JOptionPane.showMessageDialog(mainFrame, "Please insert valid integer number");
+                    }
+                    catch (Exception e) {
+                        JOptionPane.showMessageDialog(mainFrame, "Please insert valid integer number");
+                    }
                 }
             }
         };
@@ -476,7 +491,6 @@ public class MainUserInterface extends JPanel {
             mainFrame.dispose();
         }
     }
-
 
     public void recentlyCreated(JFrame mainFrame) {
         Insets insets = mainFrame.getInsets();
@@ -537,7 +551,7 @@ public class MainUserInterface extends JPanel {
                     WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
                     MainUserInterface.returnWorkItemFromSearch(foundWI);
                     MainUserInterface.WIManager.updateWorkItemsFile();
-                    LoginView.teamManager.updateTeamsFile();//Updates the team's file.
+                    TeamManager.getInstance().updateTeamsFile();//Updates the team's file.
                     MainUserInterface.mainFrame.dispose();
                 }
             }
@@ -545,7 +559,7 @@ public class MainUserInterface extends JPanel {
     }
 
     public static void userConnected(JFrame mainFrame) {
-        JLabel usernameLabel = new JLabel(LoginView.userManager.loggedInUser.getUserName() + "  (" + LoginView.userManager.loggedInUser.getPermissionLevel().name() + ")   ");
+        JLabel usernameLabel = new JLabel(UserManager.getInstance().loggedInUser.getUserName() + "  (" + UserManager.getInstance().loggedInUser.getPermissionLevel().name() + ")   ");
         JButton logoutButton = new JButton("Logout");
 
         ActionListener actionListener = new ActionListener() {
@@ -585,7 +599,7 @@ public class MainUserInterface extends JPanel {
         for (String col : columnNames) //adding columns
             modelMyTasks.addColumn(col);
         for (Map.Entry<Integer, WorkItem> entry : WIManager.workItems.entrySet()) //adding rows
-            if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(LoginView.userManager.loggedInUser.getUserName()))
+            if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals(UserManager.getInstance().loggedInUser.getUserName()))
                 modelMyTasks.addRow(new Object[]{entry.getValue().getId(), entry.getValue().getType(), entry.getValue().getStatus(), entry.getValue().getSprint(), entry.getValue().getPriority(), entry.getValue().getSummary()});
         myTasksTable.setDefaultEditor(Object.class, null);
 
@@ -637,7 +651,7 @@ public class MainUserInterface extends JPanel {
                     WorkItem foundWI = MainUserInterface.WIManager.searchWorkItem(val);
                     MainUserInterface.returnWorkItemFromSearch(foundWI);
                     MainUserInterface.WIManager.updateWorkItemsFile();
-                    LoginView.teamManager.updateTeamsFile();//Updates the team's file.
+                    TeamManager.getInstance().updateTeamsFile();//Updates the team's file.
                     MainUserInterface.mainFrame.dispose();
                 }
             }

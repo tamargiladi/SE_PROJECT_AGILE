@@ -5,6 +5,7 @@ import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
 import com.persistent.*;
+import jdk.nashorn.internal.objects.annotations.Constructor;
 
 /***
 Singleton class:
@@ -14,9 +15,14 @@ public class WorkItemManager {
 
     private static WorkItemManager WorkItemManagerInstance; //Singleton instance
 
+
     private static String fileAddress = "src/com/data/workItems.xml";
     public HashMap<Integer, WorkItem> workItems;
+
     private static Integer nextAvailableId = 100;
+
+
+    private WorkItem.sprintEnum currentSprint;
 
     public static WorkItemManager getInstance() {
         if (WorkItemManagerInstance == null)
@@ -36,25 +42,29 @@ public class WorkItemManager {
         }
     }
 
+    public WorkItemBuilder createNewWorkItem() {
+        return WorkItemBuilder.builder();
+    }
+
     public static Integer getAvailableId() {
         return nextAvailableId;
     }
 
     public static void increaseNextAvailableId() {
-        System.out.println("Increasing Work Item next available ID");
         nextAvailableId++;
     }
 
 
     // Addition of new work item to hashmap
-    public void addWorkItemToHashMap(WorkItem wi, boolean isNew) {
-        workItems.put(wi.getId(), wi);
-        if (isNew) {
-            System.out.println("Saved NEW work item: " + wi.getType() + " " +  wi.getId());
-            increaseNextAvailableId();
+    public boolean addWorkItemToHashMap(WorkItem wi, boolean isNew) {
+        if (wi != null) {
+            workItems.put(wi.getId(), wi);
+            if (isNew)
+                increaseNextAvailableId();
+            return true;
         }
         else
-            System.out.println("Saved EXISTED work item: " + wi.getType() + " " + wi.getId());
+            return false;
     }
 
 
@@ -70,49 +80,70 @@ public class WorkItemManager {
 
 
     // Loading work items file contents into hashmap
-    public void loadWorkItemFileToHashMap() {
+    public boolean loadWorkItemFileToHashMap() {
         try {
-            FileInputStream workItemsFile = new FileInputStream(fileAddress);
-            XMLDecoder decoder = new XMLDecoder(workItemsFile);
-            WorkItem wi = (WorkItem) decoder.readObject();
-            while (wi != null) {
-                addWorkItemToHashMap(wi, true);
-                wi = (WorkItem) decoder.readObject();
+            File wiFile = new File(fileAddress);
+            if (!(wiFile.createNewFile())) {
+                FileInputStream workItemsFile = new FileInputStream(fileAddress);
+                XMLDecoder decoder = new XMLDecoder(workItemsFile);
+                workItems = (HashMap<Integer, WorkItem>) decoder.readObject();
+                currentSprint = (WorkItem.sprintEnum) decoder.readObject();
+                decoder.close();
+                workItemsFile.close();
+                return true;
             }
-            decoder.close();
-            workItemsFile.close();
-            System.out.println("Loading work items from database to hashmap: succeeded");
         }
         catch (Exception e){
-            System.out.println("Loading work items from database to hashmap: failed");
             e.printStackTrace();
+            return false;
         }
+        return false;
     }
 
     // Overwrites work items file with the hashmap contents
-    public void updateWorkItemsFile() {
+    public boolean updateWorkItemsFile() {
         FileOutputStream workItemsFile = null;
         try {
             workItemsFile = new FileOutputStream(fileAddress);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
         if (workItemsFile != null) {
             try {
                 XMLEncoder encoder = new XMLEncoder(workItemsFile);
-                for (Map.Entry<Integer, WorkItem> entry : workItems.entrySet()) {
-                    encoder.writeObject(entry.getValue());
-                }
+                encoder.writeObject(workItems);
+                encoder.writeObject(currentSprint);
+
                 encoder.close();
                 workItemsFile.close();
-                System.out.println("Loading work items from hashmap to database: succeeded");
+                return true;
             } catch (IOException e) {
-                System.out.println("Loading work items from hashmap to database: failed");
                 e.printStackTrace();
+                return false;
             }
         }
+        return false;
     }
 
+
+    // getters/setters
+    public WorkItem.sprintEnum getCurrentSprint() {
+        return currentSprint;
+    }
+
+    public void setCurrentSprint(WorkItem.sprintEnum currentSprint) {
+        this.currentSprint = currentSprint;
+    }
+
+    public static Integer getNextAvailableId() {
+        return nextAvailableId;
+    }
+
+    // only change for test purposes
+    public static void setFileAddress(String fileAddress) {
+        WorkItemManager.fileAddress = fileAddress;
+    }
 
 }
 
