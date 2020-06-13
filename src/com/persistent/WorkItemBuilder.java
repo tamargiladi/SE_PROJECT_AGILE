@@ -45,11 +45,9 @@ public class WorkItemBuilder {
         workItem.setFoundVersion(this.foundVersion);
 
         if (this.summary == null || this.description == null)
-            System.out.println("Can't save Work Item: please verify summary and description fields are not empty");
-        else {
-            System.out.println("\nSaving work item " + workItem.getId());
+            workItem = null;
+        else
             WorkItemManager.getInstance().addWorkItemToHashMap(workItem, isNew);
-        }
         return workItem;
     }
 

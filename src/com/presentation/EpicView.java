@@ -217,6 +217,4 @@ public class EpicView extends JFrame {
     public void setLayoutFoundInVersion(WorkItem wi) {
     }
 
-    public static void main(String[] args) {
-    }
 }
