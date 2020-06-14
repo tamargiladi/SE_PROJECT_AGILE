@@ -29,8 +29,6 @@ import java.util.List;
 public class MainUserInterface extends JPanel {
 
     public static WorkItemManager WIManager = WorkItemManager.getInstance();
-    //public static UserManager userManager = new UserManager();
-    //public static TeamManager teamManager = new TeamManager();
     public static ReportGenerator reportGenerator = new ReportGenerator();
     public static JFrame mainFrame;
     public static JMenuBar mb;
@@ -425,7 +423,9 @@ public class MainUserInterface extends JPanel {
                 return ("<html><body style='width:850'><PRE>" + wi.getType().name() + "\t" + wi.getId() + "\t" + wi.getStatus() + "\t\t" + wi.getSummary() + "\t</PRE></html>");
         }
         else {
-            if (wi.getType() == WorkItem.typeEnum.Epic)
+            if (wi.getType() == WorkItem.typeEnum.Epic && wi.getStatus() == WorkItem.statusEnum.InProgress)
+                return ("<html><body style='width:850'><PRE><b><font size=\"4\">  >> " + wi.getType().name() + "\t" + wi.getId() + "\t\t" + wi.getStatus() + "\t" + wi.getSummary()  + "\t</PRE></html>");
+            else if (wi.getType() == WorkItem.typeEnum.Epic)
                 return ("<html><body style='width:850'><PRE><b><font size=\"4\">  >> " + wi.getType().name() + "\t" + wi.getId() + "\t\t" + wi.getStatus() + "\t\t" + wi.getSummary()  + "\t</PRE></html>");
             else if (wi.getType() == WorkItem.typeEnum.Story)
                 return ("<html><body style='width:850'><PRE>> <b>" + wi.getType().name() + "\t     " + wi.getId() + "\t     " + wi.getStatus() + "\t     " + wi.getSummary()  + "\t</PRE></html>");
