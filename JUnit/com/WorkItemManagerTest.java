@@ -33,14 +33,14 @@ public class WorkItemManagerTest {
     @Test
     public void testCreateInvalidEpicMissingFields() {
         System.out.println("Work Item Manager::Create new Work Item::Epic - invalid work items creation (missing field: summary && description) [expected result: fail]");
-        Assert.assertNull(workItemManager.createNewWorkItem()
+        Assert.assertNull("Creating invalid epic (missing summary & description)",workItemManager.createNewWorkItem()
                 .build(WorkItem.typeEnum.Epic, null));
     }
 
     @Test
     public void testCreateInvalidEpicMissingFieldDesc() {
         System.out.println("Work Item Manager::Create new Work Item::Epic - invalid work items creation (missing field: description) [expected result: fail]");
-        Assert.assertNull(workItemManager.createNewWorkItem()
+        Assert.assertNull("Creating invalid epic (missing description)", workItemManager.createNewWorkItem()
                 .withSummary("with summary test")
                 .build(WorkItem.typeEnum.Epic, null));
     }
@@ -48,7 +48,7 @@ public class WorkItemManagerTest {
     @Test
     public void testCreateInvalidEpicMissingFieldSummary() {
         System.out.println("Work Item Manager::Create new Work Item::Epic - invalid work items creation (missing field: summary) [expected result: fail]");
-        Assert.assertNull(workItemManager.createNewWorkItem()
+        Assert.assertNull("Creating invalid epic (missing description)", workItemManager.createNewWorkItem()
                 .withDescription("with description test")
                 .build(WorkItem.typeEnum.Epic, null));
     }
@@ -56,7 +56,7 @@ public class WorkItemManagerTest {
     @Test
     public void testCreateValidEpic() {
         System.out.println("Work Item Manager::Create new Work Item::Epic - valid work items creation [expected result: success]");
-        Assert.assertNotNull(workItemManager.createNewWorkItem()
+        Assert.assertNotNull("Creating valid epic", workItemManager.createNewWorkItem()
                 .withDescription("with description test")
                 .withSummary("with summary test")
                 .build(WorkItem.typeEnum.Epic, null));
@@ -262,11 +262,11 @@ public class WorkItemManagerTest {
     public void testLoadWorkItemsToFile() throws IOException {
         System.out.println("Work Item Manager:: Load work items to work items file [expected result: success]");
         String testPath = "src/com/data/workItemsTest.xml";
-        workItemManager.workItems.clear();
         workItemManager.setFileAddress(testPath);
         WorkItem newWorkItem = workItemManager.createNewWorkItem().withDescription("new task").withSummary("new task")
                 .build(WorkItem.typeEnum.Task, null);
         workItemManager.updateWorkItemsFile();
+        workItemManager.workItems.clear();
         workItemManager.loadWorkItemFileToHashMap();
         Assert.assertTrue(workItemManager.workItems.containsKey(newWorkItem.getId()));
     }

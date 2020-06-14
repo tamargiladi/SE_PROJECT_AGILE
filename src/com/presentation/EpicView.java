@@ -129,7 +129,7 @@ public class EpicView extends JFrame {
         size = descLabel.getPreferredSize();
         descLabel.setBounds(insets.left + 50 , insets.top + 300, size.width + 5, size.height);
         size = descTextBox.getPreferredSize();
-        descTextBox.setBounds(insets.left + 50 , insets.top + 325, size.width + 870, size.height + 200);
+        descTextBox.setBounds(insets.left + 50 , insets.top + 325,  870, 200);
     }
 
     public void setLayoutButtons(WorkItem wi) {
