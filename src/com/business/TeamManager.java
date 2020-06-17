@@ -4,13 +4,10 @@ import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
 import com.presentation.LoginView;
-import com.presentation.MainUserInterface;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class TeamManager {
 
@@ -31,7 +28,7 @@ public class TeamManager {
     private TeamManager() {
 
         this.teams = new HashMap<String, Team>();
-        HashMap<String, Team> map = new HashMap<>();
+       /* HashMap<String, Team> map = new HashMap<>();
         //teamsFile = new File(fileAddress);
 
         File teamsFile = new File(fileAddress);
@@ -51,49 +48,19 @@ public class TeamManager {
                 c.printStackTrace();
                 System.out.println("Class not found");
             }
-        }
-
-        if (teams.get("default") == null)//Default team
-            addTeam("default");
-        addTeam("Algo");
-        addTeam("SW");
-        //teams.put("default", new Team("default"));
-    }
-            /*try
-            {
-
-                FileInputStream fis = new FileInputStream(fileAddress);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                map = (HashMap) ois.readObject();
-                teams.putAll(map);
-                ois.close();
-                fis.close();
-            }catch(IOException ioe)
-            {
-                ioe.printStackTrace();
-                return;
-            }catch(ClassNotFoundException c)
-            {
-                System.out.println("Class not found");
-                c.printStackTrace();
-                return;
-            }
-            System.out.println("Deserialized HashMap..");
-            // Display content using Iterator
-            Set set = map.entrySet();
-            Iterator iterator = set.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry mentry = (Map.Entry)iterator.next();
-                System.out.print("key: "+ mentry.getKey() + " & Value: ");
-                System.out.println(mentry.getValue());
-            }
-
-
-            if(teams.get("default")==null)//Default team
-                teams.put("default", new Team("default"));
-
-
         }*/
+
+
+        loadTeamsFileToHashMap();
+
+        if (isTeamExist("default"))//Default team doesn't exist - no other team is exist! Need to add also Algo&SW
+        {
+            addTeam("default");
+            addTeam("Algo");
+            addTeam("SW");
+        }
+    }
+
 
     /**
      * The method read teamFile file.
@@ -105,15 +72,11 @@ public class TeamManager {
 
     }
 
-    public Boolean removeTeam(String teamsName) {
-        int size = this.teams.size();
+    public void removeTeam(String teamsName) {
 
         if (isTeamExist(teamsName)&& teams.get(teamsName).getUsers().size()==0 &&!teamsName.equals("default"))
             this.teams.remove(teamsName);
-
-        return size == (this.teams.size() + 1);
     }
-
 
     public Team getTeam(String teamName) {
         return this.teams.get(teamName);
@@ -148,10 +111,10 @@ public class TeamManager {
         }
     }
 
-    public void updateTeamsFile() {
+    public Boolean updateTeamsFile() {
+        FileOutputStream fos =null;
         try {
-            FileOutputStream fos =
-                    new FileOutputStream(fileAddress);
+            fos = new FileOutputStream(fileAddress);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(teams);
             oos.close();
@@ -161,6 +124,7 @@ public class TeamManager {
             ioe.printStackTrace();
         }
 
+        return(fos!=null);
     }
 
 
@@ -188,5 +152,75 @@ public class TeamManager {
 
     }
 
+    public void setFileAddress(String newAddress)
+    {
+        fileAddress = newAddress;
+    }
 
+    public void loadTeamsFileToHashMap()
+    {
+        HashMap<String, Team> map = new HashMap<>();
+
+        File teamsFile = new File(fileAddress);
+        if (teamsFile.length() != 0) {
+            // load users file to HashMap
+            try {
+                FileInputStream teamFileInputStream = new FileInputStream(fileAddress);
+                ObjectInputStream teamObjectInputStream = new ObjectInputStream(teamFileInputStream);
+                map = (HashMap) teamObjectInputStream.readObject();
+                teams.putAll(map);
+                teamObjectInputStream.close();
+                teamFileInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                //System.out.println("failed to load users file to HashMap\n");
+            } catch (ClassNotFoundException c) {
+                c.printStackTrace();
+                System.out.println("Class not found");
+            }
+        }
+
+        if (teams.get("default") == null)//Default team
+            addTeam("default");
+        addTeam("Algo");
+        addTeam("SW");
+        //teams.put("default", new Team("default"));
+    }
 }
+
+
+ /*try
+            {
+
+                FileInputStream fis = new FileInputStream(fileAddress);
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                map = (HashMap) ois.readObject();
+                teams.putAll(map);
+                ois.close();
+                fis.close();
+            }catch(IOException ioe)
+            {
+                ioe.printStackTrace();
+                return;
+            }catch(ClassNotFoundException c)
+            {
+                System.out.println("Class not found");
+                c.printStackTrace();
+                return;
+            }
+            System.out.println("Deserialized HashMap..");
+            // Display content using Iterator
+            Set set = map.entrySet();
+            Iterator iterator = set.iterator();
+            while(iterator.hasNext()) {
+                Map.Entry mentry = (Map.Entry)iterator.next();
+                System.out.print("key: "+ mentry.getKey() + " & Value: ");
+                System.out.println(mentry.getValue());
+            }
+
+
+            if(teams.get("default")==null)//Default team
+                teams.put("default", new Team("default"));
+
+
+        }*/

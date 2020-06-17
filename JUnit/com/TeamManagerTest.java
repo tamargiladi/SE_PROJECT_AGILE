@@ -3,6 +3,8 @@ import com.business.WorkItemManager;
 import com.persistent.Team;
 
 
+import com.persistent.WorkItem;
+import com.presentation.LoginView;
 import org.junit.*;
 
 import java.io.*;
@@ -138,23 +140,57 @@ public class TeamManagerTest {
         Assert.assertFalse(teamManager.isTeamExist(""));
     }
 
-
     //### File handling ###
 
     // Synchronization of the file & hashMap variable
     @Test
-    public void testSyncFileHashmap()
-    {}
+    public void testSyncFileHashMap()
+    {
+        /* Steps:
+           1. Add the new team to 'teamManager'
+           2. Creation of a new example file to test the synchronization
+           3. Add another team to 'teamManager'
+           4. Pull the file from 'teamManager'
+           5. Assert that the pulled file is indeed different from the previously saved file.
+         */
+
+        System.out.println("Team Manager:: Save teams to team's file [expected result: success]");
+        String testPath = "src/com/data/teamsFileTest.ser";
+        teamManager.setFileAddress(testPath);
+        teamManager.addTeam(teamNameExample);
+        Assert.assertTrue(teamManager.updateTeamsFile());
+    }
 
     // Write to file
     @Test
-    public void testWriteToFile()
-    {}
+    public void testLoadTeamsToFile() throws IOException {
+        System.out.println("Team Manager:: Load teams to team's file [expected result: success]");
+        String testPath = "src/com/data/teamsFileTest.ser";
+        teamManager.setFileAddress(testPath);
+        teamManager.addTeam(teamNameExample);
+        teamManager.updateTeamsFile();
+        teamManager.teams.clear();
+        teamManager.loadTeamsFileToHashMap();
+
+        Assert.assertTrue(teamManager.teams.containsKey(teamNameExample));
+    }
 
     // read from file + correctness
     @Test
-    public void testReadFromFile()
-    {}
+    public void testLoadTeamsUsersToFile() throws IOException {
+        System.out.println("Team Manager:: Load teams to team's file [expected result: success]");
+        String testPath = "src/com/data/teamsFileTest.ser";
+        teamManager.setFileAddress(testPath);
+        teamManager.addTeam(teamNameExample);
+        teamManager.addMemberToTeam(usernameExample[0],teamManager.teams.get(teamNameExample));
+        teamManager.updateTeamsFile();
+        teamManager.teams.clear();
+        teamManager.loadTeamsFileToHashMap();
+
+        Assert.assertTrue(teamManager.isUserBelongToTeam(teamNameExample,usernameExample[0]));
+    }
+
+
 
 
 
@@ -162,12 +198,15 @@ public class TeamManagerTest {
     //Update hash from a file.
     @Test
     public void testUpdateHashFromFile()
-    {}
+    {
+    }
 
     //Update of the hash from creating a new object
     @Test
     public void testUpdateHasOnCreatingObject()
-    {}
+    {
+
+    }
 
     //Searching a team that doesn't exist in the hashMap //But I do this 😅
     @Test
@@ -181,10 +220,27 @@ public class TeamManagerTest {
        - Permission handling
             + Only admin account can modify the teams hashMap.
      */
-
     @Test public void testPermissionTeamModification()
     {
 
+        //TODO: [Q] -> should I use the UI in order to check permissions?
+
+     /*   teamManager.addTeam(teamNameExample);
+
+        Assert.assertTrue(LoginView.userManager.loggedInUser.getPermissionLevel().equals("admin") && teamManager.teams.size()==1||
+                teamManager.teams.size()==0);*/
     }
+
+
+    @AfterClass
+    public static void deleteTestFile() {
+        String testPath = "src/com/data/teamsFileTest.ser";
+        File testFile = new File(testPath);
+        if (testFile.exists())
+            testFile.delete();
+    }
+
+
+
 
 }
