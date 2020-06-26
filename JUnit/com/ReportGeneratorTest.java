@@ -197,7 +197,7 @@ public class ReportGeneratorTest {
 
     @Test
     public void testExceedingEstimations() {
-        System.out.println("Report Generator::Report: Bugs solved in version");
+        System.out.println("Report Generator::Report: exceeding estimations");
         workItemManager.workItems.clear();
         int rand1 = new Random().nextInt(100);
         int rand2 = new Random().nextInt(100);
