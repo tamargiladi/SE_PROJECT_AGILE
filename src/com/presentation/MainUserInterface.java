@@ -342,7 +342,7 @@ public class MainUserInterface extends JPanel {
                         model.insertNodeInto(tempNodeStory, tempNodeEpic, tempNodeEpic.getChildCount());
                         // Set BUGS / TASKS
                         for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
-                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
+                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID().equals(entrySt.getKey())) {
                                 tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryTB.getValue(), "story"));
                                 model.insertNodeInto(tempNodeWI, tempNodeStory, tempNodeStory.getChildCount());
                             }
@@ -352,7 +352,7 @@ public class MainUserInterface extends JPanel {
                         tempNodeStory = new DefaultMutableTreeNode("Story " + entrySt.getKey() + ": " + entrySt.getValue().getSummary());
                         model.insertNodeInto(tempNodeStory, epicT, epicT.getChildCount());
                         for (Map.Entry<Integer, WorkItem> entryTB : WIManager.workItems.entrySet())
-                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID() == entrySt.getKey()) {
+                            if ((entryTB.getValue().getType() == WorkItem.typeEnum.Task || entryTB.getValue().getType() == WorkItem.typeEnum.Bug) && entryTB.getValue().getStoryID().equals(entrySt.getKey())) {
                                 tempNodeWI = new DefaultMutableTreeNode(convertWorkItemToString(entryTB.getValue(), "story"));
                                 model.insertNodeInto(tempNodeWI, storyT, storyT.getChildCount());
                             }

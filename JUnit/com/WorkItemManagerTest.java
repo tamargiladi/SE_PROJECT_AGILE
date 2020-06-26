@@ -1,4 +1,3 @@
-import com.business.TeamManager;
 import com.business.WorkItemManager;
 import com.persistent.WorkItem;
 import org.junit.*;
@@ -6,7 +5,6 @@ import org.junit.Assert;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Random;
 
 /***
@@ -243,7 +241,7 @@ public class WorkItemManagerTest {
     public void testCreateWorkItemsFile() throws IOException {
         System.out.println("Work Item Manager:: Create new work items file [expected result: success]");
         String testPath = "src/com/data/workItemsTest.xml";
-        workItemManager.setFileAddress(testPath);
+        workItemManager.setWorkItemFileAddress(testPath);
         File testFile = new File(testPath);
         if (testFile.exists())
             testFile.delete();
@@ -255,7 +253,7 @@ public class WorkItemManagerTest {
     public void testSaveWorkItemsToFile() throws IOException {
         System.out.println("Work Item Manager:: Save work item to work items file [expected result: success]");
         String testPath = "src/com/data/workItemsTest.xml";
-        workItemManager.setFileAddress(testPath);
+        workItemManager.setWorkItemFileAddress(testPath);
         WorkItem newWorkItem = workItemManager.createNewWorkItem().withDescription("new bug").withSummary("new bug")
                 .build(WorkItem.typeEnum.Bug, null);
         Assert.assertTrue(workItemManager.updateWorkItemsFile());
@@ -265,7 +263,7 @@ public class WorkItemManagerTest {
     public void testLoadWorkItemsToFile() throws IOException {
         System.out.println("Work Item Manager:: Load work items to work items file [expected result: success]");
         String testPath = "src/com/data/workItemsTest.xml";
-        workItemManager.setFileAddress(testPath);
+        workItemManager.setWorkItemFileAddress(testPath);
         WorkItem newWorkItem = workItemManager.createNewWorkItem().withDescription("new task").withSummary("new task")
                 .build(WorkItem.typeEnum.Task, null);
         workItemManager.updateWorkItemsFile();

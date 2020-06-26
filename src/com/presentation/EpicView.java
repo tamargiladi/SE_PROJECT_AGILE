@@ -157,7 +157,7 @@ public class EpicView extends JFrame {
                     else if (descTextBox.getText().length() == 0)
                         JOptionPane.showMessageDialog(jPanel, "Please fill description field");
                     else {
-                        WorkItemBuilder.builder().
+                        WorkItemManager.getInstance().createNewWorkItem().
                                 withSummary(summary).
                                 withStatus(status).
                                 withDescription(desc).
