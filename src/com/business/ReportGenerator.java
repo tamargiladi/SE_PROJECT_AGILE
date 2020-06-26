@@ -14,14 +14,14 @@ public class ReportGenerator {
 
     private String chosenVersion;
     private WorkItem.sprintEnum chosenSprint;
-    private HashMap<Integer, WorkItem> hashMap = MainUserInterface.WIManager.workItems;
+    private HashMap<Integer, WorkItem> hashMap = WorkItemManager.getInstance().workItems;
 
     public ReportGenerator() {
     }
 
     public boolean isActionPermitted() {
         UserManager userManager = UserManager.getInstance();
-        if (userManager.loggedInUser.getPermissionLevel() == User.PermissionLevel.member)
+        if (userManager.loggedInUser.getPermissionLevel().equals(User.PermissionLevel.member))
             return false;
         return true;
     }

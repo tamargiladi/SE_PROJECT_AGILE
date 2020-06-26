@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Random;
 
+/***
+Testing of WorkItemManager and WorkItemBuilder classes
+ ***/
 
 public class WorkItemManagerTest {
 
