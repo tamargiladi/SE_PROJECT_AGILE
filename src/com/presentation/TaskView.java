@@ -1,5 +1,6 @@
 package com.presentation;
 
+import com.business.WorkItemManager;
 import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
@@ -175,7 +176,7 @@ public class TaskView extends StoryView {
                     else if (storyId != null && MainUserInterface.WIManager.searchWorkItem(storyId).getType() != WorkItem.typeEnum.Story)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID is not Story");
                     else { //validation passed
-                        WorkItemBuilder.builder().
+                        WorkItemManager.getInstance().createNewWorkItem().
                                 withSummary(summary).
                                 withStatus((WorkItem.statusEnum) statusCombo.getModel().getSelectedItem()).
                                 withDescription(desc).

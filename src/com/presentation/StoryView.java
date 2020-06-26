@@ -1,5 +1,6 @@
 package com.presentation;
 
+import com.business.WorkItemManager;
 import com.persistent.User;
 import com.persistent.WorkItem;
 import com.persistent.WorkItemBuilder;
@@ -116,7 +117,7 @@ public class StoryView extends EpicView{
                     else if (epicId != null && MainUserInterface.WIManager.searchWorkItem(epicId).getType() != WorkItem.typeEnum.Epic)
                         JOptionPane.showMessageDialog(jPanel, "Parent ID is not Epic");
                     else { //validation passed - save work item
-                        WorkItemBuilder.builder().
+                        WorkItemManager.getInstance().createNewWorkItem().
                                 withSummary(summary).
                                 withStatus((WorkItem.statusEnum) statusCombo.getModel().getSelectedItem()).
                                 withDescription(desc).

@@ -26,22 +26,6 @@ public class ReportGenerator {
         return true;
     }
 
-    public String getChosenVersion() {
-        return chosenVersion;
-    }
-
-    public void setChosenVersion(String chosenVersion) {
-        this.chosenVersion = chosenVersion;
-    }
-
-    public WorkItem.sprintEnum getChosenSprint() {
-        return chosenSprint;
-    }
-
-    public void setChosenSprint(WorkItem.sprintEnum chosenSprint) {
-        this.chosenSprint = chosenSprint;
-    }
-
     // Reports
     public HashMap<String, Integer> totalPlannedHoursPerMember() {
         HashMap<String, Integer> sumHoursPerUser = new HashMap<>(); //username, sum of number of estimated hours
@@ -136,6 +120,23 @@ public class ReportGenerator {
                 exceedingEst.add(wi);
         }
         return exceedingEst;
+    }
+
+    // getters & setters
+    public String getChosenVersion() {
+        return chosenVersion;
+    }
+
+    public void setChosenVersion(String chosenVersion) {
+        this.chosenVersion = chosenVersion;
+    }
+
+    public WorkItem.sprintEnum getChosenSprint() {
+        return chosenSprint;
+    }
+
+    public void setChosenSprint(WorkItem.sprintEnum chosenSprint) {
+        this.chosenSprint = chosenSprint;
     }
 
 }

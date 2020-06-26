@@ -5,7 +5,6 @@ import java.beans.XMLEncoder;
 import java.io.*;
 import java.util.*;
 import com.persistent.*;
-import jdk.nashorn.internal.objects.annotations.Constructor;
 
 /***
 Singleton class:
@@ -14,14 +13,9 @@ Singleton class:
 public class WorkItemManager {
 
     private static WorkItemManager WorkItemManagerInstance; //Singleton instance
-
-
-    private static String fileAddress = "src/com/data/workItems.xml";
+    private static String workItemFileAddress = "src/com/data/workItems.xml";
     public HashMap<Integer, WorkItem> workItems;
-
     private static Integer nextAvailableId = 100;
-
-
     private WorkItem.sprintEnum currentSprint;
 
     public static WorkItemManager getInstance() {
@@ -46,14 +40,9 @@ public class WorkItemManager {
         return WorkItemBuilder.builder();
     }
 
-    public static Integer getAvailableId() {
-        return nextAvailableId;
-    }
-
     public static void increaseNextAvailableId() {
         nextAvailableId++;
     }
-
 
     // Addition of new work item to hashmap
     public boolean addWorkItemToHashMap(WorkItem wi, boolean isNew) {
@@ -67,7 +56,6 @@ public class WorkItemManager {
             return false;
     }
 
-
     // search work item by id
     public WorkItem searchWorkItem(Integer id) {
         if (workItems.containsKey(id)) {
@@ -78,13 +66,12 @@ public class WorkItemManager {
         return null;
     }
 
-
     // Loading work items file contents into hashmap
     public boolean loadWorkItemFileToHashMap() {
         try {
-            File wiFile = new File(fileAddress);
+            File wiFile = new File(workItemFileAddress);
             if (!(wiFile.createNewFile())) {
-                FileInputStream workItemsFile = new FileInputStream(fileAddress);
+                FileInputStream workItemsFile = new FileInputStream(workItemFileAddress);
                 XMLDecoder decoder = new XMLDecoder(workItemsFile);
                 workItems = (HashMap<Integer, WorkItem>) decoder.readObject();
                 currentSprint = (WorkItem.sprintEnum) decoder.readObject();
@@ -104,7 +91,7 @@ public class WorkItemManager {
     public boolean updateWorkItemsFile() {
         FileOutputStream workItemsFile = null;
         try {
-            workItemsFile = new FileOutputStream(fileAddress);
+            workItemsFile = new FileOutputStream(workItemFileAddress);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return false;
@@ -128,6 +115,10 @@ public class WorkItemManager {
 
 
     // getters/setters
+    public static Integer getAvailableId() {
+        return nextAvailableId;
+    }
+
     public WorkItem.sprintEnum getCurrentSprint() {
         return currentSprint;
     }
@@ -141,8 +132,8 @@ public class WorkItemManager {
     }
 
     // only change for test purposes
-    public static void setFileAddress(String fileAddress) {
-        WorkItemManager.fileAddress = fileAddress;
+    public static void setWorkItemFileAddress(String workItemFileAddress) {
+        WorkItemManager.workItemFileAddress = workItemFileAddress;
     }
 
 }
