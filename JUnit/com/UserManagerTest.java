@@ -1,16 +1,11 @@
-import com.business.UserManager;
 import com.business.TeamManager;
+import com.business.UserManager;
 import com.business.WorkItemManager;
 import com.persistent.User;
 import com.persistent.WorkItem;
-import com.presentation.MainUserInterface;
 import org.junit.*;
-import org.junit.Assert;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.util.Map;
-import java.util.Random;
+import java.io.File;
 
 public class UserManagerTest {
 
@@ -20,7 +15,7 @@ public class UserManagerTest {
 
     @Before
     public void setUpMethod() {
-        System.out.println("Set Up Method");
+        System.out.println("Set Up Met      hod");
         UserManager.setUserFileAddress(userTestPath);
         testFile = new File(userTestPath);
         if (testFile.exists())
