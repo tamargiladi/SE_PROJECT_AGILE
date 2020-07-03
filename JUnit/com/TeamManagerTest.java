@@ -243,7 +243,7 @@ public class TeamManagerTest {
         teamManager.addTeam(teamNameExample);
         teamManager.addMemberToTeam("nonAdmin",teamManager.teams.get(teamNameExample));
         userManager.addUser("nonAdmin","123", User.PermissionLevel.member,teamNameExample);
-        userManager.login("nonAdmin","123");
+        userManager.login("nonAdmin","123");//
 
     }
 
