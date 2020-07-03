@@ -162,7 +162,6 @@ public class UserManagerTest {
         userManager.login("demo-user", "test");
         userManager.addUser("demo-user2","test",User.PermissionLevel.admin,"default");
         UserManager.getInstance().users.clear();
-        //TODO: check why demo-user2 not exist in the file
         UserManager.getInstance().loadUsersFileToHashMap();
 
         Assert.assertTrue(UserManager.getInstance().isUserExist("demo-user2"));
@@ -266,18 +265,12 @@ public class UserManagerTest {
     }
     @Test
     public void testChangeOwnerFromAllWI() {
-        boolean isAllWIChanged=true;
         System.out.println("User Manager:: change the owner of all WI under the username to Unassigned [ expected result: success ]");
 
-        //TODO: create WI with user demo-user
-       // WorkItemManager.getInstance().createNewWorkItem().withOwner("demo-user");
+       WorkItem wi=WorkItemManager.getInstance().createNewWorkItem().withSummary("demo").withDescription("demo test").withOwner("demo-user").build(WorkItem.typeEnum.Task,null);
         userManager.removeUser("demo-user");
-        for (Map.Entry<Integer, WorkItem> entry : WorkItemManager.getInstance().workItems.entrySet())
-            if (entry.getValue().getOwner() != null && entry.getValue().getOwner().equals("demo-user"))
-                if (!(entry.getValue().getOwner().equals("Unassigned")))
-                    isAllWIChanged=false;
 
-        Assert.assertTrue(isAllWIChanged);
+        Assert.assertEquals(WorkItemManager.getInstance().workItems.get(wi.getId()).getOwner(),"Unassigned");
     }
     // --- End check removing user---
 
@@ -288,7 +281,6 @@ public class UserManagerTest {
 
         userManager.removeUser("demo-user");
         UserManager.getInstance().users.clear();
-        //TODO: check why demo-user2 not exist in the file
         UserManager.getInstance().loadUsersFileToHashMap();
 
         Assert.assertFalse(UserManager.getInstance().isUserExist("demo-user"));
@@ -431,17 +423,17 @@ public class UserManagerTest {
     public void testRemoveUserFromPreviousTeam() {
         System.out.println("User Manager:: remove user from previous team [ expected result: success ]");
 
-        userManager.updateUserTeam("demo-test","SW");
+        userManager.updateUserTeam("demo-user","SW");
 
-        Assert.assertFalse(TeamManager.getInstance().isUserBelongToTeam("default","demo-test"));
+        Assert.assertFalse(TeamManager.getInstance().isUserBelongToTeam("default","demo-user"));
     }
     @Test
     public void testInsertUserToNewTeam() {
         System.out.println("User Manager:: insert user to new team [ expected result: success ]");
 
-        userManager.updateUserTeam("demo-test","SW");
+        userManager.updateUserTeam("demo-user","SW");
 
-        Assert.assertTrue(TeamManager.getInstance().isUserBelongToTeam("SW","demo-test"));
+        Assert.assertTrue(TeamManager.getInstance().isUserBelongToTeam("SW","demo-user"));
     }
     // --- END update user team to non exist team ---
 
