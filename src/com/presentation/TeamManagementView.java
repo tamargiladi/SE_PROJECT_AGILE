@@ -70,16 +70,6 @@ public class TeamManagementView extends JFrame {
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
 
-    //TODO: Remove the main...
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                TeamManagementView tGUI = new TeamManagementView();
-            }
-        });
-    }
-
     //=============== Frames =====================
     public TeamManagementView() {
 
@@ -364,7 +354,6 @@ public class TeamManagementView extends JFrame {
         ActionListener actionListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //TODO:Add action for editing
 
                 String newTeamName = fieldEdit.getText(),
                         oldName = getSelectedTeam().getTeamsName();

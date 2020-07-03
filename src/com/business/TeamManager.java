@@ -155,11 +155,12 @@ public class TeamManager {
             }
         }
 
-        if (teams.size()==1)//Default team
+        if (teams.size()<=1)//Default team
         {
             String prevPermission = currentPermission;
             currentPermission = "admin";//Temporary permission - in case of initial operation that is not of the admin..
-            addTeam("default");
+               if(!isTeamExist("default"))
+                 addTeam("default");
             addTeam("Algo");
             addTeam("SW");
             currentPermission = prevPermission;

@@ -168,9 +168,6 @@ public class MainUserInterface extends JPanel {
 
     public static void teamMenu(JFrame mainFrame) {
 
-        //TODO:================================================================
-        //TODO:                          TAMAR
-        //TODO:================================================================
 
 
         JMenu menuTeam;
@@ -209,9 +206,7 @@ public class MainUserInterface extends JPanel {
 
         }
 
-        //================================================================
-        //TODO:                          TAMAR
-        //================================================================
+
     }
 
     public static void userMenu(JFrame mainFrame) {

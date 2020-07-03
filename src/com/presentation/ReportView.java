@@ -1,17 +1,16 @@
 package com.presentation;
 
-import com.persistent.User;
 import com.persistent.WorkItem;
-import javafx.application.Application;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReportView extends JFrame {
 

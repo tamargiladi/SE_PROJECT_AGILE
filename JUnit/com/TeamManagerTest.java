@@ -21,7 +21,9 @@ public class TeamManagerTest {
         userManager= UserManager.getInstance();
         userManager.login("admin","admin");
         teamManager = TeamManager.getInstance();
+        teamManager.setFileAddress("src/com/data/teamsFileTest.ser");
         teamManager.loginTeam(User.PermissionLevel.admin.name());
+
 
     }
 
@@ -195,15 +197,30 @@ public class TeamManagerTest {
     //### Hash Handling ###
     //Update hash from a file.
     @Test
-    public void testUpdateHashFromFile()
-    {
+    public void testUpdateHashFromFile() throws IOException {
+        System.out.println("Team Manager:: test update hash from file [expected result: success]");
+
+        teamManager.addTeam(teamNameExample);
+        File file = new File("src/com/data/teamsFileTest.ser");
+        file.delete();
+
+        teamManager.addTeam("example-team");
+        teamManager.updateTeamsFile();
+
+        Assert.assertTrue(teamManager.isTeamExist("example-team"));
+
+
     }
 
     //Update of the hash from creating a new object
     @Test
     public void testUpdateHasOnCreatingObject()
     {
+        System.out.println("Team Manager:: test update has on creating object(And not through the teamManager). ([expected result: failure]");
 
+        Team team = new Team("DontAddMe");
+
+            Assert.assertFalse(teamManager.isTeamExist("DontAddMe"));
     }
 
     //Searching a team that doesn't exist in the hashMap
