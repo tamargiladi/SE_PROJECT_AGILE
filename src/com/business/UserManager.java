@@ -39,6 +39,7 @@ public class UserManager {
                   create default team */
                 TeamManager.getInstance().addTeam("default");
                 addUser("admin","admin", User.PermissionLevel.admin,"default");
+                //addNewUser("admin","admin", User.PermissionLevel.admin,"default");
             }
 
         }catch (Exception e) {
@@ -47,54 +48,26 @@ public class UserManager {
         }
     }
 
-    public int addUser(String username, String password, User.PermissionLevel permission, String teamName)
-        /*function for add user if the user have permission or is admin user
-          return: 1- user created
-                  2- Action no permitted
-                  3- user not created
-         */
-    {
-        //create user admin when the system run in the first time (login not done yet)
-        if (loggedInUser==null && username.equals("admin")) {
-            if (addNewUser(username, password, permission, teamName)) {
-                System.out.println("Admin user created\n");
-                return 1;
-            }
-            System.out.println(username+" user not created\n");
-            return 3;
-        }
-        //add new user after login
-        if (isActionPermitted()) {
-            if (addNewUser(username, password, permission, teamName)){
-                System.out.println(username+" user created\n");
-                return 1;
-            }
-            System.out.println(username+" user not created\n");
-            return 3;
-        }
-        // Action no permitted
-        System.out.println("Action no permitted\n");
-        return 2;
-    }
-
-    private boolean addNewUser(String username, String password, User.PermissionLevel permission, String teamName)
+    public boolean addUser(String username, String password, User.PermissionLevel permission, String teamName)
         //function for add user if the user not exist in system
     {
         //check if user not exist in system
-        if (!(isUserExist(username))) {
-            //check if all inputs are valid
-            if ((username==null) || (password==null)  || !(isUserPermissionExist(permission)) || !(TeamManager.getInstance().isTeamExist(teamName))) {
-                return false;
+        if (username != null && (username.equals("admin") || isActionPermitted())) {
+            if (!(isUserExist(username))) {
+                //check if all inputs are valid
+                if ((password == null) || !(TeamManager.getInstance().isTeamExist(teamName))) {
+                    return false;
+                }
+                //create user object
+                User newUser = new User(username, password, permission, teamName);
+                //insert new user to team list
+                TeamManager.getInstance().addMemberToTeam(username, TeamManager.getInstance().teams.get(teamName));
+                //insert new user to users HashMap
+                users.put(username, newUser);
+                //update the user file with new user
+                updateUsersFile();
+                return true;
             }
-            //create user object
-            User newUser = new User(username, password, permission, teamName);
-            //insert new user to team list
-            TeamManager.getInstance().addMemberToTeam(username,  TeamManager.getInstance().teams.get(teamName));
-            //insert new user to users HashMap
-            users.put(username, newUser);
-            //update the user file with new user
-            updateUsersFile();
-            return true;
         }
         return false;
     }
@@ -236,12 +209,6 @@ public class UserManager {
 
     public Boolean isActionPermitted(){
         return (this.loggedInUser.getPermissionLevel()==User.PermissionLevel.manager || this.loggedInUser.getPermissionLevel()==User.PermissionLevel.admin);
-    }
-
-    public Boolean isUserPermissionExist(User.PermissionLevel permission){
-        if ((permission==User.PermissionLevel.admin) || (permission==User.PermissionLevel.manager) || (permission==User.PermissionLevel.member))
-            return true;
-        return false;
     }
 
     public void loadUsersFileToHashMap() {

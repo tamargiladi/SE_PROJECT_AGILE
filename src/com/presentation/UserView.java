@@ -1,5 +1,6 @@
 package com.presentation;
 
+import com.business.UserManager;
 import com.persistent.User;
 
 import java.lang.String;
@@ -120,21 +121,18 @@ public class UserView extends JPanel {
                         else if (password.length() == 0)
                             JOptionPane.showMessageDialog(userViewFrame, "Please fill Password field");
                         else {
-                            switch (LoginView.userManager.addUser(userName, password, permissionLevel, teamName)) {
-                                case 1:
-                                    JOptionPane.showMessageDialog(userViewFrame, "User successfully added");
+                            if (LoginView.userManager.addUser(userName, password, permissionLevel, teamName) == false){
+                                if (UserManager.getInstance().users.containsKey(userName))
+                                    JOptionPane.showMessageDialog(userViewFrame, "Username already exists");
+                                else
+                                    JOptionPane.showMessageDialog(userViewFrame, "Action no permitted");
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(userViewFrame, "User successfully added");
                                     JComponent comp = (JComponent) actionEvent.getSource();
                                     Window win = SwingUtilities.getWindowAncestor(comp);
                                     win.dispose();
                                     UserManagementView uv = new UserManagementView("User Management Area");
-                                    //uv.usersScreenViewPanel.setVisible(true);
-                                    break;
-                                case 2:
-                                    JOptionPane.showMessageDialog(userViewFrame, "Action no permitted");
-                                    break;
-                                case 3:
-                                    JOptionPane.showMessageDialog(userViewFrame, "Username already exist");
-                                    break;
                             }
                         }
                     }
