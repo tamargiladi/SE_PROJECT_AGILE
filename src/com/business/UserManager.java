@@ -37,7 +37,6 @@ public class UserManager {
             if(!(isUserExist("admin"))){
                 /*for adding a user must be a team,
                   create default team */
-                TeamManager.getInstance().loginTeam(User.PermissionLevel.admin.name());
                 TeamManager.getInstance().addTeam("default");
                 addUser("admin","admin", User.PermissionLevel.admin,"default");
             }
