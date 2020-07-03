@@ -38,6 +38,7 @@ public class TeamManagerTest {
         if (testFile.exists())
             testFile.delete();
 
+        teamManager.teams.clear();
         teamManager = null;
     }
 
@@ -236,7 +237,8 @@ public class TeamManagerTest {
 
         Team team = new Team("DontAddMe");
 
-            Assert.assertFalse(teamManager.isTeamExist("DontAddMe"));
+
+        Assert.assertFalse(teamManager.isTeamExist("DontAddMe"));
     }
 
     //Searching a team that doesn't exist in the hashMap
@@ -260,9 +262,9 @@ public class TeamManagerTest {
         userManager.addUser("nonAdmin", "123",User.PermissionLevel.member,teamNameExample);
 
         userManager.login("nonAdmin","123");
-
-
         teamManager.addTeam("example-team");
+
+
         Assert.assertFalse(teamManager.isTeamExist("example-team"));
         userManager.removeUser("nonAdmin");
 
