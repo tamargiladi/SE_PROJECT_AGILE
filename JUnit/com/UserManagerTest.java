@@ -10,16 +10,14 @@ import java.io.File;
 public class UserManagerTest {
 
     UserManager userManager;
-    private static String userTestPath = "src/com/data/usersTest.xml";
-    private static File testFile;
+    private static String userTestPath = "src/com/data/usersTest.ser";
+    private File testFile;
 
     @Before
     public void setUpMethod() {
-        System.out.println("Set Up Met      hod");
-        UserManager.setUserFileAddress(userTestPath);
+        System.out.println("Set Up Method");
         testFile = new File(userTestPath);
-        if (testFile.exists())
-            testFile.delete();
+        UserManager.setUserFileAddress(userTestPath);
         userManager = UserManager.getInstance();
 
         userManager.login("admin", "admin");
@@ -29,9 +27,14 @@ public class UserManagerTest {
     @After
     public void tearDownMethod() {
         System.out.println("Tear Down Method");
-        ///*File*/testFile = new File(userTestPath);
+
+        userManager.users.clear();
+        userManager.updateUsersFile();
+
         if (testFile.exists())
-            testFile.delete();
+            if (testFile.delete())
+                 System.out.println("Deleted the file: " + testFile.getName());
+
         userManager = null;
     }
 
@@ -88,7 +91,7 @@ public class UserManagerTest {
 
         userManager.login("demo-user", "test");
 
-        Assert.assertSame("existing user not created", 3,userManager.addUser("demo-user","test",User.PermissionLevel.admin,"default"));
+        Assert.assertFalse(userManager.addUser("demo-user","test",User.PermissionLevel.admin,"default"));
     }
     // --- END adding existing user---
 
@@ -127,14 +130,6 @@ public class UserManagerTest {
         userManager.login("demo-user", "test");
         userManager.addUser("demo-user2",null,User.PermissionLevel.admin,"default");
 
-        Assert.assertFalse(UserManager.getInstance().isUserExist("demo-user2"));
-    }
-    @Test
-    public void testAddUserInvalidPermissionLevel() {
-        System.out.println("User Manager:: adding user with null permission level  [ expected result: fail ]");
-
-        userManager.login("demo-user", "test");
-        userManager.addUser("demo-user2","test",null,"default");
         Assert.assertFalse(UserManager.getInstance().isUserExist("demo-user2"));
     }
     @Test
@@ -478,11 +473,11 @@ public class UserManagerTest {
 
 
 
-    @AfterClass
+   /* @AfterClass
     public static void deleteTestFile() {
         //String testPath = "src/com/data/teamsFileTest.ser";
         //File testFile = new File(userTestPath);
         if (testFile.exists())
             testFile.delete();
-    }
+    }*/
 }
