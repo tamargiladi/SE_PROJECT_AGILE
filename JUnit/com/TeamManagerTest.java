@@ -2,10 +2,14 @@ import com.business.TeamManager;
 import com.business.UserManager;
 import com.persistent.Team;
 import com.persistent.User;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class TeamManagerTest {
     TeamManager teamManager ;
@@ -22,14 +26,18 @@ public class TeamManagerTest {
         userManager.login("admin","admin");
         teamManager = TeamManager.getInstance();
         teamManager.setFileAddress("src/com/data/teamsFileTest.ser");
-        teamManager.loginTeam(User.PermissionLevel.admin.name());
-
 
     }
 
     @After
     public void tearDownMethod() {
         System.out.println("Tear Down Method");
+
+        String testPath = "src/com/data/teamsFileTest.ser";
+        File testFile = new File(testPath);
+        if (testFile.exists())
+            testFile.delete();
+
         teamManager = null;
     }
 
@@ -38,15 +46,11 @@ public class TeamManagerTest {
     public void testEditNewNameToAnExistOne() {
         System.out.println("Team Manager::  An attempt to edit a name to an existed one   [expected result: fail ]");
 
-
-        TeamManager beforeManager = TeamManager.getInstance();//To compare the 'wrong' hashMap.
-
-
         teamManager.addTeam(teamNameExample);
-        beforeManager.addTeam(teamNameExample);
-        teamManager.addTeam(teamNameExample);//Adds again to the test teamManager.
+        teamManager.addTeam("example");
+        teamManager.updateTeamsName("example", teamNameExample);
 
-        Assert.assertSame(beforeManager.teams, teamManager.teams);
+
 
     }
 
@@ -85,16 +89,12 @@ public class TeamManagerTest {
     public void testRemoveNonExistentTeam()
     {
         System.out.println("Team Manager::  An attempt to remove a team that doesn't exist.  [ expected result: fail ]");
-
-        TeamManager testTeam = TeamManager.getInstance();
-
-        teamManager.addTeam(teamNameExample);
-        testTeam.addTeam(teamNameExample);
+        int teamSizeBefore = teamManager.teams.size();
 
         teamManager.removeTeam("NonExist");
 
         //Checking that another team wasn't removed by accident.
-        Assert.assertEquals(teamManager.teams, testTeam.teams);
+        Assert.assertEquals(teamSizeBefore,teamManager.teams.size());
     }
 
     // Block the permission to remove 'default' team.
@@ -117,27 +117,43 @@ public class TeamManagerTest {
     @Test
     public void testAddExistedMemberToTeam()
     {
-        TeamManager testTeam = TeamManager.getInstance();
-
+        boolean isUserExist=false;
         teamManager.addTeam(teamNameExample);
-        testTeam.addTeam(teamNameExample);
+        UserManager.getInstance().addUser("example-user","123",
+                User.PermissionLevel.member,teamNameExample);
 
-        teamManager.addMemberToTeam(usernameExample[0],teamManager.teams.get(teamNameExample));
-        testTeam.addMemberToTeam(usernameExample[0],testTeam.teams.get(teamNameExample));
+        teamManager.addMemberToTeam("example-user",teamManager.teams.get(teamNameExample));
+        teamManager.addTeam("another-team");
 
-        teamManager.removeMemberFromTeam(usernameExample[1],teamManager.teams.get(teamNameExample));
+        teamManager.addMemberToTeam("example-user",teamManager.teams.get("another-team"));
+
+        Iterator<String> it  = teamManager.teams.get("another-team").getUsers().iterator();
+
+        while(it.hasNext()&&!isUserExist)
+        {
+            if(it.next().equals("another-team"))
+                isUserExist=true;
+        }
 
         //Makes sure that the hashMap stays the same.
-        Assert.assertEquals(teamManager.teams, testTeam.teams);
+        Assert.assertFalse(isUserExist);
     }
 
     @Test
     public void testAddBlankUserToTeam()
     {
+
+        boolean isBlankAdded = false;
         teamManager.addTeam(teamNameExample);
         teamManager.addMemberToTeam("", teamManager.teams.get(teamNameExample));
 
-        Assert.assertFalse(teamManager.isTeamExist(""));
+        Iterator<String> it = teamManager.teams.get(teamNameExample).getUsers().iterator();
+        while(it.hasNext()&&!isBlankAdded)
+        {
+            if(it.next().equals(""))
+                isBlankAdded=true;
+        }
+        Assert.assertFalse(isBlankAdded);
     }
 
     //### File handling ###
@@ -191,9 +207,6 @@ public class TeamManagerTest {
     }
 
 
-
-
-
     //### Hash Handling ###
     //Update hash from a file.
     @Test
@@ -206,8 +219,11 @@ public class TeamManagerTest {
 
         teamManager.addTeam("example-team");
         teamManager.updateTeamsFile();
+        teamManager.teams.clear();
 
+        teamManager.loadTeamsFileToHashMap();
         Assert.assertTrue(teamManager.isTeamExist("example-team"));
+
 
 
     }
@@ -227,8 +243,7 @@ public class TeamManagerTest {
     @Test
     public void testSearchNonExistTeam()
     {
-        Team tmp = teamManager.getTeam("example");
-        Assert.assertNull(tmp);
+            Assert.assertNull(teamManager.getTeam("example"));
     }
 
 
@@ -242,18 +257,18 @@ public class TeamManagerTest {
     {
         teamManager.addTeam(teamNameExample);
         teamManager.addMemberToTeam("nonAdmin",teamManager.teams.get(teamNameExample));
-        userManager.addUser("nonAdmin","123", User.PermissionLevel.member,teamNameExample);
-        userManager.login("nonAdmin","123");//
+        userManager.addUser("nonAdmin", "123",User.PermissionLevel.member,teamNameExample);
 
-    }
+        userManager.login("nonAdmin","123");
 
 
-    @AfterClass
-    public static void deleteTestFile() {
-        String testPath = "src/com/data/teamsFileTest.ser";
-        File testFile = new File(testPath);
-        if (testFile.exists())
-            testFile.delete();
+        teamManager.addTeam("example-team");
+        Assert.assertFalse(teamManager.isTeamExist("example-team"));
+        userManager.removeUser("nonAdmin");
+
+
+
+
     }
 
 

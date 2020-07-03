@@ -14,7 +14,6 @@ public class TeamManager {
     private static TeamManager TeamManagerInstance; //Singleton instance
 
     private static String fileAddress = "src/com/data/teamsFile.ser";
-    public static String currentPermission;
     // public File teamsFile;
     public HashMap<String, Team> teams;//
 
@@ -40,7 +39,9 @@ public class TeamManager {
      */
 
     public void addTeam(String teamName) {
-        if (!isTeamExist(teamName)&isAdmin())
+        if ((teamName.equals("default")||teamName.equals("Algo")||teamName.equals("SW"))||(!isTeamExist(teamName)&&isAdmin()))
+
+
             teams.put(teamName, new Team(teamName));
 
     }
@@ -53,7 +54,7 @@ public class TeamManager {
 
     public Team getTeam(String teamName) {
 
-        if(isTeamExist(teamName))
+        if (isTeamExist(teamName))
             return this.teams.get(teamName);
         else
             return null;
@@ -61,7 +62,7 @@ public class TeamManager {
 
     public void addMemberToTeam(String username, Team team) {
 
-        if (!username.isEmpty()&&isAdmin())
+        if (!username.isEmpty())
             team.addUser(username);
     }
 
@@ -108,23 +109,27 @@ public class TeamManager {
     public void updateTeamsName(String oldName, String newName) {
         Team team = teams.get(oldName);
         team.setTeamsName(newName);
-        teams.remove(oldName);
-        teams.put(newName, team);
 
-        // Change team name for all users belongs to that team
-        for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
-            String username = stringUserEntry.getKey();
-            String userTeam = stringUserEntry.getValue().getTeamName();
-            if (userTeam.equals(oldName))
-                LoginView.userManager.updateUserTeam(username, newName);
-        }
 
-        //Change team name for all work items associated with that team
-        for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
-            Integer id = workItemEntry.getKey();
-            String teamName = workItemEntry.getValue().getTeam();
-            if (teamName != null && teamName.equals(oldName))
-                workItemEntry.getValue().setTeam(newName);
+        if (!isTeamExist(newName)&&isAdmin()) {
+            teams.remove(oldName);
+            teams.put(newName, team);
+            // Change team name for all users belongs to that team
+            for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
+                String username = stringUserEntry.getKey();
+                String userTeam = stringUserEntry.getValue().getTeamName();
+                if (userTeam.equals(oldName))
+                    LoginView.userManager.updateUserTeam(username, newName);
+            }
+
+            //Change team name for all work items associated with that team
+            for (Map.Entry<Integer, WorkItem> workItemEntry : WorkItemManager.getInstance().workItems.entrySet()) {
+                Integer id = workItemEntry.getKey();
+                String teamName = workItemEntry.getValue().getTeam();
+                if (teamName != null && teamName.equals(oldName))
+                    workItemEntry.getValue().setTeam(newName);
+            }
+
         }
 
     }
@@ -155,26 +160,18 @@ public class TeamManager {
             }
         }
 
-        if (teams.size()<=1)//Default team
+        if (teams.size() <= 1)//Default team
         {
-            String prevPermission = currentPermission;
-            currentPermission = "admin";//Temporary permission - in case of initial operation that is not of the admin..
-               if(!isTeamExist("default"))
-                 addTeam("default");
+
+            if (!isTeamExist("default"))
+                addTeam("default");
             addTeam("Algo");
             addTeam("SW");
-            currentPermission = prevPermission;
         }
         //teams.put("default", new Team("default"));
     }
 
-
-    public void loginTeam(String permissionLevel) {
-        currentPermission = permissionLevel;
-    }
-
-    public boolean isAdmin()
-    {
-        return currentPermission== User.PermissionLevel.admin.name();
+    public  boolean isAdmin() {
+        return UserManager.getInstance().loggedInUser.getPermissionLevel() == User.PermissionLevel.admin;
     }
 }

@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 
 public class LoginView extends JPanel{
 
-    public static TeamManager teamManager = TeamManager.getInstance();
     public static UserManager userManager = UserManager.getInstance();
+    public static TeamManager teamManager = TeamManager.getInstance();
 
     public static JFrame loginScreenFrame;
     public static JTextField userNameTextField= new JTextField();
@@ -94,7 +94,7 @@ public class LoginView extends JPanel{
                             if (userManager.login(userName, password) == 2) {
                                 JOptionPane.showMessageDialog(loginScreenFrame, "Invalid password");
                             } else if (userManager.login(userName, password) == 1) {
-                                teamManager.loginTeam(userManager.loggedInUser.getPermissionLevel().name());
+
                                 JComponent comp = (JComponent) actionEvent.getSource();
                                 Window win = SwingUtilities.getWindowAncestor(comp);
                                 win.dispose();
