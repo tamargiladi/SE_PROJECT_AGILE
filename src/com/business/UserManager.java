@@ -1,10 +1,11 @@
 package com.business;
 
-import com.persistent.*;
-import com.presentation.MainUserInterface;
+import com.persistent.User;
+import com.persistent.WorkItem;
 
 import java.io.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /***
  Singleton class:
@@ -36,6 +37,7 @@ public class UserManager {
             if(!(isUserExist("admin"))){
                 /*for adding a user must be a team,
                   create default team */
+                TeamManager.getInstance().loginTeam(User.PermissionLevel.admin.name());
                 TeamManager.getInstance().addTeam("default");
                 addUser("admin","admin", User.PermissionLevel.admin,"default");
             }

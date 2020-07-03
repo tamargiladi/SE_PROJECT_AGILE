@@ -9,7 +9,6 @@ import com.persistent.User;
 import com.persistent.WorkItem;
 
 import javax.swing.*;
-import java.awt.Color;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
@@ -190,7 +189,6 @@ public class MainUserInterface extends JPanel {
             menuTeam.setEnabled(false);
             menuTeam.setToolTipText("You have no permissions to this area");
         } else {
-
             ActionListener actionListener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {

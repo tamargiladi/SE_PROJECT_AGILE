@@ -1,21 +1,15 @@
 import com.business.TeamManager;
-import com.business.WorkItemManager;
+import com.business.UserManager;
 import com.persistent.Team;
-
-
-import com.persistent.WorkItem;
-import com.presentation.LoginView;
+import com.persistent.User;
 import org.junit.*;
 
-import java.io.*;
-import java.lang.*;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Random;
 
 public class TeamManagerTest {
     TeamManager teamManager ;
+    UserManager userManager;
     final String teamNameExample = "TestTeam";
     final String[] usernameExample = new String[]{"testUser1", "testUser2", "testUser3"};
 
@@ -24,7 +18,11 @@ public class TeamManagerTest {
     @Before
     public void setUpMethod() {
         System.out.println("Set Up Method");
+        userManager= UserManager.getInstance();
+        userManager.login("admin","admin");
         teamManager = TeamManager.getInstance();
+        teamManager.loginTeam(User.PermissionLevel.admin.name());
+
     }
 
     @After
@@ -208,10 +206,13 @@ public class TeamManagerTest {
 
     }
 
-    //Searching a team that doesn't exist in the hashMap //But I do this 😅
+    //Searching a team that doesn't exist in the hashMap
     @Test
     public void testSearchNonExistTeam()
-    {}
+    {
+        Team tmp = teamManager.getTeam("example");
+        Assert.assertNull(tmp);
+    }
 
 
     /*
@@ -222,13 +223,11 @@ public class TeamManagerTest {
      */
     @Test public void testPermissionTeamModification()
     {
+        teamManager.addTeam(teamNameExample);
+        teamManager.addMemberToTeam("nonAdmin",teamManager.teams.get(teamNameExample));
+        userManager.addUser("nonAdmin","123", User.PermissionLevel.member,teamNameExample);
+        userManager.login("nonAdmin","123");
 
-        //TODO: [Q] -> should I use the UI in order to check permissions?
-
-     /*   teamManager.addTeam(teamNameExample);
-
-        Assert.assertTrue(LoginView.userManager.loggedInUser.getPermissionLevel().equals("admin") && teamManager.teams.size()==1||
-                teamManager.teams.size()==0);*/
     }
 
 

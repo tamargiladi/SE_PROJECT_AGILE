@@ -2,25 +2,17 @@ package com.presentation;
 
 import com.business.TeamManager;
 import com.business.UserManager;
-import com.business.WorkItemManager;
 import com.persistent.Team;
 import com.persistent.User;
-import com.persistent.WorkItem;
-import com.persistent.WorkItemBuilder;
-import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 
 import javax.swing.*;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import java.util.List;
-
-import static javax.swing.JOptionPane.showMessageDialog;
+import java.util.*;
 
 
 public class TeamManagementView extends JFrame {
