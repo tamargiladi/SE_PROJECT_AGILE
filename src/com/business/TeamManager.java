@@ -16,7 +16,7 @@ public class TeamManager {
     private static String fileAddress = "src/com/data/teamsFile.ser";
     public static String currentPermission;
     // public File teamsFile;
-    public HashMap<String, Team> teams;
+    public HashMap<String, Team> teams;//
 
 
     public static TeamManager getInstance() {
