@@ -244,7 +244,6 @@ public class UserManager {
     }
 
     public void loadUsersFileToHashMap() {
-        String line;
         User u=null;
         File usersFile = new File(userFileAddress);
         //if the file not empty,need to load users file to HashMap
@@ -258,15 +257,10 @@ public class UserManager {
                     users.put(u.getUserName(), u);
                     u = (User) userObjectInputStream.readObject();
                 }
-                /*while ((u = (User) userObjectInputStream.readObject())!=null) {
-                    users.put(u.getUserName(), u);
-                    //u = (User) userObjectInputStream.readObject();
-                }*/
                 userObjectInputStream.close();
                 userFileInputStream.close();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                //System.out.println("failed to load users file to HashMap\n");
+                return;
             }
         }
     }
