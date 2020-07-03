@@ -34,10 +34,10 @@ public class UserManagerTest {
     @After
     public void tearDownMethod() {
         System.out.println("Tear Down Method");
-        userManager = null;
-        /*File*/testFile = new File(userTestPath);
+        ///*File*/testFile = new File(userTestPath);
         if (testFile.exists())
             testFile.delete();
+        userManager = null;
     }
 
     // --- CHECK admin user is created in  user manager constructor---
@@ -140,7 +140,6 @@ public class UserManagerTest {
 
         userManager.login("demo-user", "test");
         userManager.addUser("demo-user2","test",null,"default");
-
         Assert.assertFalse(UserManager.getInstance().isUserExist("demo-user2"));
     }
     @Test

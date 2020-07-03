@@ -44,6 +44,7 @@ public class EpicView extends JFrame {
         setSize(1000,600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setVisible(true);
+        setResizable(false);
 
         this.setContentPane(this.jPanel);
         this.jPanel.setLayout(null);
