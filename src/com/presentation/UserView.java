@@ -21,15 +21,6 @@ public class UserView extends JPanel {
     ImageIcon backIcon = new ImageIcon("src/com/presentation/images/background.png");
     JLabel background = new JLabel("", backIcon, JLabel.RIGHT);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                UserView frame = new UserView("Add New User");
-            }
-        });
-    }
-
     public UserView(String title) throws HeadlessException {
         action = title;
         userViewFrame = new JFrame(action);
