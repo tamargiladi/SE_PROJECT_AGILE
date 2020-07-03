@@ -19,7 +19,6 @@ public class UserManagerTest {
         testFile = new File(userTestPath);
         UserManager.setUserFileAddress(userTestPath);
         userManager = UserManager.getInstance();
-
         userManager.login("admin", "admin");
         userManager.addUser("demo-user","test", User.PermissionLevel.admin,"default");
     }
@@ -27,8 +26,11 @@ public class UserManagerTest {
     @After
     public void tearDownMethod() {
         System.out.println("Tear Down Method");
-
-        userManager.users.clear();
+        userManager.login("admin","admin");
+        while (userManager.users.containsKey("demo-user"))
+            userManager.removeUser("demo-user");
+        while (userManager.users.containsKey("demo-user2"))
+            userManager.removeUser("demo-user2");
         userManager.updateUsersFile();
 
         if (testFile.exists())
@@ -247,10 +249,9 @@ public class UserManagerTest {
     @Test
     public void testRemoveMemberFromTeam() {
         System.out.println("User Manager:: remove user from team list [ expected result: success ]");
-
-        userManager.removeUser("demo-user");
-
-        Assert.assertFalse(TeamManager.getInstance().isUserBelongToTeam("default","demo-user"));
+        userManager.addUser("remove-test","123", User.PermissionLevel.member,"default");
+        userManager.removeUser("remove-test");
+        Assert.assertFalse(TeamManager.getInstance().isUserBelongToTeam("default","remove-test"));
     }
     @Test
     public void testChangeOwnerFromAllWI() {
@@ -413,7 +414,6 @@ public class UserManagerTest {
         System.out.println("User Manager:: remove user from previous team [ expected result: success ]");
 
         userManager.updateUserTeam("demo-user","SW");
-
         Assert.assertFalse(TeamManager.getInstance().isUserBelongToTeam("default","demo-user"));
     }
     @Test
@@ -471,13 +471,4 @@ public class UserManagerTest {
     //                                  END Login Testing
     //==========================================================================================
 
-
-
-   /* @AfterClass
-    public static void deleteTestFile() {
-        //String testPath = "src/com/data/teamsFileTest.ser";
-        //File testFile = new File(userTestPath);
-        if (testFile.exists())
-            testFile.delete();
-    }*/
 }
