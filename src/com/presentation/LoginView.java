@@ -94,6 +94,7 @@ public class LoginView extends JPanel{
                             if (userManager.login(userName, password) == 2) {
                                 JOptionPane.showMessageDialog(loginScreenFrame, "Invalid password");
                             } else if (userManager.login(userName, password) == 1) {
+                                teamManager.loginTeam(userManager.loggedInUser.getPermissionLevel().name());
                                 JComponent comp = (JComponent) actionEvent.getSource();
                                 Window win = SwingUtilities.getWindowAncestor(comp);
                                 win.dispose();

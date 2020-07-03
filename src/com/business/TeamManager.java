@@ -14,8 +14,9 @@ public class TeamManager {
     private static TeamManager TeamManagerInstance; //Singleton instance
 
     private static String fileAddress = "src/com/data/teamsFile.ser";
+    public static String currentPermission;
     // public File teamsFile;
-    public HashMap<String, Team> teams;
+    public HashMap<String, Team> teams;//
 
 
     public static TeamManager getInstance() {
@@ -28,37 +29,9 @@ public class TeamManager {
     private TeamManager() {
 
         this.teams = new HashMap<String, Team>();
-       /* HashMap<String, Team> map = new HashMap<>();
-        //teamsFile = new File(fileAddress);
-
-        File teamsFile = new File(fileAddress);
-        if (teamsFile.length() != 0) {
-            // load users file to HashMap
-            try {
-                FileInputStream teamFileInputStream = new FileInputStream(fileAddress);
-                ObjectInputStream teamObjectInputStream = new ObjectInputStream(teamFileInputStream);
-                map = (HashMap) teamObjectInputStream.readObject();
-                teams.putAll(map);
-                teamObjectInputStream.close();
-                teamFileInputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                //System.out.println("failed to load users file to HashMap\n");
-            } catch (ClassNotFoundException c) {
-                c.printStackTrace();
-                System.out.println("Class not found");
-            }
-        }*/
-
 
         loadTeamsFileToHashMap();
 
-        if (isTeamExist("default"))//Default team doesn't exist - no other team is exist! Need to add also Algo&SW
-        {
-            addTeam("default");
-            addTeam("Algo");
-            addTeam("SW");
-        }
     }
 
 
@@ -67,29 +40,33 @@ public class TeamManager {
      */
 
     public void addTeam(String teamName) {
-        if (!isTeamExist(teamName))
+        if (!isTeamExist(teamName)&isAdmin())
             teams.put(teamName, new Team(teamName));
 
     }
 
     public void removeTeam(String teamsName) {
 
-        if (isTeamExist(teamsName)&& teams.get(teamsName).getUsers().size()==0 &&!teamsName.equals("default"))
+        if (isTeamExist(teamsName) && teams.get(teamsName).getUsers().size() == 0 && !teamsName.equals("default")&&isAdmin())
             this.teams.remove(teamsName);
     }
 
     public Team getTeam(String teamName) {
-        return this.teams.get(teamName);
+
+        if(isTeamExist(teamName))
+            return this.teams.get(teamName);
+        else
+            return null;
     }
 
     public void addMemberToTeam(String username, Team team) {
 
-        if(!username.isEmpty())
+        if (!username.isEmpty()&&isAdmin())
             team.addUser(username);
     }
 
     public void removeMemberFromTeam(String username, Team team) {
-        if (isUserBelongToTeam(team.getTeamsName(), username))
+        if (isUserBelongToTeam(team.getTeamsName(), username)&&isAdmin())
             team.removeUser(username);
     }
 
@@ -112,7 +89,7 @@ public class TeamManager {
     }
 
     public Boolean updateTeamsFile() {
-        FileOutputStream fos =null;
+        FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(fileAddress);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -124,7 +101,7 @@ public class TeamManager {
             ioe.printStackTrace();
         }
 
-        return(fos!=null);
+        return (fos != null);
     }
 
 
@@ -152,13 +129,11 @@ public class TeamManager {
 
     }
 
-    public void setFileAddress(String newAddress)
-    {
+    public void setFileAddress(String newAddress) {
         fileAddress = newAddress;
     }
 
-    public void loadTeamsFileToHashMap()
-    {
+    public void loadTeamsFileToHashMap() {
         HashMap<String, Team> map = new HashMap<>();
 
         File teamsFile = new File(fileAddress);
@@ -180,47 +155,26 @@ public class TeamManager {
             }
         }
 
-        if (teams.get("default") == null)//Default team
-            addTeam("default");
-        addTeam("Algo");
-        addTeam("SW");
+        if (teams.size()<=1)//Default team
+        {
+            String prevPermission = currentPermission;
+            currentPermission = "admin";//Temporary permission - in case of initial operation that is not of the admin..
+               if(!isTeamExist("default"))
+                 addTeam("default");
+            addTeam("Algo");
+            addTeam("SW");
+            currentPermission = prevPermission;
+        }
         //teams.put("default", new Team("default"));
     }
+
+
+    public void loginTeam(String permissionLevel) {
+        currentPermission = permissionLevel;
+    }
+
+    public boolean isAdmin()
+    {
+        return currentPermission== User.PermissionLevel.admin.name();
+    }
 }
-
-
- /*try
-            {
-
-                FileInputStream fis = new FileInputStream(fileAddress);
-                ObjectInputStream ois = new ObjectInputStream(fis);
-                map = (HashMap) ois.readObject();
-                teams.putAll(map);
-                ois.close();
-                fis.close();
-            }catch(IOException ioe)
-            {
-                ioe.printStackTrace();
-                return;
-            }catch(ClassNotFoundException c)
-            {
-                System.out.println("Class not found");
-                c.printStackTrace();
-                return;
-            }
-            System.out.println("Deserialized HashMap..");
-            // Display content using Iterator
-            Set set = map.entrySet();
-            Iterator iterator = set.iterator();
-            while(iterator.hasNext()) {
-                Map.Entry mentry = (Map.Entry)iterator.next();
-                System.out.print("key: "+ mentry.getKey() + " & Value: ");
-                System.out.println(mentry.getValue());
-            }
-
-
-            if(teams.get("default")==null)//Default team
-                teams.put("default", new Team("default"));
-
-
-        }*/
