@@ -27,7 +27,6 @@ public class TeamManagerTest {
         teamManager = TeamManager.getInstance();
         teamManager.setFileAddress("src/com/data/teamsFileTest.ser");
 
-
     }
 
     @After
@@ -258,10 +257,20 @@ public class TeamManagerTest {
     {
         teamManager.addTeam(teamNameExample);
         teamManager.addMemberToTeam("nonAdmin",teamManager.teams.get(teamNameExample));
-        userManager.addUser("nonAdmin","123", User.PermissionLevel.member,teamNameExample);
-        userManager.login("nonAdmin","123");//
+        userManager.addUser("nonAdmin", "123",User.PermissionLevel.member,teamNameExample);
+
+        userManager.login("nonAdmin","123");
+
+
+        teamManager.addTeam("example-team");
+        Assert.assertFalse(teamManager.isTeamExist("example-team"));
+        userManager.removeUser("nonAdmin");
+
+
+
 
     }
+
 
 
 

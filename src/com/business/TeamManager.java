@@ -39,7 +39,9 @@ public class TeamManager {
      */
 
     public void addTeam(String teamName) {
-        if (!isTeamExist(teamName)&&(teamName.equals("default")||isAdmin()))
+        if ((teamName.equals("default")||teamName.equals("Algo")||teamName.equals("SW"))||(!isTeamExist(teamName)&&isAdmin()))
+
+
             teams.put(teamName, new Team(teamName));
 
     }
