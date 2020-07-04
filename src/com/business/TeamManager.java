@@ -3,7 +3,6 @@ package com.business;
 import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
-import com.presentation.LoginView;
 
 import java.io.*;
 import java.util.HashMap;
@@ -110,11 +109,11 @@ public class TeamManager {
             teams.remove(oldName);
             teams.put(newName, team);
             // Change team name for all users belongs to that team
-            for (Map.Entry<String, User> stringUserEntry : LoginView.userManager.users.entrySet()) {
+            for (Map.Entry<String, User> stringUserEntry : UserManager.getInstance().users.entrySet()) {
                 String username = stringUserEntry.getKey();
                 String userTeam = stringUserEntry.getValue().getTeamName();
                 if (userTeam.equals(oldName))
-                    LoginView.userManager.updateUserTeam(username, newName);
+                    UserManager.getInstance().updateUserTeam(username, newName);
             }
 
             //Change team name for all work items associated with that team
