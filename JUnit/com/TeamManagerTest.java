@@ -41,9 +41,6 @@ public class TeamManagerTest {
         teamManager.teams.clear();
         teamManager = null;
 
-        userManager.removeUser("nonAdmin");
-        userManager.removeUser(usernameExample);
-
     }
 
     //Editing a team's name to one that already exists.
@@ -142,6 +139,7 @@ public class TeamManagerTest {
 
         //Makes sure that the hashMap stays the same.
         Assert.assertFalse(isUserExist);
+        userManager.removeUser(usernameExample);
     }
 
     @Test
@@ -209,6 +207,8 @@ public class TeamManagerTest {
         teamManager.loadTeamsFileToHashMap();
 
         Assert.assertTrue(teamManager.isUserBelongToTeam(teamNameExample,usernameExample));
+        userManager.removeUser(usernameExample);
+
     }
 
 
@@ -271,8 +271,6 @@ public class TeamManagerTest {
 
         Assert.assertFalse(teamManager.isTeamExist("example-team"));
         userManager.removeUser("nonAdmin");
-
-
 
 
     }
