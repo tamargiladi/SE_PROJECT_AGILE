@@ -1,5 +1,6 @@
 package com.business;
 
+import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
 
@@ -31,16 +32,13 @@ public class UserManager {
             users = new HashMap<>();
             loadUsersFileToHashMap();
 
-            //check if  admin user exist, if not crete this user
-            /*An admin user must exist in the system to ensure
-              that there is at least one user with all permissions */
-            if(!(isUserExist("admin"))){
-                /*for adding a user must be a team,
-                  create default team */
-                TeamManager.getInstance().addTeam("default");
-                addUser("admin","admin", User.PermissionLevel.admin,"default");
-                //addNewUser("admin","admin", User.PermissionLevel.admin,"default");
-            }
+            /* - Create admin user
+               - An admin user must exist in the system to ensure
+                 that there is at least one user with all permissions
+               - For adding a user must be a team,
+               - create default team*/
+            TeamManager.getInstance().addTeam("default");
+            addUser("admin","admin", User.PermissionLevel.admin,"default");
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -51,11 +49,13 @@ public class UserManager {
     public boolean addUser(String username, String password, User.PermissionLevel permission, String teamName)
         //function for add user if the user not exist in system
     {
-        //check if user not exist in system
+        //validation the username && create admin user or other user
         if (username != null && (username.equals("admin") || isActionPermitted())) {
+            //check if user not exist in system
             if (!(isUserExist(username))) {
                 //check if all inputs are valid
                 if ((password == null) || !(TeamManager.getInstance().isTeamExist(teamName))) {
+                    System.out.println(username+" user not created\n");
                     return false;
                 }
                 //create user object
@@ -66,9 +66,11 @@ public class UserManager {
                 users.put(username, newUser);
                 //update the user file with new user
                 updateUsersFile();
+                System.out.println(username+" user created\n");
                 return true;
             }
         }
+        System.out.println(username+" user not created\n");
         return false;
     }
 
@@ -202,7 +204,6 @@ public class UserManager {
                   System.out.println("invalid password\n");
                   return 2;
                 }
-
          System.out.println("User not exist\n");
          return 0;
     }
@@ -212,19 +213,21 @@ public class UserManager {
     }
 
     public void loadUsersFileToHashMap() {
-        User u=null;
+        HashMap<String, User> map = new HashMap<>();
         File usersFile = new File(userFileAddress);
+
         //if the file not empty,need to load users file to HashMap
         if (usersFile.length() != 0) {
             // load users file to HashMap
             try {
                 FileInputStream userFileInputStream = new FileInputStream(userFileAddress);
                 ObjectInputStream userObjectInputStream = new ObjectInputStream(userFileInputStream);
-                u = (User) userObjectInputStream.readObject();
-                while (u!=null){
+                map = (HashMap) userObjectInputStream.readObject();
+                users.putAll(map);
+                /*while (u!=null){
                     users.put(u.getUserName(), u);
                     u = (User) userObjectInputStream.readObject();
-                }
+                }*/
                 userObjectInputStream.close();
                 userFileInputStream.close();
             } catch (IOException | ClassNotFoundException e) {
@@ -237,8 +240,9 @@ public class UserManager {
         try {
             FileOutputStream userFileOutputStream = new FileOutputStream(userFileAddress);
             ObjectOutputStream userObjectOutputStream = new ObjectOutputStream(userFileOutputStream);
-            for (Map.Entry<String, User> entry : users.entrySet())
-                userObjectOutputStream.writeObject(entry.getValue());
+            /*for (Map.Entry<String, User> entry : users.entrySet())
+                userObjectOutputStream.writeObject(entry.getValue());*/
+            userObjectOutputStream.writeObject(users);
             userObjectOutputStream.close();
             userFileOutputStream.close();
         } catch (IOException e) {

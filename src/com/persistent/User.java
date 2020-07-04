@@ -22,8 +22,7 @@ public class User implements Serializable {
         this.teamName = teamName;
     }
 
-    public User(String userName)
-    {
+    public User(String userName) {
         this.userName=userName;
     }
 
