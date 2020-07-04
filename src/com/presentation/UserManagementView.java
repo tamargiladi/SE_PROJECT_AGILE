@@ -1,9 +1,6 @@
 package com.presentation;
 
-import com.business.WorkItemManager;
 import com.persistent.User;
-import com.persistent.WorkItem;
-import com.persistent.WorkItemBuilder;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -109,7 +106,6 @@ public class UserManagementView extends JFrame{
                                         Window win = SwingUtilities.getWindowAncestor(comp);
                                         win.dispose();
                                         UserManagementView uv=new UserManagementView(command);
-                                        //UserManagementView.usersScreenViewPanel.setVisible(true);
                                         break;
                                     case 2:
                                         JOptionPane.showMessageDialog(usersScreenViewPanel, "Action no permitted");
