@@ -15,7 +15,7 @@ public class TeamManagerTest {
     TeamManager teamManager ;
     UserManager userManager;
     final String teamNameExample = "TestTeam";
-    final String[] usernameExample = new String[]{"testUser1", "testUser2", "testUser3"};
+    final String usernameExample = "testUser";
 
     //d: System.out.println("Team Manager::  An attempt to edit a name to an existed one   [expected result: fail ]");
 
@@ -40,6 +40,10 @@ public class TeamManagerTest {
 
         teamManager.teams.clear();
         teamManager = null;
+
+        userManager.removeUser("nonAdmin");
+        userManager.removeUser(usernameExample);
+
     }
 
     //Editing a team's name to one that already exists.
@@ -78,7 +82,7 @@ public class TeamManagerTest {
         System.out.println("Team Manager::  An attempt to remove a team that has users within it.  [ expected result: fail ]");
 
         teamManager.addTeam(teamNameExample);
-        teamManager.addMemberToTeam(usernameExample[0], teamManager.teams.get(teamNameExample));
+        teamManager.addMemberToTeam(usernameExample, teamManager.teams.get(teamNameExample));
         teamManager.removeTeam(teamNameExample);
 
         Assert.assertTrue(teamManager.isTeamExist(teamNameExample));
@@ -120,13 +124,13 @@ public class TeamManagerTest {
     {
         boolean isUserExist=false;
         teamManager.addTeam(teamNameExample);
-        UserManager.getInstance().addUser("example-user","123",
+        UserManager.getInstance().addUser(usernameExample,"123",
                 User.PermissionLevel.member,teamNameExample);
 
-        teamManager.addMemberToTeam("example-user",teamManager.teams.get(teamNameExample));
+        teamManager.addMemberToTeam(usernameExample,teamManager.teams.get(teamNameExample));
         teamManager.addTeam("another-team");
 
-        teamManager.addMemberToTeam("example-user",teamManager.teams.get("another-team"));
+        teamManager.addMemberToTeam(usernameExample,teamManager.teams.get("another-team"));
 
         Iterator<String> it  = teamManager.teams.get("another-team").getUsers().iterator();
 
@@ -199,12 +203,12 @@ public class TeamManagerTest {
         String testPath = "src/com/data/teamsFileTest.ser";
         teamManager.setFileAddress(testPath);
         teamManager.addTeam(teamNameExample);
-        teamManager.addMemberToTeam(usernameExample[0],teamManager.teams.get(teamNameExample));
+        teamManager.addMemberToTeam(usernameExample,teamManager.teams.get(teamNameExample));
         teamManager.updateTeamsFile();
         teamManager.teams.clear();
         teamManager.loadTeamsFileToHashMap();
 
-        Assert.assertTrue(teamManager.isUserBelongToTeam(teamNameExample,usernameExample[0]));
+        Assert.assertTrue(teamManager.isUserBelongToTeam(teamNameExample,usernameExample));
     }
 
 
