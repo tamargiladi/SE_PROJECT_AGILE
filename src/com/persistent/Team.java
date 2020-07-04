@@ -15,7 +15,7 @@ public class Team implements Serializable {
      * The constructor of the class
      *
      * @param teamsName the new team's name.
-     */
+     *///
     public Team(String teamsName) {
         this.teamsName = teamsName;
         this.users = new LinkedList<>();//Explicit type argument

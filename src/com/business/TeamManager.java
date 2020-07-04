@@ -14,7 +14,6 @@ public class TeamManager {
     private static TeamManager TeamManagerInstance; //Singleton instance
 
     private static String fileAddress = "src/com/data/teamsFile.ser";
-    // public File teamsFile;
     public HashMap<String, Team> teams;//
 
 
@@ -33,10 +32,6 @@ public class TeamManager {
 
     }
 
-
-    /**
-     * The method read teamFile file.
-     */
 
     public void addTeam(String teamName) {
         if ((teamName.equals("default")||teamName.equals("Algo")||teamName.equals("SW"))||(!isTeamExist(teamName)&&isAdmin()))
@@ -153,7 +148,6 @@ public class TeamManager {
                 teamFileInputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
-                //System.out.println("failed to load users file to HashMap\n");
             } catch (ClassNotFoundException c) {
                 c.printStackTrace();
                 System.out.println("Class not found");
@@ -168,7 +162,6 @@ public class TeamManager {
             addTeam("Algo");
             addTeam("SW");
         }
-        //teams.put("default", new Team("default"));
     }
 
     public  boolean isAdmin() {
