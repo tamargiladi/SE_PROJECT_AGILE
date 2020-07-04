@@ -1,6 +1,5 @@
 package com.business;
 
-import com.persistent.Team;
 import com.persistent.User;
 import com.persistent.WorkItem;
 
@@ -81,9 +80,9 @@ public class UserManager {
     public int removeUser(String username)
         /*removeUser
           return: 1- user removed
-                 2- Action no permitted
-                3- Invalid to edit admin user
-                4- user can't remove himself
+                  2- Action no permitted
+                  3- Invalid to edit admin user
+                  4- user can't remove himself
          */
     {
         //check permission
@@ -224,10 +223,6 @@ public class UserManager {
                 ObjectInputStream userObjectInputStream = new ObjectInputStream(userFileInputStream);
                 map = (HashMap) userObjectInputStream.readObject();
                 users.putAll(map);
-                /*while (u!=null){
-                    users.put(u.getUserName(), u);
-                    u = (User) userObjectInputStream.readObject();
-                }*/
                 userObjectInputStream.close();
                 userFileInputStream.close();
             } catch (IOException | ClassNotFoundException e) {
@@ -240,8 +235,6 @@ public class UserManager {
         try {
             FileOutputStream userFileOutputStream = new FileOutputStream(userFileAddress);
             ObjectOutputStream userObjectOutputStream = new ObjectOutputStream(userFileOutputStream);
-            /*for (Map.Entry<String, User> entry : users.entrySet())
-                userObjectOutputStream.writeObject(entry.getValue());*/
             userObjectOutputStream.writeObject(users);
             userObjectOutputStream.close();
             userFileOutputStream.close();
