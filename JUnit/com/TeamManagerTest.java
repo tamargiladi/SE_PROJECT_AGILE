@@ -2,10 +2,7 @@ import com.business.TeamManager;
 import com.business.UserManager;
 import com.persistent.Team;
 import com.persistent.User;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +29,12 @@ public class TeamManagerTest {
     @After
     public void tearDownMethod() {
         System.out.println("Tear Down Method");
+
+        while (userManager.users.containsKey("example-user"))
+            userManager.users.remove("example-user");
+        while (userManager.users.containsKey("nonAdmin"))
+            userManager.users.remove("nonAdmin");
+        userManager.updateUsersFile();
 
         String testPath = "src/com/data/teamsFileTest.ser";
         File testFile = new File(testPath);
@@ -275,7 +278,6 @@ public class TeamManagerTest {
 
 
     }
-
 
 
 
