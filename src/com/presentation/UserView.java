@@ -35,12 +35,9 @@ public class UserView extends JPanel {
 
     public void setLayout() {
         Insets insets = userViewFrame.getInsets();
-        //Dimension size;
 
         //user name Label
         userNameLabel = new JLabel("<html><span style='font-size:12px'>" + "User Name:" + "</span></html>");
-        //size = userNameLabel.getPreferredSize();
-        //userNameLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
         userNameLabel.setBounds(30, 50, 180, 40);
         userViewFrame.add(userNameLabel);
 
@@ -52,8 +49,6 @@ public class UserView extends JPanel {
 
         //password Label
         passwordLabel = new JLabel("<html><span style='font-size:12px'>" + "Password:" + "</span></html>");
-        //size = passwordLabel.getPreferredSize();
-        //passwordLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
         passwordLabel.setBounds(30, 100, 180, 40);
         userViewFrame.add(passwordLabel);
 
@@ -65,8 +60,6 @@ public class UserView extends JPanel {
 
         //permission level Label
         permissionLevelLabel = new JLabel("<html><span style='font-size:12px'>" + "Permission Level:" + "</span></html>");
-        //size = permissionLevelLabel.getPreferredSize();
-        //permissionLevelLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
         permissionLevelLabel.setBounds(30, 157, 180, 40);
         userViewFrame.add(permissionLevelLabel);
 
@@ -77,8 +70,6 @@ public class UserView extends JPanel {
 
         //team Label
         teamLabel = new JLabel("<html><span style='font-size:12px'>" + "Team:" + "</span></html>");
-        //size = teamLabel.getPreferredSize();
-        //teamLabel.setBounds(insets.left + 20 , insets.top + 20, size.width + 5, size.height);
         teamLabel.setBounds(30, 208, 180, 40);
         userViewFrame.add(teamLabel);
 
