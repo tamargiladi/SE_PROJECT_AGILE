@@ -207,7 +207,8 @@ public class TeamManagerTest {
         teamManager.loadTeamsFileToHashMap();
 
         Assert.assertTrue(teamManager.isUserBelongToTeam(teamNameExample,usernameExample));
-        userManager.removeUser(usernameExample);
+        if (userManager.users.containsKey(usernameExample))
+            userManager.removeUser(usernameExample);
 
     }
 
