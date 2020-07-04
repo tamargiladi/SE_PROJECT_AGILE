@@ -243,7 +243,7 @@ public class TeamManagementView extends JFrame {
                     generateRemoveWindow();
                     closeTeamsScreenViewPanel(actionEvent);
                 } else
-                    JOptionPane.showMessageDialog(null, "The team must be empty in order to delete it.\nPlease assign new team to all team members.");
+                    JOptionPane.showMessageDialog(teamsScreenViewPanel, "The team must be empty in order to delete it.\nPlease assign new team to all team members.");
             }
 
         };
@@ -312,7 +312,7 @@ public class TeamManagementView extends JFrame {
 
         btnAddConfirm.addActionListener(actionListener);
         btnAddConfirm.setFont(new Font("Arial", Font.BOLD, 16));
-        btnAddConfirm.setBounds(fieldAdd.getX(), fieldAdd.getY() + 50, btnSize.width, btnHeight);
+        btnAddConfirm.setBounds(fieldAdd.getX(), fieldAdd.getY() + 50, btnSize.width*2, btnHeight);
     }
 
     public void generateFieldAdd() {

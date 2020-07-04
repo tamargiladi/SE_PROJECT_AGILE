@@ -1,0 +1,1615 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_251" class="java.beans.XMLDecoder">
+ <object class="java.util.HashMap">
+  <void method="put">
+   <int>128</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Once version is ready with all bug fixes</string>
+    </void>
+    <void property="estimate">
+     <int>24</int>
+    </void>
+    <void property="id">
+     <int>128</int>
+    </void>
+    <void property="owner">
+     <string>Katie Bell</string>
+    </void>
+    <void property="priority">
+     <object class="java.lang.Enum" id="WorkItem$priorityEnum0" method="valueOf">
+      <class>com.persistent.WorkItem$priorityEnum</class>
+      <string>High</string>
+     </object>
+    </void>
+    <void property="sprint">
+     <object class="java.lang.Enum" method="valueOf">
+      <class>com.persistent.WorkItem$sprintEnum</class>
+      <string>Sep20</string>
+     </object>
+    </void>
+    <void property="storyID">
+     <int>110</int>
+    </void>
+    <void property="summary">
+     <string>Verify all ABC bugs + detection sanity test on version</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>129</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Expervim deployments on site</string>
+    </void>
+    <void property="estimate">
+     <int>24</int>
+    </void>
+    <void property="id">
+     <int>129</int>
+    </void>
+    <void property="owner">
+     <string>Mafalda Hopkirk</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object class="java.lang.Enum" id="WorkItem$sprintEnum0" method="valueOf">
+      <class>com.persistent.WorkItem$sprintEnum</class>
+      <string>Apr20</string>
+     </object>
+    </void>
+    <void property="status">
+     <object class="java.lang.Enum" id="WorkItem$statusEnum0" method="valueOf">
+      <class>com.persistent.WorkItem$statusEnum</class>
+      <string>Done</string>
+     </object>
+    </void>
+    <void property="storyID">
+     <int>114</int>
+    </void>
+    <void property="summary">
+     <string>Expervim deployments on site</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+    <void property="timeSpent">
+     <int>24</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>130</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>replace on 2 lab systems: Lab1, Lab3</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>130</int>
+    </void>
+    <void property="owner">
+     <string>Stan Shunpike</string>
+    </void>
+    <void property="priority">
+     <object class="java.lang.Enum" id="WorkItem$priorityEnum1" method="valueOf">
+      <class>com.persistent.WorkItem$priorityEnum</class>
+      <string>Medium</string>
+     </object>
+    </void>
+    <void property="sprint">
+     <object class="java.lang.Enum" id="WorkItem$sprintEnum1" method="valueOf">
+      <class>com.persistent.WorkItem$sprintEnum</class>
+      <string>Jul20</string>
+     </object>
+    </void>
+    <void property="status">
+     <object class="java.lang.Enum" id="WorkItem$statusEnum1" method="valueOf">
+      <class>com.persistent.WorkItem$statusEnum</class>
+      <string>InProgress</string>
+     </object>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>New HD Camera - replace on 2 lab systems</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Hardware</string>
+    </void>
+    <void property="timeSpent">
+     <int>2</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>131</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string> IQF tests for new HDR camera</string>
+    </void>
+    <void property="estimate">
+     <int>12</int>
+    </void>
+    <void property="id">
+     <int>131</int>
+    </void>
+    <void property="owner">
+     <string>Ted Tonks</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>New HDC: IQF tests</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Hardware</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>132</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>benchmark p1 &amp; p2</string>
+    </void>
+    <void property="estimate">
+     <int>32</int>
+    </void>
+    <void property="id">
+     <int>132</int>
+    </void>
+    <void property="owner">
+     <string>Mafalda Hopkirk</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>New HD Camera: benchmark p1 &amp; p2</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>133</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>benchmark on p3 &amp; p5</string>
+    </void>
+    <void property="estimate">
+     <int>32</int>
+    </void>
+    <void property="id">
+     <int>133</int>
+    </void>
+    <void property="owner">
+     <string>Ernie Macmillan</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>HD Camera: benchmark on p3 &amp; p5</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>134</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>VFLIP value read incorrectly to the camera</string>
+    </void>
+    <void property="estimate">
+     <int>4</int>
+    </void>
+    <void property="foundVersion">
+     <string>Integ</string>
+    </void>
+    <void property="id">
+     <int>134</int>
+    </void>
+    <void property="owner">
+     <string>Oliver Wood</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>New HD camera: VFLIP value read incorrectly</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Hardware</string>
+    </void>
+    <void property="timeSpent">
+     <int>10</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>135</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>improve segmentation</string>
+    </void>
+    <void property="epicID">
+     <int>119</int>
+    </void>
+    <void property="id">
+     <int>135</int>
+    </void>
+    <void property="owner">
+     <string>Padma Patil</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>2DM: improve segmentation</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>136</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Improve Shiny edges</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>136</int>
+    </void>
+    <void property="owner">
+     <string>Padma Patil</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>135</int>
+    </void>
+    <void property="summary">
+     <string>Improve Shiny edges mech.</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+    <void property="timeSpent">
+     <int>8</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>137</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>smoothing factor value miscalculation</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="foundVersion">
+     <string>1.7</string>
+    </void>
+    <void property="id">
+     <int>137</int>
+    </void>
+    <void property="owner">
+     <string>Padma Patil</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="storyID">
+     <int>135</int>
+    </void>
+    <void property="summary">
+     <string>2DM - smoothing factor value miscalculation</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.1</string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+    <void property="timeSpent">
+     <int>12</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>138</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>add weighted sampler </string>
+    </void>
+    <void property="estimate">
+     <int>24</int>
+    </void>
+    <void property="id">
+     <int>138</int>
+    </void>
+    <void property="owner">
+     <string>Padma Patil</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>135</int>
+    </void>
+    <void property="summary">
+     <string>2D - add weighted sampler for new data</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.1</string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+    <void property="timeSpent">
+     <int>2</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>139</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>2DM Benchmark</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>139</int>
+    </void>
+    <void property="owner">
+     <string>Katie Bell</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>135</int>
+    </void>
+    <void property="summary">
+     <string>2DM Benchmark with Padma&apos;s improvements</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.1</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>140</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>2DM: Top &amp; Bottom</string>
+    </void>
+    <void property="epicID">
+     <int>119</int>
+    </void>
+    <void property="id">
+     <int>140</int>
+    </void>
+    <void property="owner">
+     <string>Hannah Abbott</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>2DM: Top &amp; Bottom</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>141</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>See requirements file</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>141</int>
+    </void>
+    <void property="owner">
+     <string>John Dawlish</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>140</int>
+    </void>
+    <void property="summary">
+     <string>Top &amp; Bottom measurements - UI</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.4</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+    <void property="timeSpent">
+     <int>8</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>142</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>PPR - replace on lab system3</string>
+    </void>
+    <void property="estimate">
+     <int>4</int>
+    </void>
+    <void property="id">
+     <int>142</int>
+    </void>
+    <void property="owner">
+     <string>Oliver Wood</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object class="java.lang.Enum" id="WorkItem$sprintEnum2" method="valueOf">
+      <class>com.persistent.WorkItem$sprintEnum</class>
+      <string>Jun20</string>
+     </object>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="storyID">
+     <int>118</int>
+    </void>
+    <void property="summary">
+     <string>PPR - replace on lab system3</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Hardware</string>
+    </void>
+    <void property="timeSpent">
+     <int>4</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>143</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>Wrong top measurement on top&amp;Bottom mode</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="foundVersion">
+     <string>2.0</string>
+    </void>
+    <void property="id">
+     <int>143</int>
+    </void>
+    <void property="owner">
+     <string>Rita Skeeter</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>140</int>
+    </void>
+    <void property="summary">
+     <string>2DM: Wrong top measurement on top&amp;Bottom mode</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.4</string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+    <void property="timeSpent">
+     <int>4</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>144</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>2DM Top&amp;Bottom BMT</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>144</int>
+    </void>
+    <void property="owner">
+     <string>Argus Filch</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>140</int>
+    </void>
+    <void property="summary">
+     <string>2DM Top&amp;Bottom BMT</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>145</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>demo</string>
+    </void>
+    <void property="id">
+     <int>145</int>
+    </void>
+    <void property="owner">
+     <string>Teddy Lupin</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum1"/>
+    </void>
+    <void property="summary">
+     <string>Demo story</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>100</int>
+   <object class="com.persistent.EpicWI">
+    <void property="description">
+     <string>Version 2.2 Release targeted to release e/o August</string>
+    </void>
+    <void property="id">
+     <int>100</int>
+    </void>
+    <void property="summary">
+     <string>Version 2.2 Release</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>101</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string> QA tests for release</string>
+    </void>
+    <void property="epicID">
+     <int>100</int>
+    </void>
+    <void property="id">
+     <int>101</int>
+    </void>
+    <void property="owner">
+     <string>Katie Bell</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>Version 2.2: QA tests</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>102</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Run stability and memory check scripts every night the following week
+- Memory should not exceed 500MBph
+- No system failures</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>102</int>
+    </void>
+    <void property="owner">
+     <string>Ludo Bagman</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum2"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: stability &amp; memory leak</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+    <void property="timeSpent">
+     <int>2</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>103</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Run automatic testing for version 2.2:
+- Sanity 
+- Scenarios
+- Parameters
+- Features
+
+On systems: QA1, QA2
+
+Different configuration: see detailed file under /raid/Teams/QA/Versions/2.2/testingConfigurations.xlsx</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>103</int>
+    </void>
+    <void property="owner">
+     <string>Susan Bones</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum2"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: Automatic testing</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+    <void property="timeSpent">
+     <int>2</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>104</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Safety and recovery scenarios on systems
+Hand sensors
+Curtain sensors
+Hood sensors</string>
+    </void>
+    <void property="estimate">
+     <int>4</int>
+    </void>
+    <void property="id">
+     <int>104</int>
+    </void>
+    <void property="owner">
+     <string>Ludo Bagman</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object class="java.lang.Enum" id="WorkItem$sprintEnum3" method="valueOf">
+      <class>com.persistent.WorkItem$sprintEnum</class>
+      <string>Aug20</string>
+     </object>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: Safety and recovery</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>105</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Check all license options on dongles:
+UNME
+2DMT
+3DMT
+BVST
+AVUV
+TRAC
+APPC</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>105</int>
+    </void>
+    <void property="owner">
+     <string>Katie Bell</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum3"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: license validation tests</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>106</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>New feature: Log Cleaner for version 2.2</string>
+    </void>
+    <void property="epicID">
+     <int>100</int>
+    </void>
+    <void property="id">
+     <int>106</int>
+    </void>
+    <void property="owner">
+     <string>John Dawlish</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>Log Cleaner (version 2.2)</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>107</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Sync log cleaner service with the services stack</string>
+    </void>
+    <void property="estimate">
+     <int>12</int>
+    </void>
+    <void property="id">
+     <int>107</int>
+    </void>
+    <void property="owner">
+     <string>Colin Creevy</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>106</int>
+    </void>
+    <void property="summary">
+     <string>Sync log cleaner service</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>108</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>Log cleaner: failed to read frequency in cron format
+See logs under /raid/Teams/QA/Susan/Tests/LogCleanerTests/failure.log</string>
+    </void>
+    <void property="estimate">
+     <int>4</int>
+    </void>
+    <void property="foundVersion">
+     <string>Integ-2</string>
+    </void>
+    <void property="id">
+     <int>108</int>
+    </void>
+    <void property="owner">
+     <string>Colin Creevy</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="storyID">
+     <int>106</int>
+    </void>
+    <void property="summary">
+     <string>Log cleaner: failed to read frequency in cron format</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.1</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>109</int>
+   <object class="com.persistent.EpicWI">
+    <void property="description">
+     <string>Bugs and tasks for customers</string>
+    </void>
+    <void property="id">
+     <int>109</int>
+    </void>
+    <void property="summary">
+     <string>Customer support</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>110</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>For next CS version</string>
+    </void>
+    <void property="epicID">
+     <int>109</int>
+    </void>
+    <void property="id">
+     <int>110</int>
+    </void>
+    <void property="owner">
+     <string>Lee Jordan</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>ABC evalutions bugs</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>111</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>See data (marked):
+/raid/Teams/Product/Ernie/Customers/ABC/Eval-May/Miss/RawData</string>
+    </void>
+    <void property="estimate">
+     <int>24</int>
+    </void>
+    <void property="foundVersion">
+     <string>1.8</string>
+    </void>
+    <void property="id">
+     <int>111</int>
+    </void>
+    <void property="owner">
+     <string>Teddy Lupin</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>110</int>
+    </void>
+    <void property="summary">
+     <string>ABC: miss-detection on 3 samples</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.4</string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>112</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>ABC reporting on 4 minutes load time
+Analyze issue
+Logs under /raid/Teams/Ernie/Customers/ABC/Eval-May/LongLoad/</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="foundVersion">
+     <string>1.8</string>
+    </void>
+    <void property="id">
+     <int>112</int>
+    </void>
+    <void property="owner">
+     <string>Amos Diggory</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum3"/>
+    </void>
+    <void property="storyID">
+     <int>110</int>
+    </void>
+    <void property="summary">
+     <string>ABC: long load time</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.4</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>113</int>
+   <object class="com.persistent.BugWI">
+    <void property="description">
+     <string>RawData: /raid/Teams/Product/Ernie/Customers/ABC/Eval-May/FA/
+
+* On teflon
+Try to improve segmention on exiting images to avoid HW changes</string>
+    </void>
+    <void property="estimate">
+     <int>36</int>
+    </void>
+    <void property="foundVersion">
+     <string>2.0</string>
+    </void>
+    <void property="id">
+     <int>113</int>
+    </void>
+    <void property="owner">
+     <string>Mafalda Hopkirk</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum2"/>
+    </void>
+    <void property="storyID">
+     <int>110</int>
+    </void>
+    <void property="summary">
+     <string>ABC: FA on rough surface - improve segmentation</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.4</string>
+    </void>
+    <void property="team">
+     <string>Algo</string>
+    </void>
+    <void property="timeSpent">
+     <int>8</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>114</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>6 new systems deployed on Expervim during March
+They report several issues with the integrations on 3</string>
+    </void>
+    <void property="epicID">
+     <int>109</int>
+    </void>
+    <void property="id">
+     <int>114</int>
+    </void>
+    <void property="owner">
+     <string>Argus Filch</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="summary">
+     <string>Expervim: new systems deployment support</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>115</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Recalibrate 3 machine on Expervim - can&apos;t acquire good image
+
+* Status 15/04:
+- delay due to corrupted encoder cable on machine 4. Cable was replaced and system recalibrated.
+- Exceeded estimations due to unexpected issue debugging
+</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>115</int>
+    </void>
+    <void property="owner">
+     <string>Argus Filch</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum1"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum0"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="storyID">
+     <int>114</int>
+    </void>
+    <void property="summary">
+     <string>Expervim - 3 machines re-calibration</string>
+    </void>
+    <void property="targetVersion">
+     <string></string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+    <void property="timeSpent">
+     <int>24</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>116</int>
+   <object class="com.persistent.EpicWI">
+    <void property="description">
+     <string>COGS reduction</string>
+    </void>
+    <void property="id">
+     <int>116</int>
+    </void>
+    <void property="summary">
+     <string>COGS reduction</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>117</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>New HD Camera</string>
+    </void>
+    <void property="epicID">
+     <int>116</int>
+    </void>
+    <void property="id">
+     <int>117</int>
+    </void>
+    <void property="owner">
+     <string>Oliver Wood</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="summary">
+     <string>New HD Camera</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>118</int>
+   <object class="com.persistent.StoryWI">
+    <void property="description">
+     <string>PPR Card Replacement - replacing SB to Haswell with PPR3 instead of PPR2</string>
+    </void>
+    <void property="epicID">
+     <int>116</int>
+    </void>
+    <void property="id">
+     <int>118</int>
+    </void>
+    <void property="owner">
+     <string>John Dawlish</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="summary">
+     <string>PPR Card Replacement (new Haswell)</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>119</int>
+   <object class="com.persistent.EpicWI">
+    <void property="description">
+     <string>2D Metrology</string>
+    </void>
+    <void property="id">
+     <int>119</int>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="summary">
+     <string>2D Metrology</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>120</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>On varias materials</string>
+    </void>
+    <void property="estimate">
+     <int>24</int>
+    </void>
+    <void property="id">
+     <int>120</int>
+    </void>
+    <void property="owner">
+     <string>Mafalda Hopkirk</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>117</int>
+    </void>
+    <void property="summary">
+     <string>New HD camera: image acqistion tests</string>
+    </void>
+    <void property="targetVersion">
+     <string>3.0</string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+    <void property="timeSpent">
+     <int>8</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>121</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Traceability feature sanity test (see comperhensive test plan on QA drive)</string>
+    </void>
+    <void property="estimate">
+     <int>4</int>
+    </void>
+    <void property="id">
+     <int>121</int>
+    </void>
+    <void property="owner">
+     <string>Ludo Bagman</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum1"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: features sanity - traceability</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+    <void property="timeSpent">
+     <int>6</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>122</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>features sanity - Injector for version 2.2 release</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>122</int>
+    </void>
+    <void property="owner">
+     <string>Susan Bones</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum1"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: features sanity - Injector</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>123</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>On resolutions:
+3.75
+4.25
+5.5
+7
+8.25</string>
+    </void>
+    <void property="estimate">
+     <int>16</int>
+    </void>
+    <void property="id">
+     <int>123</int>
+    </void>
+    <void property="owner">
+     <string>Susan Bones</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: Throughput tests</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>124</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Sit with tech. writer and define RN</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>124</int>
+    </void>
+    <void property="owner">
+     <string>Hannah Abbott</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>101</int>
+    </void>
+    <void property="summary">
+     <string>2.2: Release notes</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>Product</string>
+    </void>
+    <void property="timeSpent">
+     <int>5</int>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>125</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>sanity test on final version 2.2</string>
+    </void>
+    <void property="estimate">
+     <int>6</int>
+    </void>
+    <void property="id">
+     <int>125</int>
+    </void>
+    <void property="owner">
+     <string>Susan Bones</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>106</int>
+    </void>
+    <void property="summary">
+     <string>Log Cleaner: sanity test on final version</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>QA</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>126</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Add to database option to remove\add directories to the log cleaner service</string>
+    </void>
+    <void property="estimate">
+     <int>8</int>
+    </void>
+    <void property="id">
+     <int>126</int>
+    </void>
+    <void property="owner">
+     <string>Amos Diggory</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum1"/>
+    </void>
+    <void property="sprint">
+     <object idref="WorkItem$sprintEnum1"/>
+    </void>
+    <void property="storyID">
+     <int>106</int>
+    </void>
+    <void property="summary">
+     <string>Add DB setting for log cleaner dirs</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+   </object>
+  </void>
+  <void method="put">
+   <int>127</int>
+   <object class="com.persistent.TaskWI">
+    <void property="description">
+     <string>Export frequency setting to UI debug tool (log cleaner)</string>
+    </void>
+    <void property="estimate">
+     <int>6</int>
+    </void>
+    <void property="id">
+     <int>127</int>
+    </void>
+    <void property="owner">
+     <string>Amos Diggory</string>
+    </void>
+    <void property="priority">
+     <object idref="WorkItem$priorityEnum0"/>
+    </void>
+    <void property="status">
+     <object idref="WorkItem$statusEnum0"/>
+    </void>
+    <void property="storyID">
+     <int>106</int>
+    </void>
+    <void property="summary">
+     <string>Export frequency setting to UI debug tool (log cleaner)</string>
+    </void>
+    <void property="targetVersion">
+     <string>2.2</string>
+    </void>
+    <void property="team">
+     <string>SW</string>
+    </void>
+    <void property="timeSpent">
+     <int>8</int>
+    </void>
+   </object>
+  </void>
+ </object>
+ <object idref="WorkItem$sprintEnum1"/>
+</java>
