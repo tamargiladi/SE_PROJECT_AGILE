@@ -54,8 +54,7 @@ public class TeamManagerTest {
         teamManager.addTeam(teamNameExample);
         teamManager.addTeam("example");
         teamManager.updateTeamsName("example", teamNameExample);
-
-
+        Assert.assertTrue(teamManager.isTeamExist("example"));
 
     }
 
